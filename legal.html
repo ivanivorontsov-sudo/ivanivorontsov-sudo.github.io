@@ -12,7 +12,7 @@
 :root{color-scheme:light dark;--bg:#fbf6ef;--fg:#2b211a;--mut:#75665a;--card:#fffaf4;--bd:rgba(120,80,40,.18);--acc:#b95124}
 @media(prefers-color-scheme:dark){:root{--bg:#1c1714;--fg:#f3e9df;--mut:#bba999;--card:#2c241f;--bd:rgba(255,200,150,.16);--acc:#f08a4b}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.7 system-ui,-apple-system,"Segoe UI",sans-serif}.wrap{max-width:850px;margin:auto;padding:28px 18px 60px}h1{line-height:1.15}h2{margin-top:2em;font-size:1.2rem}p,li{color:var(--fg)}.note{padding:18px;border:1px solid var(--bd);border-left:4px solid var(--acc);border-radius:12px;background:var(--card)}.muted{color:var(--mut)}a{color:var(--acc)}footer{margin-top:40px;color:var(--mut)} 
-.contact-form{margin:18px 0;padding:18px;border:1px solid var(--bd);border-radius:14px;background:var(--card)}.contact-form label{display:block;font-weight:650;margin:12px 0 5px}.contact-form input,.contact-form select,.contact-form textarea{width:100%;padding:11px 12px;border:1px solid var(--bd);border-radius:9px;background:var(--bg);color:var(--fg);font:inherit}.contact-form textarea{min-height:130px;resize:vertical}.contact-form button{margin-top:14px;padding:11px 18px;border:0;border-radius:999px;background:var(--acc);color:white;font:inherit;font-weight:700;cursor:pointer}.small{font-size:.92rem;color:var(--mut)}</style>
+</style>
 </head>
 <body><main class="wrap">
 <p><a href="/">← На главную страницу проектов</a></p>
@@ -52,30 +52,9 @@
 <p>Если вы считаете, что размещённый здесь материал нарушает ваши авторские, смежные, товарные, личные или иные законные права, либо обнаружили ошибку, уязвимость или другой существенный вопрос, направьте обращение на <a href="mailto:ivanivorontsov@gmail.com">ivanivorontsov@gmail.com</a> или воспользуйтесь формой ниже.</p>
 <p>Для проверки укажите точную ссылку на страницу или файл, опишите спорный материал и ваши права на него, приложите доступные подтверждения и оставьте способ обратной связи. Для заявления об авторских правах желательно также указать оригинальное произведение, конкретный фрагмент, который предположительно нарушает права, и подтвердить, что вы правообладатель либо уполномочены действовать от его имени.</p>
 <p><strong>Я рассмотрю обоснованное обращение и, если нарушение подтвердится, удалю материал либо ограничу к нему доступ в разумный срок после получения достаточной информации.</strong> Если данных недостаточно, я могу запросить уточнения. Срочные обращения о потенциально опасном или незаконном содержимом будут рассмотрены приоритетно. Отправка обращения сама по себе не означает автоматического признания нарушения.</p>
-<form class="contact-form" id="report-form">
-<label for="report-type">Тип обращения</label>
-<select id="report-type" name="type"><option>Жалоба на нарушение прав</option><option>Сообщение об ошибке или уязвимости</option><option>Запрос на удаление материала</option><option>Другое обращение</option></select>
-<label for="report-url">Ссылка на страницу или файл</label>
-<input id="report-url" name="url" type="url" placeholder="https://..." required>
-<label for="report-name">Ваше имя или организация (необязательно)</label>
-<input id="report-name" name="name" type="text" autocomplete="name">
-<label for="report-email">Контактный e-mail для ответа</label>
-<input id="report-email" name="email" type="email" autocomplete="email" required>
-<label for="report-details">Описание обращения и подтверждение прав (если применимо)</label>
-<textarea id="report-details" name="details" required placeholder="Опишите, что именно нарушает права, кому принадлежат права и как с вами связаться."></textarea>
-<button type="submit">Подготовить письмо</button>
-<p class="small">Форма не отправляет данные на сервер сайта. После нажатия откроется ваше почтовое приложение с подготовленным письмом; проверьте его и нажмите «Отправить». Не прикладывайте пароли, платёжные данные и документы, не нужные для рассмотрения обращения.</p>
-</form>
+
 <p>Обратите внимание: для официальной процедуры по законодательству конкретной страны могут требоваться дополнительные сведения, форма уведомления или обращение непосредственно к хостинг-провайдеру. Эта форма — канал связи с владельцем сайта, а не замена предусмотренной законом процедуры.</p>
 <h2>9. Персональные данные и конфиденциальность</h2>
 <p>Отдельная <a href="/privacy.html">Политика конфиденциальности</a> описывает, какие данные могут обрабатываться при посещении сайта, использовании внешних сервисов и отправке обращения.</p>
 <footer><a href="/">Вернуться к каталогу проектов</a></footer>
-</main><script>
-document.getElementById('report-form').addEventListener('submit',function(event){
- event.preventDefault();
- const v=id=>document.getElementById(id).value.trim();
- const subject='Обращение с сайта: '+v('report-type');
- const body=['Тип обращения: '+v('report-type'),'Ссылка: '+v('report-url'),'Имя / организация: '+(v('report-name')||'не указано'),'Контактный e-mail: '+v('report-email'),'','Описание:',v('report-details')].join('\n');
- window.location.href='mailto:ivanivorontsov@gmail.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
-});
-</script></body></html>
+</main></body></html>
