@@ -75,7 +75,7 @@ document.getElementById('report-form').addEventListener('submit',function(event)
  event.preventDefault();
  const v=id=>document.getElementById(id).value.trim();
  const subject='Обращение с сайта: '+v('report-type');
- const body=['Тип обращения: '+v('report-type'),'Ссылка: '+v('report-url'),'Имя / организация: '+(v('report-name')||'не указано'),'Контактный e-mail: '+v('report-email'),'','Описание:',v('report-details')].join('\\n');
+ const body=['Тип обращения: '+v('report-type'),'Ссылка: '+v('report-url'),'Имя / организация: '+(v('report-name')||'не указано'),'Контактный e-mail: '+v('report-email'),'','Описание:',v('report-details')].join('\n');
  window.location.href='mailto:ivanivorontsov@gmail.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
 });
 </script></body></html>
