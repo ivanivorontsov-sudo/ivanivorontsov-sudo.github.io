@@ -4,9 +4,9 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const bytes=n=>n<1048576?(n/1024).toFixed(1)+" КБ":(n/1048576).toFixed(2)+" МБ";
 function msg(el,text,kind=""){
- if(el.tagName==="TEXTAREA"||el.tagName==="INPUT"){el.setAttribute("aria-label",text);return;}
+ const parent=(el.tagName==="TEXTAREA"||el.tagName==="INPUT")?(el.parentNode||el):el;
  let node=el._statusLine;
- if(!node||!node.isConnected){node=document.createElement("p");node.className="status";el.append(node);el._statusLine=node;}
+ if(!node||!node.isConnected){node=document.createElement("p");node.className="status";parent.append(node);el._statusLine=node;}
  node.textContent=text;node.className="status"+(kind?" "+kind:"");
 }
 async function copy(s){if(navigator.clipboard&&window.isSecureContext)return navigator.clipboard.writeText(s);const t=document.createElement("textarea");t.value=s;document.body.append(t);t.select();if(!document.execCommand("copy"))throw new Error("Копирование запрещено браузером");t.remove();}
