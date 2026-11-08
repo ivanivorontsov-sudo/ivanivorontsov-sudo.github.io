@@ -3,7 +3,12 @@
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const bytes=n=>n<1048576?(n/1024).toFixed(1)+" КБ":(n/1048576).toFixed(2)+" МБ";
-function msg(el,text,kind=""){el.textContent=text;el.className="status"+(kind?" "+kind:"");}
+function msg(el,text,kind=""){
+ if(el.tagName==="TEXTAREA"||el.tagName==="INPUT"){el.setAttribute("aria-label",text);return;}
+ let node=el._statusLine;
+ if(!node||!node.isConnected){node=document.createElement("p");node.className="status";el.append(node);el._statusLine=node;}
+ node.textContent=text;node.className="status"+(kind?" "+kind:"");
+}
 async function copy(s){if(navigator.clipboard&&window.isSecureContext)return navigator.clipboard.writeText(s);const t=document.createElement("textarea");t.value=s;document.body.append(t);t.select();if(!document.execCommand("copy"))throw new Error("Копирование запрещено браузером");t.remove();}
 function save(blob,name){const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),30000);}
 function table(headers,rows){const t=document.createElement("table");t.className="resulttable";const thead=document.createElement("thead"),tr=document.createElement("tr");headers.forEach(h=>{const th=document.createElement("th");th.textContent=h;tr.append(th);});thead.append(tr);t.append(thead);const body=document.createElement("tbody");rows.forEach(row=>{const tr=document.createElement("tr");row.forEach(cell=>{const td=document.createElement("td");td.textContent=cell;tr.append(td);});body.append(tr);});t.append(body);return t;}
