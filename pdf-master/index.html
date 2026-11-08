@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>PDF Мастер — PDF без подписки и загрузки файлов</title>
+<meta name="description" content="Объединение PDF, сортировка, поворот, удаление и извлечение страниц. Файлы обрабатываются прямо в браузере без регистрации и подписки.">
+<link rel="canonical" href="https://ivanivorontsov-sudo.github.io/pdf-master/">
+<meta name="theme-color" content="#f7f4ee">
+<style>
+:root{color-scheme:light;--bg:#f7f4ee;--surface:#fffefa;--surface2:#f1ece4;--text:#28231f;--muted:#756b61;--line:#e5ddd2;--accent:#b85b32;--accent2:#e4a04b;--shadow:0 16px 40px rgba(70,45,24,.09);--danger:#b83c35;--good:#28744d}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#1c1916;--surface:#28231f;--surface2:#322c26;--text:#f5eee6;--muted:#c2b5a8;--line:#4a4037;--accent:#f08a55;--accent2:#e5b36b;--shadow:0 16px 40px rgba(0,0,0,.25);--danger:#ff8278;--good:#7fdaa5}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#1c1916;--surface:#28231f;--surface2:#322c26;--text:#f5eee6;--muted:#c2b5a8;--line:#4a4037;--accent:#f08a55;--accent2:#e5b36b;--shadow:0 16px 40px rgba(0,0,0,.25);--danger:#ff8278;--good:#7fdaa5}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(70rem 38rem at 0 0,#f2dfca 0,transparent 62%),var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+a{color:var(--accent)}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.top{border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--surface) 88%,transparent)}
+.top-inner{max-width:1180px;margin:auto;padding:13px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.brand{font-size:1.05rem;font-weight:850;letter-spacing:-.03em;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:10px}
+.brand-mark{width:34px;height:34px;border-radius:11px;background:linear-gradient(140deg,var(--accent),var(--accent2));display:grid;place-items:center;color:white;font-weight:900}
+.top-actions{display:flex;align-items:center;gap:8px}
+.ghost,.primary,.danger-btn{border:1px solid var(--line);border-radius:12px;padding:9px 13px;background:var(--surface);color:var(--text);text-decoration:none;font-weight:650}
+.primary{background:linear-gradient(130deg,var(--accent),var(--accent2));border-color:transparent;color:#fff}
+.danger-btn{color:var(--danger)}
+.wrap{max-width:1180px;margin:auto;padding:28px 18px 60px}
+.hero{display:grid;grid-template-columns:1.4fr .6fr;gap:22px;align-items:end;margin:4px 0 24px}
+.eyebrow{font-size:.75rem;letter-spacing:.13em;font-weight:800;color:var(--accent)}
+h1{font-size:clamp(2rem,6vw,3.5rem);line-height:1.05;letter-spacing:-.05em;margin:9px 0 13px}
+.hero p{color:var(--muted);max-width:68ch;margin:0}
+.promise{padding:18px 20px;border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:var(--shadow)}
+.promise strong{display:block;font-size:1.12rem}.promise span{font-size:.88rem;color:var(--muted)}
+.security-line{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 24px}
+.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;background:var(--surface);padding:6px 11px;font-size:.82rem;font-weight:650}
+.pill b{color:var(--good)}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+.panel-head{padding:17px 19px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.panel-head h2{font-size:1.12rem;margin:0}
+.panel-body{padding:18px}
+.drop{border:2px dashed var(--line);border-radius:16px;background:var(--surface2);padding:25px 16px;text-align:center;transition:.15s}
+.drop.drag{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 9%,var(--surface))}
+.drop h3{margin:6px 0 2px;font-size:1rem}.drop p{margin:0;color:var(--muted);font-size:.88rem}
+.drop .symbol{font-size:2rem;color:var(--accent)}
+input[type=file]{display:none}
+.file-list{display:grid;gap:7px;margin-top:13px}
+.file-row{padding:9px 11px;border-radius:11px;background:var(--surface2);display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:.84rem}
+.file-row span{min-width:0;overflow-wrap:anywhere}.muted{color:var(--muted)}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.small-btn{padding:8px 11px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-size:.84rem;font-weight:650}
+.small-btn:hover,.ghost:hover{border-color:var(--accent)}
+.small-btn:disabled,.primary:disabled{opacity:.45;cursor:not-allowed}
+.page-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:11px}
+.page-card{position:relative;min-width:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:9px;transition:border-color .15s,transform .15s}
+.page-card.dragging{opacity:.4}.page-card.over{outline:2px dashed var(--accent);outline-offset:2px}
+.page-card canvas{display:block;width:100%;height:170px;object-fit:contain;background:#eeeae4;border-radius:7px}
+.page-meta{display:flex;justify-content:space-between;align-items:center;gap:6px;margin:8px 0 5px;font-size:.78rem}
+.page-meta strong{font-size:.82rem}.page-actions{display:flex;gap:5px;flex-wrap:wrap}
+.page-actions button{flex:1;min-width:32px;padding:6px 4px;border:1px solid var(--line);background:var(--surface2);color:var(--text);border-radius:8px;font-size:.76rem}
+.page-check{display:flex;align-items:center;gap:6px;font-size:.8rem}
+.page-check input{accent-color:var(--accent)}
+.empty-state{text-align:center;padding:30px 10px;color:var(--muted)}
+.empty-state strong{display:block;color:var(--text);margin-bottom:4px}
+.sidebar{display:grid;gap:14px}
+.field{display:grid;gap:5px;margin-bottom:13px}
+.field label{font-size:.83rem;font-weight:700}
+.field input[type=text],.field input[type=number],.field select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--text)}
+.checkrow{display:flex;align-items:flex-start;gap:9px;margin:11px 0;font-size:.86rem}
+.checkrow input{margin-top:4px;accent-color:var(--accent)}
+.help{padding:13px 14px;background:var(--surface2);border-radius:12px;color:var(--muted);font-size:.82rem}
+.output-actions{display:grid;gap:9px;margin-top:16px}
+.output-actions button{width:100%;padding:12px 14px}
+.status{display:none;margin-top:13px;padding:11px 13px;border-radius:11px;background:var(--surface2);font-size:.84rem;color:var(--muted)}
+.status.show{display:block}.status.error{color:var(--danger)}.status.ok{color:var(--good)}
+.section-title{font-size:1.05rem;font-weight:800;margin:22px 0 10px}
+footer{margin-top:36px;border-top:1px solid var(--line);padding-top:20px;color:var(--muted);font-size:.85rem}
+@media(max-width:850px){.workspace{grid-template-columns:1fr}.sidebar{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr}.promise{max-width:420px}}
+@media(max-width:560px){.top-inner{padding-inline:13px}.top-actions .ghost:first-child{display:none}.wrap{padding:20px 12px 44px}.sidebar{grid-template-columns:1fr}.panel-body{padding:13px}.panel-head{padding:14px}.page-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.page-card canvas{height:155px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
+<script src="./app.js" defer></script>
+</head>
+<body>
+<header class="top"><div class="top-inner">
+<a class="brand" href="https://ivanivorontsov-sudo.github.io/"><span class="brand-mark">PDF</span> PDF Мастер</a>
+<div class="top-actions"><a class="ghost" href="https://ivanivorontsov-sudo.github.io/">Все инструменты</a><button class="ghost" id="theme" type="button" aria-label="Переключить тему">◐</button><a class="ghost" href="https://github.com/ivanivorontsov-sudo/ivanivorontsov-sudo.github.io/tree/main/pdf-master" target="_blank" rel="noopener noreferrer">Код ↗</a></div>
+</div></header>
+<main class="wrap">
+<section class="hero">
+<div><div class="eyebrow">ДОКУМЕНТЫ БЕЗ ЛИШНИХ ПОСРЕДНИКОВ</div><h1>PDF, который<br>работает на тебя.</h1><p>Объединяй документы, меняй порядок страниц, поворачивай, удаляй и извлекай нужное. Без аккаунта, водяных знаков, лимита страниц и платной кнопки «Сохранить».</p></div>
+<div class="promise"><strong>Обработка на устройстве</strong><span>Файлы читаются браузером и не загружаются на сервер сайта.</span></div>
+</section>
+<div class="security-line">
+<span class="pill"><b>✓</b> Без регистрации</span><span class="pill"><b>✓</b> Без рекламы и подписки</span><span class="pill"><b>✓</b> Без загрузки PDF на сервер</span><span class="pill">Открытый исходный код</span>
+</div>
+<div class="workspace">
+<section class="panel">
+<div class="panel-head"><h2>1. Добавь PDF-файлы</h2><span class="muted" id="page-count">0 страниц</span></div>
+<div class="panel-body">
+<div class="drop" id="drop">
+<div class="symbol">＋</div><h3>Перетащи документы сюда</h3><p>или выбери несколько PDF на устройстве</p><p class="muted" style="margin-top:8px">Можно добавить несколько файлов, они объединятся в общий список страниц.</p>
+<button id="choose" class="primary" type="button" style="margin-top:13px">Выбрать PDF</button><input id="files" type="file" accept="application/pdf,.pdf" multiple>
+</div>
+<div class="file-list" id="file-list"></div>
+<div class="toolbar">
+<button class="small-btn" id="select-all" type="button" disabled>Выбрать все</button>
+<button class="small-btn" id="select-none" type="button" disabled>Снять выбор</button>
+<button class="small-btn" id="remove-unselected" type="button" disabled>Удалить невыбранные</button>
+<button class="small-btn" id="clear" type="button" disabled>Очистить список</button>
+</div>
+<div class="section-title">2. Страницы — перетаскивай для изменения порядка</div>
+<div id="pages" class="page-grid"><div class="empty-state"><strong>Пока нет страниц</strong>Добавь один или несколько PDF — здесь появятся миниатюры.</div></div>
+<div class="status" id="status" role="status" aria-live="polite"></div>
+</div>
+</section>
+<aside class="sidebar">
+<section class="panel">
+<div class="panel-head"><h2>3. Параметры экспорта</h2></div>
+<div class="panel-body">
+<div class="field"><label for="filename">Имя готового файла</label><input id="filename" type="text" value="document-ready.pdf" maxlength="100"></div>
+<label class="checkrow"><input id="clear-meta" type="checkbox" checked><span><strong>Очистить стандартные метаданные</strong><br><span class="muted">Название, автор, тема, ключевые слова, сведения о программе и XMP-пакет, если доступен.</span></span></label>
+<label class="checkrow"><input id="page-numbers" type="checkbox"><span><strong>Добавить номера страниц</strong><br><span class="muted">Нумерация внизу каждой страницы итогового файла.</span></span></label>
+<div class="field" style="margin-top:13px"><label for="range">Извлечь только страницы (необязательно)</label><input id="range" type="text" placeholder="Например: 1-3, 5, 8-10"><span class="muted" style="font-size:.78rem">Номера относятся к текущему порядку страниц после перетаскивания.</span></div>
+<div class="output-actions">
+<button class="primary" id="export-selected" type="button" disabled>Скачать выбранные страницы</button>
+<button class="small-btn" id="export-range" type="button" disabled>Скачать диапазон</button>
+</div>
+</div>
+</section>
+<section class="panel">
+<div class="panel-head"><h2>Что умеет PDF Мастер</h2></div>
+<div class="panel-body">
+<div class="help">Объединять несколько PDF · сортировать страницы · поворачивать на 90° · удалять лишние · извлекать выбранное · добавлять номера · очищать стандартные поля метаданных.</div>
+<p class="muted" style="font-size:.82rem;margin:12px 0 0">Оригиналы не изменяются. Готовый документ создаётся как новый файл.</p>
+</div>
+</section>
+<section class="panel">
+<div class="panel-head"><h2>Ограничения</h2></div>
+<div class="panel-body">
+<p class="muted" style="font-size:.82rem;margin:0">Зашифрованные PDF не поддерживаются. При пересохранении цифровые подписи перестают быть действительными. Интерактивные формы, закладки, вложения и сложные аннотации могут не сохраниться. Очистка метаданных удаляет стандартные поля и XMP-пакет, но не скрытый текст, историю правок или содержимое страниц.</p>
+</div>
+</section>
+</aside>
+</div>
+<footer><p>PDF обрабатывается локально в браузере с помощью PDF.js и pdf-lib. Эти библиотеки загружаются с публичных CDN; CDN получает обычный технический запрос браузера, но сами PDF-файлы ему не отправляются. На GitHub Pages действует политика хостинга.</p><p><a href="privacy.html">Политика конфиденциальности</a> · <a href="https://ivanivorontsov-sudo.github.io/">Главный сайт</a> · <a href="https://ivanivorontsov-sudo.github.io/vizitka/">Визитка</a></p><p>© 2026 Иван Воронцов.</p></footer>
+</main>
+</body></html>
