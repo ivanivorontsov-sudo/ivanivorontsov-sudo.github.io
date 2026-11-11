@@ -17,7 +17,7 @@ const state = {
 };
 const controls = { gas:false, brake:false, left:false, right:false, handbrake:false };
 let renderer, composer, bloomPass, scene, camera, curve, trackLength, player, playerFallback, carPaintMaterial;
-let cockpitGroup, steeringWheelVisual, cockpitPaintMaterial, inputTelemetryTimer=0;
+let cockpitGroup, steeringWheelVisual, cockpitPaintMaterial, cockpitGaugeContext, cockpitGaugeTexture, inputTelemetryTimer=0;
 const hardware = { steer:0, throttle:0, brake:0, handbrake:false };
 const inputConfig = { steer:"axis0", gas:"button7", brake:"button6", handbrake:"button0", invertSteer:false, invertGas:false, invertBrake:false, pedalsPositive:false, sensitivity:1.25 };
 let skyTexture, skyCanvas, skyContext, sun, directionalLight, ambientLight, stars;
@@ -459,7 +459,7 @@ function buildCockpit() {
   addBox(.11,.7,.12,leatherMat,1.03,-.67,-.12,0,0,.08);
   // Текстурированная приборная панель с цифровыми шкалами.
   const gaugeCanvas=document.createElement("canvas");gaugeCanvas.width=512;gaugeCanvas.height=180;
-  const gc=gaugeCanvas.getContext("2d");
+  cockpitGaugeContext=gaugeCanvas.getContext("2d");const gc=cockpitGaugeContext;
   const gg=gc.createLinearGradient(0,0,0,180);gg.addColorStop(0,"#172a36");gg.addColorStop(1,"#071016");
   gc.fillStyle=gg;gc.fillRect(0,0,512,180);
   gc.strokeStyle="#4f9eaa";gc.lineWidth=3;gc.strokeRect(5,5,502,170);
@@ -470,9 +470,11 @@ function buildCockpit() {
   gc.fillStyle="#eaf8f5";gc.textAlign="center";gc.font="800 27px Manrope, sans-serif";gc.fillText("DRIVE",256,76);
   gc.fillStyle="#80d6cf";gc.font="700 14px Manrope, sans-serif";gc.fillText("HORIZON  •  SPORT",256,104);
   gc.fillStyle="#a8c4cb";gc.font="600 11px Manrope, sans-serif";gc.fillText("KM/H                         RPM",256,137);
-  const gaugeTex=new THREE.CanvasTexture(gaugeCanvas);gaugeTex.colorSpace=THREE.SRGBColorSpace;
+  cockpitGaugeTexture=new THREE.CanvasTexture(gaugeCanvas);cockpitGaugeTexture.colorSpace=THREE.SRGBColorSpace;
+  const gaugeTex=cockpitGaugeTexture;
   const gauge=new THREE.Mesh(new THREE.PlaneGeometry(1.45,.5),new THREE.MeshBasicMaterial({map:gaugeTex,side:THREE.DoubleSide}));
   gauge.position.set(0,-.77,-1.005);gauge.renderOrder=5;cockpitGroup.add(gauge);
+  drawCockpitDashboard(0,850,"N");
   // Руль с металлическими спицами. Он вращается вместе с аналоговым рулевым вводом.
   steeringWheelVisual=new THREE.Group();steeringWheelVisual.position.set(0,-.52,-.94);
   const wheelMat=new THREE.MeshStandardMaterial({color:0x10161c,roughness:.48,metalness:.22});
@@ -491,6 +493,32 @@ function buildCockpit() {
   addBox(.32,.14,.1,mirrorMat,0,.55,-1.49);
   cockpitGroup.visible=false;
   camera.add(cockpitGroup);
+}
+
+
+function drawCockpitDashboard(speed,rpm,gear) {
+  if(!cockpitGaugeContext||!cockpitGaugeTexture)return;
+  const c=cockpitGaugeContext;
+  const grad=c.createLinearGradient(0,0,0,180);grad.addColorStop(0,"#1b303b");grad.addColorStop(1,"#050b10");
+  c.fillStyle=grad;c.fillRect(0,0,512,180);
+  c.strokeStyle="#4f9eaa";c.lineWidth=3;c.strokeRect(5,5,502,170);
+  for(const x of [115,397]){
+    const max=x===115?240:8000,current=x===115?Math.min(speed,max):Math.min(rpm,max);
+    c.beginPath();c.arc(x,88,59,Math.PI*.82,Math.PI*2.18);c.lineWidth=8;c.strokeStyle="rgba(194,224,225,.16)";c.stroke();
+    c.beginPath();c.arc(x,88,59,Math.PI*.82,Math.PI*.82+Math.PI*1.36*current/max);c.lineWidth=8;c.lineCap="round";c.strokeStyle=x===115?"#80d6cf":"#e9b67e";c.stroke();c.lineCap="butt";
+    for(let i=0;i<=10;i++){
+      const a=Math.PI*.82+i/10*Math.PI*1.36;
+      c.beginPath();c.moveTo(x+Math.cos(a)*45,88+Math.sin(a)*45);c.lineTo(x+Math.cos(a)*54,88+Math.sin(a)*54);
+      c.strokeStyle="#d7e8e7";c.lineWidth=2;c.stroke();
+    }
+    c.fillStyle="#eaf8f5";c.textAlign="center";c.font="800 23px Manrope, sans-serif";
+    c.fillText(x===115?String(Math.round(speed)).padStart(3,"0"):String(Math.round(rpm/100)/10).padStart(3,"0"),x,112);
+    c.fillStyle="#a8c4cb";c.font="600 10px Manrope, sans-serif";c.fillText(x===115?"KM/H":"×1000 RPM",x,132);
+  }
+  c.fillStyle="#eaf8f5";c.textAlign="center";c.font="900 22px Manrope, sans-serif";c.fillText(String(gear),256,91);
+  c.fillStyle="#80d6cf";c.font="800 10px Manrope, sans-serif";c.fillText("DRIVE HORIZON",256,112);
+  c.fillStyle="#a8c4cb";c.font="600 9px Manrope, sans-serif";c.fillText("SPORT   •   NORTH COAST",256,139);
+  cockpitGaugeTexture.needsUpdate=true;
 }
 
 function placeVehicles(dt) {
@@ -572,11 +600,13 @@ function updateGame(dt) {
       localStorage.setItem("driveHorizonRecord",String(state.distance));
       $("record").innerHTML=(state.distance/1000).toFixed(2)+" <i>KM</i>";
     }
-    const kmh=Math.round(Math.abs(state.speed)*3.6);
+    const kmh=Math.round(Math.abs(state.speed)*3.6),rpmValue=Math.round(850+Math.abs(state.speed)*112);
+    const gearValue=state.speed<-.5?"R":state.speed<1?"N":String(clamp(Math.floor(state.speed/10)+1,1,6));
     $("speed").textContent=String(kmh).padStart(3,"0");
-    $("rpm").textContent=Math.round(850+Math.abs(state.speed)*112)+" RPM";
+    $("rpm").textContent=rpmValue+" RPM";
     $("rpmBar").style.width=clamp((Math.abs(state.speed)/58)*100,0,100)+"%";
-    $("gear").textContent=state.speed<-.5?"R":state.speed<1?"N":String(clamp(Math.floor(state.speed/10)+1,1,6));
+    $("gear").textContent=gearValue;
+    drawCockpitDashboard(kmh,rpmValue,gearValue);
     $("distance").innerHTML=(state.distance/1000).toFixed(2)+" <i>KM</i>";
     updateAudio();
   }
