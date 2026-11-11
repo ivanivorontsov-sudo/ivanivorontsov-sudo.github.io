@@ -71,6 +71,19 @@ footer{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);color:v
 <div class="btns"><button class="btn primary" id="hash-compare">Сравнить</button></div>
 <div class="output" id="hash-out" aria-live="polite"></div>
 </article>
+<article class="card wide">
+<h3>Разделить и склеить файл</h3><p class="desc">Разделение большого файла на части и обратная сборка без изменения содержимого. Всё выполняется в памяти браузера.</p>
+<div class="row">
+<div class="field"><label for="split-file">Файл для разделения</label><input id="split-file" type="file"></div>
+<div class="field"><label for="split-size">Размер одной части, МБ</label><input id="split-size" type="number" min="1" max="100" value="25"></div>
+</div>
+<div class="btns"><button class="btn primary" id="split-run">Разделить файл</button></div>
+<div class="output" id="split-out" aria-live="polite"></div>
+<div class="field"><label for="join-parts">Части для обратной сборки (выбрать все)</label><input id="join-parts" type="file" multiple></div>
+<div class="btns"><button class="btn primary" id="join-run">Склеить части</button></div>
+<div class="output" id="join-out" aria-live="polite"></div>
+<p class="hint">Имена частей содержат исходное имя, номер и общее количество. Для сборки необходимы все части от первой до последней. Перед объединением проверяются имя набора, количество и последовательность частей.</p>
+</article>
 </div>
 </section>
 
@@ -267,7 +280,7 @@ $("inspect-run").addEventListener("click",async()=>{
  const f=$("inspect-file").files[0];if(!f)return output("inspect-out","Сначала выберите файл.","bad");
  if(f.size>256*1024*1024)return output("inspect-out","Файл больше 256 МБ. Для безопасности обработки в памяти проверка остановлена.","bad");
  try{
-  const buf=await f.arrayBuffer(),head=dec.decode(new Uint8Array(buf.slice(0,512))),bytes=new Uint8Array(buf.slice(0,16));
+  const buf=await f.arrayBuffer(),head=String.fromCharCode(...new Uint8Array(buf.slice(0,512))),bytes=new Uint8Array(buf.slice(0,16));
   const signature=signatures.find(x=>x[1](head));const ext=(f.name.split(".").pop()||"").toLowerCase();
   const extMap={pdf:"PDF",png:"PNG",jpg:"JPEG",jpeg:"JPEG",gif:"GIF",webp:"WEBP",zip:"ZIP / DOCX / XLSX / APK",docx:"ZIP / DOCX / XLSX / APK",xlsx:"ZIP / DOCX / XLSX / APK",apk:"ZIP / DOCX / XLSX / APK",gz:"GZIP",mp3:"MP3",wav:"WAV",mp4:"MP4 / MOV",mov:"MP4 / MOV",ogg:"OGG",7z:"7-Zip",rar:"RAR",exe:"Windows EXE / DLL",dll:"Windows EXE / DLL",db:"SQLite",sqlite:"SQLite"};
   const sha=bytesToHex(await crypto.subtle.digest("SHA-256",buf));
@@ -279,6 +292,43 @@ $("hash-compare").addEventListener("click",async()=>{
  const f=$("hash-file").files[0],want=$("expected-hash").value.trim().toLowerCase();
  if(!f)return output("hash-out","Выберите файл.","bad");if(!/^[0-9a-f]{64}$/.test(want))return output("hash-out","Нужен SHA-256 из 64 шестнадцатеричных символов.","bad");
  try{const got=bytesToHex(await crypto.subtle.digest("SHA-256",await f.arrayBuffer()));output("hash-out","SHA-256: "+got+"\n"+(got===want?"СОВПАДАЕТ — файл соответствует ожидаемой контрольной сумме.":"НЕ СОВПАДАЕТ — файл отличается или контрольная сумма неверна."),got===want?"good":"bad");}catch(e){output("hash-out","Ошибка: "+e.message,"bad");}
+});
+
+// Split and join arbitrary binary files locally.
+let splitUrls=[];
+$("split-run").addEventListener("click",()=>{
+ const f=$("split-file").files[0],box=$("split-out");box.replaceChildren();
+ splitUrls.forEach(URL.revokeObjectURL);splitUrls=[];
+ if(!f){output("split-out","Выберите файл.","bad");return;}
+ if(f.size>500*1024*1024){output("split-out","Максимальный размер в этой версии — 500 МБ.","bad");return;}
+ const mb=Number($("split-size").value);
+ if(!Number.isInteger(mb)||mb<1||mb>100){output("split-out","Размер части должен быть от 1 до 100 МБ.","bad");return;}
+ const chunkSize=mb*1024*1024,total=Math.max(1,Math.ceil(f.size/chunkSize)),width=Math.max(3,String(total).length);
+ const note=document.createElement("p");note.textContent="Создано частей: "+total+" · исходный размер: "+sizeText(f.size)+". Скачайте каждую часть:";box.append(note);
+ for(let i=0;i<total;i++){
+  const part=f.slice(i*chunkSize,Math.min(f.size,(i+1)*chunkSize));
+  const name=f.name+".part"+String(i+1).padStart(width,"0")+"of"+String(total).padStart(width,"0")+".mtrxpart";
+  const url=URL.createObjectURL(part);splitUrls.push(url);
+  const a=document.createElement("a");a.href=url;a.download=name;a.textContent="Часть "+(i+1)+" из "+total+" · "+sizeText(part.size);a.style.display="block";a.style.margin="6px 0";box.append(a);
+ }
+});
+$("join-run").addEventListener("click",()=>{
+ const files=[...$("join-parts").files];if(!files.length)return output("join-out","Выберите все части.","bad");
+ const parsed=[];
+ for(const f of files){
+  const m=f.name.match(/^(.*)\.part(\d+)of(\d+)\.mtrxpart$/i);
+  if(!m)return output("join-out","Неизвестное имя части: "+f.name,"bad");
+  parsed.push({file:f,base:m[1],index:Number(m[2]),total:Number(m[3])});
+ }
+ const base=parsed[0].base,total=parsed[0].total;
+ if(parsed.some(x=>x.base!==base||x.total!==total))return output("join-out","Выбраны части из разных наборов.","bad");
+ if(parsed.length!==total)return output("join-out","Не хватает частей: выбрано "+parsed.length+" из "+total+".","bad");
+ parsed.sort((a,b)=>a.index-b.index);
+ if(parsed.some((x,i)=>x.index!==i+1))return output("join-out","Есть пропущенный или повторяющийся номер части.","bad");
+ if(parsed.reduce((s,x)=>s+x.file.size,0)>500*1024*1024)return output("join-out","Суммарный размер частей превышает 500 МБ.","bad");
+ const blob=new Blob(parsed.map(x=>x.file),{type:"application/octet-stream"});
+ download(blob,base);
+ output("join-out","Готово: "+base+" · "+sizeText(blob.size)+" · объединено частей: "+total+". Порядок проверен по именам файлов.","good");
 });
 
 // AES-256-GCM file encryption container.
