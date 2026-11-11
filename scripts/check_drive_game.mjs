@@ -16,26 +16,26 @@ function check(condition, message) {
 }
 
 // Parse the browser module without executing DOM/WebGL code.
-const parseable = js.replace(/^import\\s+.*?;\\s*$/gm, "");
+const parseable = js.replace(/^import\s+.*?;\s*$/gm, "");
 new Function(parseable);
 check(true, "Drive Horizon JavaScript syntax");
 
 // Make sure the page points to the local game module and the referenced file exists.
-const moduleTag = html.match(/<script\\s+type=["']module["']\\s+src=["']([^"']+)["']/i);
+const moduleTag = html.match(/<script\s+type=["']module["']\s+src=["']([^"']+)["']/i);
 check(Boolean(moduleTag), "HTML contains a module entry point");
 const modulePath = moduleTag[1].split("?")[0];
 check(existsSync(resolve(gameDir, modulePath)), "HTML module path exists: " + modulePath);
 
 // Every direct $() lookup must have a corresponding element in the page.
-const ids = new Set([...html.matchAll(/\\bid=["']([^"']+)["']/g)].map((match) => match[1]));
-const lookups = new Set([...js.matchAll(/\\$\\(["']([^"']+)["']\\)/g)].map((match) => match[1]));
+const ids = new Set([...html.matchAll(/\bid=["']([^"']+)["']/g)].map((match) => match[1]));
+const lookups = new Set([...js.matchAll(/\$\(["']([^"']+)["']\)/g)].map((match) => match[1]));
 const missing = [...lookups].filter((id) => !ids.has(id));
 check(missing.length === 0, "All direct DOM lookups exist" + (missing.length ? ": " + missing.join(", ") : ""));
 
 // Guard the fixes that previously regressed in the mobile driving scene.
 check(js.includes("assets/models/cars/suv.glb"), "Ordinary SUV is the default imported vehicle");
 check(js.includes("w.rotateX(-state.speed*dt/radius)"), "Wheels rotate around their local axle X");
-check(js.includes("obj.name.toLowerCase()===" + '"body"' + ")"), "Imported exterior body shell is identified");
+check(js.includes('obj.name.toLowerCase()==="body"'), "Imported exterior body shell is identified");
 check(js.includes("player.userData.bodyShell.visible=state.camera!==1"), "Exterior shell is hidden only in driver view");
 check(js.includes("if(cockpitGroup)cockpitGroup.visible=state.camera===1"), "Cabin appears in driver view");
 check(js.includes("new THREE.PlaneGeometry(1.88,.88)"), "Driver cabin includes windshield geometry");
