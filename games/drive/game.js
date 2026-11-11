@@ -17,7 +17,7 @@ const state = {
 };
 const controls = { gas:false, brake:false, left:false, right:false, handbrake:false };
 let renderer, composer, bloomPass, scene, camera, curve, trackLength, player, playerFallback, carPaintMaterial;
-let cockpitGroup, steeringWheelVisual, cockpitPaintMaterial, cockpitGaugeContext, cockpitGaugeTexture, inputTelemetryTimer=0;
+let cockpitGroup, steeringWheelVisual, cockpitPaintMaterial, cockpitGaugeContext, cockpitGaugeTexture, cockpitGaugeLast=0, inputTelemetryTimer=0;
 const hardware = { steer:0, throttle:0, brake:0, handbrake:false };
 const inputConfig = { steer:"axis0", gas:"button7", brake:"button6", handbrake:"button0", invertSteer:false, invertGas:false, invertBrake:false, pedalsPositive:false, sensitivity:1.25 };
 let skyTexture, skyCanvas, skyContext, sun, directionalLight, ambientLight, stars;
@@ -498,6 +498,7 @@ function buildCockpit() {
 
 function drawCockpitDashboard(speed,rpm,gear) {
   if(!cockpitGaugeContext||!cockpitGaugeTexture)return;
+  const now=performance.now();if(cockpitGaugeLast&&now-cockpitGaugeLast<80)return;cockpitGaugeLast=now;
   const c=cockpitGaugeContext;
   const grad=c.createLinearGradient(0,0,0,180);grad.addColorStop(0,"#1b303b");grad.addColorStop(1,"#050b10");
   c.fillStyle=grad;c.fillRect(0,0,512,180);
