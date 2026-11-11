@@ -294,7 +294,7 @@ $("inspect-run").addEventListener("click",async()=>{
  try{
   const buf=await f.arrayBuffer(),head=String.fromCharCode(...new Uint8Array(buf.slice(0,512))),bytes=new Uint8Array(buf.slice(0,16));
   const signature=signatures.find(x=>x[1](head));const ext=(f.name.split(".").pop()||"").toLowerCase();
-  const extMap={pdf:"PDF",png:"PNG",jpg:"JPEG",jpeg:"JPEG",gif:"GIF",webp:"WEBP",zip:"ZIP / DOCX / XLSX / APK",docx:"ZIP / DOCX / XLSX / APK",xlsx:"ZIP / DOCX / XLSX / APK",apk:"ZIP / DOCX / XLSX / APK",gz:"GZIP",mp3:"MP3",wav:"WAV",mp4:"MP4 / MOV",mov:"MP4 / MOV",ogg:"OGG",7z:"7-Zip",rar:"RAR",exe:"Windows EXE / DLL",dll:"Windows EXE / DLL",db:"SQLite",sqlite:"SQLite"};
+  const extMap={pdf:"PDF",png:"PNG",jpg:"JPEG",jpeg:"JPEG",gif:"GIF",webp:"WEBP",zip:"ZIP / DOCX / XLSX / APK",docx:"ZIP / DOCX / XLSX / APK",xlsx:"ZIP / DOCX / XLSX / APK",apk:"ZIP / DOCX / XLSX / APK",gz:"GZIP",mp3:"MP3",wav:"WAV",mp4:"MP4 / MOV",mov:"MP4 / MOV",ogg:"OGG","7z":"7-Zip",rar:"RAR",exe:"Windows EXE / DLL",dll:"Windows EXE / DLL",db:"SQLite",sqlite:"SQLite"};
   const sha=bytesToHex(await crypto.subtle.digest("SHA-256",buf));
   const expected=extMap[ext], mismatch=expected&&signature&&expected!==signature[0];
   output("inspect-out","Имя: "+f.name+"\nРазмер: "+sizeText(f.size)+"\nMIME браузера: "+(f.type||"не определён")+"\nРасширение: ."+ext+"\nТип по сигнатуре: "+(signature?signature[0]:"не распознан")+"\nПервые 16 байт: "+[...bytes].map(x=>x.toString(16).padStart(2,"0")).join(" ")+"\nSHA-256: "+sha+(mismatch?"\nВНИМАНИЕ: расширение не совпадает с определённой сигнатурой.":"") ,mismatch?"bad":"good");
