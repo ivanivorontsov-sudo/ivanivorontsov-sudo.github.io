@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=horizon-cabin-v7-20261111">
+  <link rel="stylesheet" href="style.css?v=horizon-v8-20261111">
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -146,11 +146,13 @@
       <button class="start-btn" id="startBtn" disabled><span>ЗАГРУЗКА…</span><b>→</b></button>
       <div class="load-status" id="loadStatus">Загружаем трассу и автомобиль…</div>
       <div class="fine-print">* Частота кадров зависит от устройства. Прогресс, рекорд и настройки руля хранятся в этом браузере.</div>
+      <div class="fine-print credits-line">Модели: Car Concept — Darmstadt Graphics Group GmbH и Eric Chadwick, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>, <a href="https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/CarConcept" target="_blank" rel="noopener">Khronos glTF-Sample-Assets</a>. SUV и трафик — Kenney Car Kit, CC0. Текстуры — ambientCG (Asphalt 031, Concrete 034) и Poly Haven (Kloofendal Pure Sky), CC0. Полный список: CREDITS.md</div>
     </div>
   </section>
   <section class="pause-panel glass hidden" id="pausePanel">
     <div class="pause-kicker">DRIVE HORIZON</div><h2>Пауза</h2>
     <p>Дорога подождёт. Она вообще очень терпеливая.</p>
+    <p class="pause-credits">Car Concept © 2024 DGG / Eric Chadwick, CC BY 4.0. Kenney, ambientCG, Poly Haven — CC0.</p>
     <p class="pause-stats">Путь <b id="pauseDistance">0.00 км</b> · Рекорд <b id="pauseRecord">0.00 км</b></p>
     <label class="setting-check"><input type="checkbox" id="speedLinesTogglePause"> Линии скорости</label>
     <button class="start-btn compact" id="resumeBtn"><span>ПРОДОЛЖИТЬ</span><b>→</b></button>
@@ -216,6 +218,6 @@
     }, 18000);
   </script>
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js"}}</script>
-  <script type="module" src="game.js?v=horizon-cabin-v7-20261111"></script>
+  <script type="module" src="game.js?v=horizon-v8-20261111"></script>
 </body>
 </html>

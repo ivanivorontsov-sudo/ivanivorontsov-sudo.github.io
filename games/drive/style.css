@@ -230,3 +230,7 @@ html.touch-ui .analog-hud{width:116px;height:116px;bottom:max(86px,calc(env(safe
 @media (orientation:portrait) and (max-width:600px){
   html.touch-ui .analog-hud{width:104px;height:104px;bottom:max(92px,calc(env(safe-area-inset-bottom) + 78px))}
 }
+
+.credits-line{margin-top:6px;max-width:46ch;margin-left:auto;margin-right:auto}
+.credits-line a{color:#8faeb8;text-decoration:underline}
+.pause-credits{margin:8px 0 0;color:#8fa3ad;font-size:11px;line-height:1.45}
