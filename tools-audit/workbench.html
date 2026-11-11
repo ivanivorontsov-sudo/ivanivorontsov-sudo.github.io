@@ -43,7 +43,7 @@ footer{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);color:v
 </head>
 <body>
 <div class="wrap">
-<div class="top"><a class="brand" href="./">Материаловед · Локальная мастерская</a><a class="back" href="./">← К каталогу 100 инструментов</a></div>
+<div class="top"><a class="brand" href="./">Локальная веб-мастерская</a><a class="back" href="./">← К каталогу 100 инструментов</a></div>
 <header class="hero">
 <div class="eyebrow">Без регистрации · без рекламы · без загрузки файлов на сайт</div>
 <h1>Инструменты работают в браузере. Файлы остаются на устройстве.</h1>
@@ -262,7 +262,7 @@ footer{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);color:v
 </div>
 </section>
 
-<footer>Локальная мастерская · обработка в браузере · код без внешних библиотек · <a href="./">назад к каталогу</a><br>© 2026 Иван Воронцов. Сама страница не хранит пользовательские файлы и пароли.</footer>
+<footer>Локальная мастерская · обработка в браузере · код без внешних библиотек · <a href="./">назад к каталогу</a><br>© 2026 Иван Воронцов · <a href="privacy.html">Политика приватности</a>. Сама страница не хранит пользовательские файлы и пароли.</footer>
 </div>
 
 <script>
@@ -595,7 +595,7 @@ $("rtc-send").addEventListener("click",async()=>{
  sending=true;channelState();
  try{
   dc.send(JSON.stringify({kind:"MTRX_FILE",name:f.name,type:f.type,size:f.size}));
-  const chunk=64*1024;let sent=0;
+  const chunk=16*1024;let sent=0;
   for(let off=0;off<f.size;off+=chunk){await drainChannel();if(!dc||dc.readyState!=="open")throw Error("Соединение прервано.");const ab=await f.slice(off,Math.min(f.size,off+chunk)).arrayBuffer();dc.send(ab);sent+=ab.byteLength;output("rtc-progress","Отправлено "+sizeText(sent)+" / "+sizeText(f.size));}
   await drainChannel();dc.send("MTRX_FILE_END");output("rtc-progress","Файл передан: "+f.name+" · "+sizeText(f.size),"good");
  }catch(e){output("rtc-progress","Ошибка передачи: "+e.message,"bad");}
