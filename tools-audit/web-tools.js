@@ -120,5 +120,5 @@ $("run").addEventListener("click",()=>{try{last=String(run(chosen.id,$("src").va
 $("copy").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(last);$("status").textContent="Скопировано"}catch(e){$("status").textContent="Копирование недоступно: "+e.message}});
 $("save").addEventListener("click",()=>{const u=URL.createObjectURL(new Blob([last],{type:"text/plain;charset=utf-8"})),a=document.createElement("a");a.href=u;a.download=(chosen?chosen.id:"result")+".txt";a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)});
 $("clear").addEventListener("click",()=>{$("src").value="";$("second").value="";$("out").textContent="Результат появится здесь";$("copy").disabled=true;$("save").disabled=true;$("status").textContent="Поля очищены"});
-if("serviceWorker" in navigator)navigator.serviceWorker.register("./sw.js").catch(()=>{});
+if("serviceWorker" in navigator)navigator.serviceWorker.register("/tools-audit/sw.js").catch(()=>{});
 })();

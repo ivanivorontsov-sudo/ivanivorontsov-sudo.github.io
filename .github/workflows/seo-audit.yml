@@ -47,6 +47,10 @@ jobs:
           node-version: "22"
       - name: Validate SEO, metadata, links and sitemap
         run: python scripts/seo_audit.py
+      - name: Verify the 1000-tool workshop inventory
+        run: python scripts/check_workshop.py
+      - name: Parse local converter engine
+        run: node --check tools-audit/workshop/converters.js
       - name: Parse inline JavaScript
         run: node scripts/check_inline_js.mjs
       - name: Check local browser utilities bundle

@@ -1,5 +1,5 @@
-const CACHE_NAME = "tools-audit-shell-v2";
-const CORE = ["./", "./index.html", "./workbench.html", "./privacy.html", "./manifest.webmanifest", "./icon.svg"];
+const CACHE_NAME = "tools-audit-shell-v3";
+const CORE = ["./", "./index.html", "./workbench.html", "./privacy.html", "./manifest.webmanifest", "./icon.svg", "./web-tools.html", "./workshop/converters.js"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()));
 });
