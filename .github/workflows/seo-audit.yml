@@ -53,6 +53,8 @@ jobs:
         run: node --check tools-audit/workshop/converters.js
       - name: Parse smart search engine
         run: node --check tools-audit/search.js
+      - name: Validate Drive Horizon runtime and vehicle
+        run: node scripts/check_drive_game.mjs
       - name: Parse inline JavaScript
         run: node scripts/check_inline_js.mjs
       - name: Check local browser utilities bundle
