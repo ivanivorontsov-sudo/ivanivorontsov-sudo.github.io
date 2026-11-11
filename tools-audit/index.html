@@ -112,6 +112,7 @@ function render(){
 document.getElementById('q').addEventListener('input',render);
 cat.addEventListener('change',render);tag.addEventListener('change',render);
 document.getElementById('quick').addEventListener('click',e=>{const b=e.target.closest('button[data-quick]');if(!b)return;quick=b.dataset.quick;document.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x===b));tag.value='';render()});
+if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 render();
 </script>
 </body>
