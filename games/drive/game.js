@@ -744,7 +744,7 @@ function bindUI() {
   $("qualityBtn").addEventListener("click",()=>{
     state.quality=!state.quality;renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,state.quality?(isMobile?1.25:1.8):1));
     renderer.shadowMap.enabled=state.quality;if(bloomPass)bloomPass.strength=state.quality?(isMobile?.16:.34):.1;
-    renderer.setSize(window.innerWidth,window.innerHeight,false);if(composer)composer.setSize(window.innerWidth,window.innerHeight);
+    renderer.setSize(window.innerWidth,window.innerHeight,false);if(composer){composer.setPixelRatio(renderer.getPixelRatio());composer.setSize(window.innerWidth,window.innerHeight);}
     $("qualityBtn").querySelector(".btn-label").textContent="Графика: "+(state.quality?"высокая":"быстрая");
     toast(state.quality?"Высокое качество":"Режим производительности");
   });
