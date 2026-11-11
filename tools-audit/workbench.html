@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#111827">
-<meta name="description" content="Локальная веб-мастерская: проверка файлов, SHA-256, шифрование AES-GCM, очистка изображений, преобразование аудио, работа с текстом и прямая передача файлов.">
+
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
-<title>Локальная веб-мастерская — инструменты без загрузки файлов</title>
+<title>Бесплатные локальные инструменты для файлов, фото и аудио</title>
 <style>
 :root{color-scheme:dark;--bg:#0b1020;--surface:#131b2e;--surface2:#19243a;--line:#2a3852;--text:#edf2ff;--muted:#aab7cf;--accent:#8ab4ff;--green:#83d6b0;--amber:#f2c879;--red:#ff9f9f}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:94px}body{margin:0;background:radial-gradient(900px 500px at 5% -10%,#233960 0,transparent 65%),var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -40,6 +40,23 @@ textarea{min-height:110px;resize:vertical;font:13px/1.5 ui-monospace,SFMono-Regu
 footer{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:11px}
 @media(max-width:760px){.grid,.tool-links{grid-template-columns:1fr}.card.wide{grid-column:auto}.row,.row3{grid-template-columns:1fr}.wrap{padding:15px 13px 55px}.section-title{align-items:start;flex-direction:column}}
 </style>
+<meta name="description" content="Шифрование AES-256, SHA-256, разделение файлов, очистка EXIF, конвертация фото, аудио и видео, генератор паролей и P2P-передача в браузере.">
+<meta name="theme-color" content="#111827">
+<meta name="author" content="Иван Воронцов">
+<meta name="robots" content="index,follow">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="canonical" href="https://ivanivorontsov-sudo.github.io/tools-audit/workbench.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Проекты Ивана Воронцова">
+<meta property="og:title" content="Бесплатные локальные инструменты для файлов, фото и аудио">
+<meta property="og:description" content="Шифрование AES-256, SHA-256, разделение файлов, очистка EXIF, конвертация фото, аудио и видео, генератор паролей и P2P-передача в браузере.">
+<meta property="og:url" content="https://ivanivorontsov-sudo.github.io/tools-audit/workbench.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Бесплатные локальные инструменты для файлов, фото и аудио">
+<meta name="twitter:description" content="Шифрование AES-256, SHA-256, разделение файлов, очистка EXIF, конвертация фото, аудио и видео, генератор паролей и P2P-передача в браузере.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Локальная веб-мастерская","url":"https://ivanivorontsov-sudo.github.io/tools-audit/workbench.html","description":"Шифрование AES-256, SHA-256, разделение файлов, очистка EXIF, конвертация фото, аудио и видео, генератор паролей и P2P-передача в браузере.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","isAccessibleForFree":true,"inLanguage":"ru-RU","featureList":["Проверка сигнатур и SHA-256","Шифрование и расшифрование AES-256-GCM","Разделение и объединение файлов","Очистка EXIF и конвертация изображений","Преобразование аудио в WAV и видео в WebM","Форматирование JSON, Base64 и URL","Генератор паролей","Передача файлов через WebRTC DataChannel"],"isPartOf":{"@type":"WebSite","name":"Проекты Ивана Воронцова","url":"https://ivanivorontsov-sudo.github.io/"}}</script>
 </head>
 <body>
 <div class="wrap">
