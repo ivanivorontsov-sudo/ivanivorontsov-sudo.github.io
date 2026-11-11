@@ -40,7 +40,7 @@ textarea{min-height:110px;resize:vertical;font:13px/1.5 ui-monospace,SFMono-Regu
 footer{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:11px}
 @media(max-width:760px){.grid,.tool-links{grid-template-columns:1fr}.card.wide{grid-column:auto}.row,.row3{grid-template-columns:1fr}.wrap{padding:15px 13px 55px}.section-title{align-items:start;flex-direction:column}}
 </style>
-<meta name="description" content="Шифрование AES-256, SHA-256, разделение файлов, очистка EXIF, конвертация фото, аудио и видео, генератор паролей и P2P-передача в браузере.">
+<meta name="description" content="Бесплатные инструменты в браузере: AES-256-GCM, SHA-256, проверка файлов, очистка EXIF, конвертация фото, аудио, видео и P2P-передача до 512 МБ.">
 
 <meta name="author" content="Иван Воронцов">
 <meta name="robots" content="index,follow">
@@ -50,17 +50,19 @@ footer{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);color:v
 <meta property="og:locale" content="ru_RU">
 <meta property="og:site_name" content="Проекты Ивана Воронцова">
 <meta property="og:title" content="Бесплатные локальные инструменты для файлов, фото и аудио">
-<meta property="og:description" content="Шифрование AES-256, SHA-256, разделение файлов, очистка EXIF, конвертация фото, аудио и видео, генератор паролей и P2P-передача в браузере.">
+<meta property="og:description" content="Бесплатные инструменты в браузере: AES-256-GCM, SHA-256, проверка файлов, очистка EXIF, конвертация фото, аудио, видео и P2P-передача до 512 МБ.">
 <meta property="og:url" content="https://ivanivorontsov-sudo.github.io/tools-audit/workbench.html">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Бесплатные локальные инструменты для файлов, фото и аудио">
-<meta name="twitter:description" content="Шифрование AES-256, SHA-256, разделение файлов, очистка EXIF, конвертация фото, аудио и видео, генератор паролей и P2P-передача в браузере.">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Локальная веб-мастерская","url":"https://ivanivorontsov-sudo.github.io/tools-audit/workbench.html","description":"Шифрование AES-256, SHA-256, разделение файлов, очистка EXIF, конвертация фото, аудио и видео, генератор паролей и P2P-передача в браузере.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","isAccessibleForFree":true,"inLanguage":"ru-RU","featureList":["Проверка сигнатур и SHA-256","Шифрование и расшифрование AES-256-GCM","Разделение и объединение файлов","Очистка EXIF и конвертация изображений","Преобразование аудио в WAV и видео в WebM","Форматирование JSON, Base64 и URL","Генератор паролей","Передача файлов через WebRTC DataChannel"],"isPartOf":{"@type":"WebSite","name":"Проекты Ивана Воронцова","url":"https://ivanivorontsov-sudo.github.io/"}}</script>
+<meta name="twitter:description" content="Бесплатные инструменты в браузере: AES-256-GCM, SHA-256, проверка файлов, очистка EXIF, конвертация фото, аудио, видео и P2P-передача до 512 МБ.">
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Локальная веб-мастерская","url":"https://ivanivorontsov-sudo.github.io/tools-audit/workbench.html","description":"Бесплатные инструменты в браузере: AES-256-GCM, SHA-256, проверка файлов, очистка EXIF, конвертация фото, аудио, видео и P2P-передача до 512 МБ.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","isAccessibleForFree":true,"inLanguage":"ru-RU","featureList":["Проверка сигнатур и SHA-256","Шифрование и расшифрование AES-256-GCM","Разделение и объединение файлов","Очистка EXIF и конвертация изображений","Преобразование аудио в WAV и видео в WebM","Форматирование JSON, Base64 и URL","Генератор паролей","Передача файлов через WebRTC DataChannel"],"isPartOf":{"@type":"WebSite","name":"Проекты Ивана Воронцова","url":"https://ivanivorontsov-sudo.github.io/"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://ivanivorontsov-sudo.github.io/"},{"@type":"ListItem","position":2,"name":"Каталог 100 инструментов","item":"https://ivanivorontsov-sudo.github.io/tools-audit/"},{"@type":"ListItem","position":3,"name":"Локальная веб-мастерская","item":"https://ivanivorontsov-sudo.github.io/tools-audit/workbench.html"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","inLanguage":"ru-RU","mainEntity":[{"@type":"Question","name":"Отправляются ли выбранные файлы на сервер сайта?","acceptedAnswer":{"@type":"Answer","text":"Нет. Проверка, хеширование, шифрование и поддерживаемые преобразования выполняются браузером на устройстве. Файлы не включаются в запросы к статическому хостингу."}},{"@type":"Question","name":"Работает ли мастерская офлайн?","acceptedAnswer":{"@type":"Answer","text":"После первого посещения Service Worker кеширует оболочку приложения и основные страницы. Локальные функции могут работать без интернета; P2P требует подключения двух устройств."}},{"@type":"Question","name":"Какие ограничения размеров установлены?","acceptedAnswer":{"@type":"Answer","text":"Проверка файла и SHA-256 — до 256 МБ; шифрование — до 100 МБ; разбиение — до 500 МБ; аудио — до 120 МБ; видео — до 1,5 ГБ; P2P — до 512 МБ. Фактический предел зависит от памяти браузера."}},{"@type":"Question","name":"Почему WebRTC может не подключиться?","acceptedAnswer":{"@type":"Answer","text":"Используется прямой WebRTC без серверов STUN и TURN. NAT, VPN, корпоративные сети и брандмауэры могут блокировать прямой маршрут. SDP-предложение и ответ передавайте только предполагаемому получателю."}}]}</script>
 </head>
 <body>
 <div class="wrap">
-<div class="top"><a class="brand" href="./">Локальная веб-мастерская</a><a class="back" href="./">← К каталогу 100 инструментов</a></div>
+<div class="top"><a class="brand" href="./">Локальная веб-мастерская</a><div class="top-links"><a class="back" href="./">← К каталогу 100 инструментов</a><a class="back" href="privacy.html">Политика приватности</a></div></div>
 <header class="hero">
 <div class="eyebrow">Без регистрации · без рекламы · без загрузки файлов на сайт</div>
 <h1>Инструменты работают в браузере. Файлы остаются на устройстве.</h1>
@@ -250,7 +252,7 @@ footer{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);color:v
 <div class="btns"><button class="btn primary" id="rtc-send" disabled>Отправить файл</button><button class="btn danger" id="rtc-close">Закрыть соединение</button></div>
 <div class="output" id="rtc-progress" aria-live="polite"></div>
 <div class="received" id="rtc-received"></div>
-<p class="hint">Соединение использует WebRTC с DTLS-шифрованием, но без STUN/TURN. Поэтому чаще всего работает в одной локальной сети или там, где возможен прямой ICE-маршрут; через сложный NAT или разные сети соединение может не установиться. Для создания связи сервер сигнализации не используется. Сверяйте предложение и ответ через доверенный канал: не публикуйте их открыто.</p>
+<p class="hint">Передача ограничена 512 МБ, получатель сверяет объявленный и фактически принятый размер. Соединение использует WebRTC с DTLS-шифрованием, но без STUN/TURN. Поэтому чаще всего работает в одной локальной сети или там, где возможен прямой ICE-маршрут; через сложный NAT или разные сети соединение может не установиться. Для создания связи сервер сигнализации не используется. Сверяйте предложение и ответ через доверенный канал: не публикуйте их открыто.</p>
 </article>
 </div>
 </section>
@@ -279,6 +281,7 @@ footer{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);color:v
 </div>
 </section>
 
+<section class="section" id="faq" aria-labelledby="faq-title"><div class="section-title"><h2 id="faq-title">Частые вопросы</h2><p>Локальная обработка и ограничения</p></div><div class="grid"><article class="card"><h3>Отправляются ли выбранные файлы на сервер сайта?</h3><p class="desc">Нет. Проверка, хеширование, шифрование и поддерживаемые преобразования выполняются браузером на устройстве. Файлы не включаются в запросы к статическому хостингу.</p></article><article class="card"><h3>Работает ли мастерская офлайн?</h3><p class="desc">После первого посещения Service Worker кеширует оболочку приложения и основные страницы. Локальные функции могут работать без интернета; P2P требует подключения двух устройств.</p></article><article class="card"><h3>Какие ограничения размеров установлены?</h3><p class="desc">Проверка файла и SHA-256 — до 256 МБ; шифрование — до 100 МБ; разбиение — до 500 МБ; аудио — до 120 МБ; видео — до 1,5 ГБ; P2P — до 512 МБ. Фактический предел зависит от памяти браузера.</p></article><article class="card"><h3>Почему WebRTC может не подключиться?</h3><p class="desc">Используется прямой WebRTC без серверов STUN и TURN. NAT, VPN, корпоративные сети и брандмауэры могут блокировать прямой маршрут. SDP-предложение и ответ передавайте только предполагаемому получателю.</p></article></div></section>
 <footer>Локальная мастерская · обработка в браузере · код без внешних библиотек · <a href="./">назад к каталогу</a><br>© 2026 Иван Воронцов · <a href="privacy.html">Политика приватности</a>. Сама страница не хранит пользовательские файлы и пароли.</footer>
 </div>
 
@@ -320,6 +323,7 @@ $("inspect-run").addEventListener("click",async()=>{
 $("hash-compare").addEventListener("click",async()=>{
  const f=$("hash-file").files[0],want=$("expected-hash").value.trim().toLowerCase();
  if(!f)return output("hash-out","Выберите файл.","bad");if(!/^[0-9a-f]{64}$/.test(want))return output("hash-out","Нужен SHA-256 из 64 шестнадцатеричных символов.","bad");
+ if(f.size>256*1024*1024)return output("hash-out","Файл больше 256 МБ. Проверка остановлена, чтобы не перегружать память браузера.","bad");
  try{const got=bytesToHex(await crypto.subtle.digest("SHA-256",await f.arrayBuffer()));output("hash-out","SHA-256: "+got+"\n"+(got===want?"СОВПАДАЕТ — файл соответствует ожидаемой контрольной сумме.":"НЕ СОВПАДАЕТ — файл отличается или контрольная сумма неверна."),got===want?"good":"bad");}catch(e){output("hash-out","Ошибка: "+e.message,"bad");}
 });
 
@@ -561,6 +565,7 @@ $("pass-generate").addEventListener("click",()=>{
 $("pass-copy").addEventListener("click",async()=>{if(!generated)return output("pass-out","Сначала создайте пароль.","bad");try{await copyText(generated);$("pass-meter").style.width="100%";}catch(e){output("pass-out",e.message,"bad");}});
 
 // Peer-to-peer file transfer with manual SDP exchange and no signaling server.
+const MAX_TRANSFER_SIZE=512*1024*1024;
 let pc=null,dc=null,receiving=null,sending=false;
 const rtcStatus=(s,k)=>output("rtc-status",s,k);
 function channelState(){const open=dc&&dc.readyState==="open";$("rtc-channel").textContent=open?"Соединение открыто · "+dc.readyState:(dc?"Канал: "+dc.readyState:"Не подключено");$("rtc-send").disabled=!open||sending||!$("rtc-file").files.length;}
@@ -568,14 +573,31 @@ $("rtc-file").addEventListener("change",channelState);
 function attachChannel(ch){
  dc=ch;dc.binaryType="arraybuffer";dc.bufferedAmountLowThreshold=128*1024;
  dc.onopen=()=>{rtcStatus("Прямой канал открыт. Файлы можно отправлять в обе стороны.","good");channelState();};
- dc.onclose=()=>{rtcStatus("Канал закрыт.");channelState();};
- dc.onerror=()=>rtcStatus("Ошибка канала передачи.","bad");
- dc.onmessage=async ev=>{
+ dc.onclose=()=>{receiving=null;rtcStatus("Канал закрыт.");channelState();};
+ dc.onerror=()=>{receiving=null;rtcStatus("Ошибка канала передачи.","bad");};
+ dc.onmessage=ev=>{
   if(typeof ev.data==="string"){
    if(ev.data==="MTRX_FILE_END"){
-    if(receiving){const blob=new Blob(receiving.parts,{type:receiving.type||"application/octet-stream"});const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=receiving.name; a.textContent="Скачать "+receiving.name+" · "+sizeText(blob.size);a.addEventListener("click",()=>setTimeout(()=>URL.revokeObjectURL(u),30000),{once:true});$("rtc-received").append(a);output("rtc-progress","Файл получен: "+receiving.name+" · "+sizeText(blob.size),"good");receiving=null;}
-   }else{try{const m=JSON.parse(ev.data);if(m.kind==="MTRX_FILE"&&Number.isFinite(m.size)&&m.size>=0){receiving={name:String(m.name||"received.bin").replace(/[\\:*?"<>|]/g,"_").replaceAll("/","_"),type:String(m.type||"application/octet-stream"),size:m.size,parts:[],got:0};output("rtc-progress","Получение "+receiving.name+" · "+sizeText(receiving.size));}}catch{}}
-  }else if(receiving&&ev.data instanceof ArrayBuffer){receiving.parts.push(ev.data);receiving.got+=ev.data.byteLength;output("rtc-progress","Получено "+sizeText(receiving.got)+" / "+sizeText(receiving.size));}
+    if(!receiving)return;const done=receiving;receiving=null;
+    if(done.got!==done.size){output("rtc-progress","Передача прервана: ожидалось "+sizeText(done.size)+", получено "+sizeText(done.got)+".","bad");return;}
+    const blob=new Blob(done.parts,{type:done.type}),url=URL.createObjectURL(blob),a=document.createElement("a");
+    a.href=url;a.download=done.name;a.textContent="Скачать "+done.name+" · "+sizeText(blob.size);
+    a.addEventListener("click",()=>setTimeout(()=>URL.revokeObjectURL(url),30000),{once:true});
+    $("rtc-received").append(a);output("rtc-progress","Файл получен: "+done.name+" · "+sizeText(blob.size),"good");
+   }else{
+    try{
+     const m=JSON.parse(ev.data);if(m.kind!=="MTRX_FILE")return;
+     if(!Number.isSafeInteger(m.size)||m.size<0||m.size>MAX_TRANSFER_SIZE){receiving=null;output("rtc-progress","Файл отклонён: размер не указан или превышает 512 МБ.","bad");return;}
+     const safeName=String(m.name||"received.bin").replace(/[\u0000-\u001f\u007f\\/:*?"<>|]/g,"_").slice(0,180)||"received.bin";
+     receiving={name:safeName,type:String(m.type||"application/octet-stream").slice(0,120),size:m.size,parts:[],got:0};
+     output("rtc-progress","Получение "+receiving.name+" · "+sizeText(receiving.size));
+    }catch{output("rtc-progress","Не удалось прочитать описание входящего файла.","bad");}
+   }
+  }else if(receiving&&ev.data instanceof ArrayBuffer){
+   const next=receiving.got+ev.data.byteLength;
+   if(next>receiving.size||next>MAX_TRANSFER_SIZE){receiving=null;output("rtc-progress","Передача остановлена: получено больше объявленного размера.","bad");return;}
+   receiving.parts.push(ev.data);receiving.got=next;output("rtc-progress","Получено "+sizeText(receiving.got)+" / "+sizeText(receiving.size));
+  }
  };
  channelState();
 }
@@ -606,10 +628,20 @@ $("rtc-apply-answer").addEventListener("click",async()=>{
 $("rtc-copy").addEventListener("click",async()=>{try{await copyText($("rtc-offer-text").value);rtcStatus("Текст скопирован.");}catch(e){rtcStatus(e.message,"bad");}});
 $("rtc-copy-answer").addEventListener("click",async()=>{try{await copyText($("rtc-answer-result").value);rtcStatus("Ответ скопирован.");}catch(e){rtcStatus(e.message,"bad");}});
 $("rtc-close").addEventListener("click",()=>{if(pc)pc.close();pc=null;dc=null;receiving=null;sending=false;channelState();rtcStatus("Соединение закрыто.");});
-function drainChannel(){if(!dc||dc.readyState!=="open")return Promise.reject(Error("Канал разорван."));if(dc.bufferedAmount<256*1024)return Promise.resolve();return new Promise(resolve=>dc.addEventListener("bufferedamountlow",resolve,{once:true}));}
+function drainChannel(){
+ const channel=dc;if(!channel||channel.readyState!=="open")return Promise.reject(Error("Канал разорван."));
+ if(channel.bufferedAmount<256*1024)return Promise.resolve();
+ return new Promise((resolve,reject)=>{
+  let settled=false;
+  const finish=error=>{if(settled)return;settled=true;clearTimeout(timer);channel.removeEventListener("bufferedamountlow",onLow);channel.removeEventListener("close",onClose);error?reject(error):resolve();};
+  const onLow=()=>finish(),onClose=()=>finish(Error("Соединение закрыто во время передачи."));
+  const timer=setTimeout(()=>finish(Error("Буфер передачи не освободился за 30 секунд.")),30000);
+  channel.addEventListener("bufferedamountlow",onLow,{once:true});channel.addEventListener("close",onClose,{once:true});
+ });
+}
 $("rtc-send").addEventListener("click",async()=>{
  const f=$("rtc-file").files[0];if(!f||!dc||dc.readyState!=="open"||sending)return;
- if(f.size>1024*1024*1024)return output("rtc-progress","Файл больше 1 ГБ — передача не запущена.","bad");
+ if(f.size>MAX_TRANSFER_SIZE)return output("rtc-progress","Файл больше 512 МБ — передача не запущена.","bad");
  sending=true;channelState();
  try{
   dc.send(JSON.stringify({kind:"MTRX_FILE",name:f.name,type:f.type,size:f.size}));
