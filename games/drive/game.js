@@ -546,7 +546,9 @@ function placeVehicles(dt) {
   });
   const chasePos=player.position.clone().addScaledVector(tan,-11.5).add(new THREE.Vector3(0,5.1,0)).addScaledVector(right,state.steer*.65);
   // Глаза водителя находятся внутри импортированного салона.
-  const cockpitPos=player.localToWorld(new THREE.Vector3(.49,1.52,.20));
+  // Driver seat and steering wheel after Blender→glTF axis conversion and model yaw.
+  // Eye point sits just behind the wheel and below the roof line.
+  const cockpitPos=player.localToWorld(new THREE.Vector3(.49,1.30,.08));
   // Камера вынесена за передний бампер: капот не перекрывает изображение.
   const hoodPos=player.localToWorld(new THREE.Vector3(0,1.42,-2.72));
   const topPos=player.position.clone().add(new THREE.Vector3(0,21,0)).addScaledVector(tan,-1.2);
@@ -557,9 +559,9 @@ function placeVehicles(dt) {
     player.userData.steeringWheel.rotation.set(base.x,base.y,base.z-state.steer*.55);
   }
   if(player.userData.rollingWheels)player.userData.rollingWheels.forEach(w=>{w.rotation.z-=state.speed*dt*1.9;});
-  const look=state.camera===3?player.position.clone():state.camera===1?player.localToWorld(new THREE.Vector3(.49,1.38,-24)):state.camera===2?player.localToWorld(new THREE.Vector3(0,1.2,-30)):player.position.clone().addScaledVector(tan,5).add(new THREE.Vector3(0,.8,0));
+  const look=state.camera===3?player.position.clone():state.camera===1?player.localToWorld(new THREE.Vector3(.49,1.25,-35)):state.camera===2?player.localToWorld(new THREE.Vector3(0,1.2,-30)):player.position.clone().addScaledVector(tan,5).add(new THREE.Vector3(0,.8,0));
   camera.lookAt(look);
-  const targetFov=state.camera===1?74:(isMobile?69:62);
+  const targetFov=state.camera===1?68:(isMobile?69:62);
   if(Math.abs(camera.fov-targetFov)>.1){camera.fov=lerp(camera.fov,targetFov,Math.min(1,dt*4));camera.updateProjectionMatrix();}
 }
 
@@ -626,7 +628,7 @@ function updateGame(dt) {
 function resize() {
   if(!renderer||!camera)return;
   const w=window.innerWidth,h=window.innerHeight;
-  camera.aspect=w/h;camera.fov=state.camera===1?74:(w<650?69:62);camera.updateProjectionMatrix();
+  camera.aspect=w/h;camera.near=.06;camera.fov=state.camera===1?68:(w<650?69:62);camera.updateProjectionMatrix();
   renderer.setSize(w,h,false);
   if(composer)composer.setSize(w,h);
 }
