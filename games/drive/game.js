@@ -141,7 +141,7 @@ function buildTrack() {
   addRibbon(-9.48,.16,lineMat,.075);addRibbon(9.48,.16,lineMat,.075);
   const dashGeo=new THREE.BoxGeometry(.14,.035,6.2);
   const dashMat=new THREE.MeshStandardMaterial({color:0xf4f1dc,roughness:.8,emissive:0x151410});
-  const dashCount=Math.floor(trackLength/16)*2;
+  const dashCount=Math.ceil(trackLength/16)*2+2;
   const dashes=new THREE.InstancedMesh(dashGeo,dashMat,dashCount);
   const dummy=new THREE.Object3D();let k=0;
   for(let t=0;t<1;t+=16/trackLength){
@@ -280,7 +280,7 @@ function buildWorld() {
   grassTexture=canvasTexture("grass");
   grassTexture.repeat.set(90,90);
   const ground=new THREE.Mesh(new THREE.PlaneGeometry(1800,1800),new THREE.MeshStandardMaterial({map:grassTexture,color:0xffffff,roughness:1}));
-  ground.rotation.x=-Math.PI/2;ground.position.y=-1.25;ground.receiveShadow=true;scene.add(ground);
+  ground.rotation.x=-Math.PI/2;ground.position.y=0;ground.receiveShadow=true;scene.add(ground);
   const distantGround=new THREE.Mesh(new THREE.PlaneGeometry(4000,4000),new THREE.MeshStandardMaterial({color:0x5d785d,roughness:1}));
   distantGround.rotation.x=-Math.PI/2;distantGround.position.y=-2.1;scene.add(distantGround);
   buildTrack();addMountains();addForest();addStreetFurniture();addPitStop();
@@ -324,7 +324,7 @@ function makeCar(color) {
   }
   const headlights=[];
   for(const x of [-.72,.72]){
-    const light=new THREE.SpotLight(0xf3e5c3,0,58,Math.PI/7,.4,1.2);
+    const light=new THREE.SpotLight(0xf3e5c3,32,58,Math.PI/7,.4,1.2);
     light.position.set(x,.88,-1.8);light.target.position.set(x,0,-24);g.add(light);g.add(light.target);headlights.push(light);
   }
   g.userData={wheels,headlights,bodyMat};
