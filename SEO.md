@@ -49,7 +49,7 @@
 
 ## Категории каталога
 
-Десять категорий будут опубликованы отдельными страницами в `tools-audit/categories/`. На каждой странице будет собственное описание, список из десяти программ, ссылки на карточки полного каталога, canonical, Open Graph, Twitter Card и Schema.org CollectionPage/ItemList/BreadcrumbList. Все адреса включены в `sitemap.xml`.
+Десять категорий опубликованы отдельными страницами в `tools-audit/categories/`. На каждой странице будет собственное описание, список из десяти программ, ссылки на карточки полного каталога, canonical, Open Graph, Twitter Card и Schema.org CollectionPage/ItemList/BreadcrumbList. Все адреса включены в `sitemap.xml`.
 
 Поиск и фильтры применяются к готовым HTML-карточкам. Параметры `q`, `category`, `tag` и `quick` сохраняются в URL через History API, поэтому отфильтрованным представлением можно делиться ссылкой. Без JavaScript весь каталог остаётся видимым.
 
