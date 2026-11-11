@@ -30,6 +30,9 @@ input,select{width:100%;background:var(--panel);color:var(--text);border:1px sol
 .method{margin:36px 0 0;padding:22px;border:1px solid var(--line);border-radius:16px;background:#111a2c}.method h2{margin:0 0 12px;font-size:22px}.method p,.method li{color:var(--muted);font-size:13px}.method ul{padding-left:20px}
 footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 @media(max-width:760px){.metrics{grid-template-columns:repeat(2,1fr)}.searchrow{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.wrap{padding:18px 14px 50px}.sectionhead{align-items:start;flex-direction:column}}
+
+.workbench{margin:18px 0 22px;padding:19px;border:1px solid #496284;background:linear-gradient(130deg,#172844,#151d2e);border-radius:17px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px}.workbench h2{font-size:20px;margin:0 0 5px}.workbench p{margin:0;color:#c2cee2;font-size:13px;max-width:760px}.workbench a{display:inline-flex;align-items:center;justify-content:center;background:#8ab4ff;color:#0b1020;border-radius:11px;padding:11px 15px;font-weight:800;white-space:nowrap}.workbench a:hover{text-decoration:none;filter:brightness(1.08)}
+@media(max-width:760px){.workbench{grid-template-columns:1fr}.workbench a{justify-self:start}}
 </style>
 </head>
 <body>
@@ -63,6 +66,7 @@ footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:v
  </div>
 </div>
 <div class="notice"><strong>Важно:</strong> наличие подписки, рекламы, телеметрии или облачной обработки не означает, что программа является вирусом или вредоносным ПО. В карточках отмечены конкретные условия, описанные разработчиками. Передача файла на сервер, сбор технической телеметрии и продажа пользовательского содержимого — разные вещи.</div>
+<div class="workbench"><div><h2>Локальная веб-мастерская</h2><p>Шифрование файлов AES-256, SHA-256, проверка формата файлов, очистка фото от метаданных, преобразование аудио в WAV, JSON, Base64, очистка текста и прямая передача файлов между браузерами. Обработка выполняется на устройстве.</p></div><a href="workbench.html">Открыть инструменты →</a></div>
 <div class="sectionhead"><h2>Каталог</h2><div class="count" id="shown">Показано 100 из 100</div></div>
 <div class="grid" id="grid"></div>
 <div class="empty" id="empty">По выбранным условиям ничего не найдено.</div>
