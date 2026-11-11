@@ -79,7 +79,7 @@
 .touch-btn.horn,.touch-btn.handbrake{height:44px;min-width:72px;border-radius:12px;font-size:8px;font-weight:900;letter-spacing:.12em}
 .touch-btn.horn{color:#ffe7a8;border-color:rgba(255,210,120,.5);background:rgba(120,90,30,.28)}
 .touch-btn.handbrake{color:#ffd0c4;border-color:rgba(245,145,126,.4)}
-.speed-lines{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;background:repeating-linear-gradient(90deg,transparent 0 18%,rgba(255,255,255,.07) 20%,transparent 22%);mix-blend-mode:overlay;transition:opacity .18s}
+.speed-lines{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;background:repeating-linear-gradient(108deg,transparent 0 42px,rgba(255,255,255,.14) 43px,transparent 45px),repeating-linear-gradient(72deg,transparent 0 50px,rgba(255,255,255,.08) 51px,transparent 53px);-webkit-mask-image:linear-gradient(90deg,#000 0%,#000 10%,transparent 20%,transparent 80%,#000 90%,#000 100%);mask-image:linear-gradient(90deg,#000 0%,#000 10%,transparent 20%,transparent 80%,#000 90%,#000 100%);transition:opacity .2s}
 .crack-overlay{position:fixed;inset:0;z-index:4;pointer-events:none;opacity:0;background:
   radial-gradient(circle at 30% 20%,rgba(255,255,255,.05),transparent 24%),
   linear-gradient(118deg,transparent 46%,rgba(255,255,255,.28) 46.3%,transparent 46.6%),
@@ -204,4 +204,16 @@ html.touch-ui body.cam-cockpit .hud-strip{left:auto;right:56px;max-width:min(320
   html.touch-ui .hud-strip{top:52px;padding:4px 10px;gap:10px}
   html.touch-ui .strip-primary strong{font-size:20px}
   html.touch-ui .strip-stats{gap:8px}
+}
+
+.setting-check{display:flex;align-items:center;gap:10px;margin:14px 0 2px;font-size:12px;font-weight:700;letter-spacing:.04em;color:#c5d4dc;cursor:pointer}
+.setting-check input{accent-color:#78dfd8;width:16px;height:16px;flex:none}
+.pause-panel .setting-check{justify-content:center;margin:6px 0 14px}
+#message.message-pill,.message-pill{top:58px !important;bottom:auto !important;left:50%;transform:translateX(-50%);z-index:6;max-width:min(70vw,440px)}
+html.touch-ui .message-pill{top:54px !important;max-width:min(62vw,340px)}
+.toast{top:58px !important}
+html.touch-ui .toast{top:54px !important}
+@media (max-width:650px){
+  .toast{top:54px !important}
+  .message-pill{top:54px !important}
 }

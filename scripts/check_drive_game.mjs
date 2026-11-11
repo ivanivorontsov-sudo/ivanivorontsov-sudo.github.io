@@ -54,6 +54,12 @@ check(js.includes("mirrorCam"), "Rear-view mirror camera exists");
 check(js.includes("if(k===\"u\")toggleHud();"), "HUD can be hidden with the U key");
 check(html.includes('id="hudStrip"'), "Compact HUD strip exists");
 check(html.includes('id="moreBtn"'), "Mobile header collapses into a menu button");
+check(html.includes('id="speedLinesToggle"'), "Speed-line setting exists");
+check(js.includes("driveHorizonSpeedLines"), "Speed-line preference is persisted");
+check(js.includes("function updateSpeedLines"), "Speed lines respect camera, speed and the user toggle");
+check(js.includes("function syncCockpitMirror"), "Portrait rear-view mirror is recentered");
+check(js.includes("function drawDigitalCluster"), "Sports car uses a digital instrument cluster");
+check(js.includes("top:194.5"), "Spectral GT RS is geared for a 700 km/h top speed");
 check(html.includes('data-car="spectral"') && html.includes('data-car="suv"'), "Both vehicle choices exist in the menu");
 check(css.includes(".vehicle-picker"), "Garage selection is styled");
 
@@ -63,7 +69,7 @@ check(js.includes("function honk("), "Horn can be sounded");
 check(html.includes('data-control="horn"'), "On-screen horn button exists");
 check(js.includes("QUALITY_PRESETS"), "Graphics quality presets exist");
 check(js.includes("function collideWorld"), "Collision resolution is present");
-check(js.includes("Math.max(1, Math.ceil(Math.abs(state.speed)*dt/1.15))"), "High-speed collision uses substeps");
+check(js.includes("Math.max(1, Math.ceil(Math.abs(state.speed)*dt/maxStep))"), "High-speed collision uses substeps");
 check(js.includes("__DRIVE_HORIZON_READY"), "Boot readiness flag is published");
 
 console.log("Drive Horizon validation passed.");

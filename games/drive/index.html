@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=horizon-hud-20261111">
+  <link rel="stylesheet" href="style.css?v=horizon-hyper-20261111">
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -142,6 +142,7 @@
         <button class="paint" data-paint="#343a46" style="--paint:#343a46" aria-label="Графитовый"></button>
         <button class="paint" data-paint="#e5b84b" style="--paint:#e5b84b" aria-label="Золотой"></button>
       </div>
+      <label class="setting-check"><input type="checkbox" id="speedLinesToggle"> Линии скорости</label>
       <button class="start-btn" id="startBtn" disabled><span>ЗАГРУЗКА…</span><b>→</b></button>
       <div class="load-status" id="loadStatus">Загружаем трассу и автомобиль…</div>
       <div class="fine-print">* Частота кадров зависит от устройства. Прогресс, рекорд и настройки руля хранятся в этом браузере.</div>
@@ -151,6 +152,7 @@
     <div class="pause-kicker">DRIVE HORIZON</div><h2>Пауза</h2>
     <p>Дорога подождёт. Она вообще очень терпеливая.</p>
     <p class="pause-stats">Путь <b id="pauseDistance">0.00 км</b> · Рекорд <b id="pauseRecord">0.00 км</b></p>
+    <label class="setting-check"><input type="checkbox" id="speedLinesTogglePause"> Линии скорости</label>
     <button class="start-btn compact" id="resumeBtn"><span>ПРОДОЛЖИТЬ</span><b>→</b></button>
     <button class="secondary-btn" id="restartBtn">↻ Начать поездку заново</button>
     <button class="secondary-btn" id="menuBtn">⌂ В главное меню</button>
@@ -213,6 +215,6 @@
     }, 18000);
   </script>
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js"}}</script>
-  <script type="module" src="game.js?v=horizon-hud-20261111"></script>
+  <script type="module" src="game.js?v=horizon-hyper-20261111"></script>
 </body>
 </html>
