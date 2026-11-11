@@ -49,9 +49,23 @@ class PageParser(HTMLParser):
         self._title_buffer = ""
         self._script_jsonld = False
         self._script_buffer = ""
+        self.document_langs: list[str] = []
+        self.image_missing_alt = 0
+        self.unsafe_blank_links: list[str] = []
+        self.heading_levels: list[int] = []
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         a = {k.lower(): (v or "") for k, v in attrs}
+        if tag.lower() == "html":
+            self.document_langs.append(a.get("lang", "").strip())
+        if tag.lower() == "img" and "alt" not in a:
+            self.image_missing_alt += 1
+        if tag.lower() == "a" and a.get("target", "").lower() == "_blank":
+            rel_tokens = {token.lower() for token in a.get("rel", "").split()}
+            if not ({"noopener", "noreferrer"} & rel_tokens):
+                self.unsafe_blank_links.append(a.get("href", "(без href)"))
+        if re.fullmatch(r"h[1-6]", tag.lower()):
+            self.heading_levels.append(int(tag[1]))
         if "id" in a:
             if a["id"] in self.ids:
                 self.duplicate_ids.add(a["id"])
@@ -170,6 +184,19 @@ def check_page(path: Path, seen_canonicals: dict[str, Path]) -> None:
 
     if parser.h1_count != 1:
         error(f"{rel}: expected exactly one H1, found {parser.h1_count}")
+
+    if len(parser.document_langs) != 1 or not parser.document_langs[0]:
+        warning(f"{rel}: missing or ambiguous <html lang>")
+    viewports = parser.metas.get("viewport", [])
+    if len(viewports) != 1 or "width=device-width" not in (viewports[0].lower() if viewports else ""):
+        warning(f"{rel}: expected one responsive viewport meta tag")
+    if parser.image_missing_alt:
+        warning(f"{rel}: {parser.image_missing_alt} image(s) missing alt")
+    for href in parser.unsafe_blank_links:
+        warning(f"{rel}: target=_blank without rel=noopener/noreferrer: {href}")
+    for previous, current in zip(parser.heading_levels, parser.heading_levels[1:]):
+        if current > previous + 1:
+            warning(f"{rel}: heading level jumps from h{previous} to h{current}")
 
     if len(parser.canonicals) != 1 or not parser.canonicals[0]:
         error(f"{rel}: expected exactly one canonical URL, found {len(parser.canonicals)}")
