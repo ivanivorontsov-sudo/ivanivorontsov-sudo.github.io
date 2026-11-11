@@ -9,7 +9,7 @@ const $ = (id) => document.getElementById(id);
 const sceneHost = $("scene");
 const isMobile = matchMedia("(max-width: 700px)").matches || ("ontouchstart" in window);
 const state = {
-  time: "sunset", paint: "#df4e3d", quality: !isMobile, camera: 0,
+  time: "sunset", paint: "#df4e3d", quality: true, camera: 0,
   running: false, paused: false, speed: 0, distance: 0, progress: 0,
   lateral: 0, steer: 0, steerInput: 0, totalDistance: 0, hitCooldown: 0,
   messageTimer: 0, soundOn: true, gamepadIndex: null
@@ -77,10 +77,13 @@ function canvasTexture(kind, size=512) {
 }
 
 function makeSky() {
-  skyCanvas = document.createElement("canvas"); skyCanvas.width=8; skyCanvas.height=512;
+  skyCanvas = document.createElement("canvas"); skyCanvas.width=1024; skyCanvas.height=512;
   skyContext = skyCanvas.getContext("2d");
   skyTexture = new THREE.CanvasTexture(skyCanvas);
   skyTexture.colorSpace = THREE.SRGBColorSpace;
+  skyTexture.mapping = THREE.EquirectangularReflectionMapping;
+  scene.environment = skyTexture;
+  scene.environmentIntensity = 0.9;
   const sky = new THREE.Mesh(
     new THREE.SphereGeometry(850,32,18),
     new THREE.MeshBasicMaterial({map:skyTexture,side:THREE.BackSide,depthWrite:false})
@@ -106,13 +109,26 @@ function applyTime(mode) {
   const p = PALETTES[mode] || PALETTES.sunset;
   const grad = skyContext.createLinearGradient(0,0,0,512);
   grad.addColorStop(0,p.top); grad.addColorStop(.58,p.middle); grad.addColorStop(1,p.horizon);
-  skyContext.fillStyle=grad;skyContext.fillRect(0,0,8,512);skyTexture.needsUpdate=true;
+  skyContext.fillStyle=grad;skyContext.fillRect(0,0,skyCanvas.width,skyCanvas.height);
+  if(mode!=="night"){
+    for(let i=0;i<34;i++){
+      const x=rand()*skyCanvas.width,y=95+rand()*230,rx=45+rand()*120,ry=9+rand()*25;
+      const cloud=skyContext.createRadialGradient(x,y,2,x,y,rx);
+      cloud.addColorStop(0,mode==="sunset"?"rgba(255,226,205,.25)":"rgba(255,255,255,.24)");
+      cloud.addColorStop(.55,mode==="sunset"?"rgba(255,220,198,.11)":"rgba(255,255,255,.10)");
+      cloud.addColorStop(1,"rgba(255,255,255,0)");
+      skyContext.save();skyContext.translate(x,y);skyContext.scale(1,ry/rx);
+      skyContext.fillStyle=cloud;skyContext.beginPath();skyContext.arc(0,0,rx,0,Math.PI*2);skyContext.fill();skyContext.restore();
+    }
+  }
+  skyTexture.needsUpdate=true;
   scene.fog.color.setHex(p.fog);
   ambientLight.intensity=p.ambient;
   directionalLight.intensity=p.direct;
   directionalLight.color.set(mode==="night"?0x9bb8e4:0xffe2c1);
   sun.visible=mode!=="night";stars.visible=mode==="night";
-  if(player && player.userData.headlights) player.userData.headlights.forEach(l=>l.visible=mode==="night");
+  const lights=playerFallback?.userData.headlights;
+  if(lights)lights.forEach(l=>l.visible=mode==="night");
   const label = mode==="day"?"День":mode==="night"?"Ночь":"Закат";
   $("timeBtn").querySelector("#timeIcon").textContent=mode==="day"?"☀️":mode==="night"?"🌙":"🌇";
   $("timeBtn").querySelector(".btn-label").textContent=label;
@@ -180,15 +196,15 @@ function buildTrack() {
 }
 
 function addMountains() {
-  const rockMat=new THREE.MeshStandardMaterial({color:0x667a7b,roughness:1,flatShading:true});
-  const snowMat=new THREE.MeshStandardMaterial({color:0xe3e8e4,roughness:.95,flatShading:true});
+  const rockMat=new THREE.MeshStandardMaterial({color:0x718488,roughness:.96,metalness:.02});
+  const snowMat=new THREE.MeshStandardMaterial({color:0xe3e8e4,roughness:.9});
   for(let i=0;i<34;i++){
     const a=rand()*Math.PI*2,d=260+rand()*180,h=48+rand()*100,w=32+rand()*58;
     const x=Math.cos(a)*d,z=Math.sin(a)*d;
-    const m=new THREE.Mesh(new THREE.ConeGeometry(w,h,6+Math.floor(rand()*3)),rockMat);
+    const m=new THREE.Mesh(new THREE.ConeGeometry(w,h,32,8),rockMat);
     m.position.set(x,h/2-8,z);m.rotation.y=rand()*Math.PI;m.rotation.z=(rand()-.5)*.12;m.castShadow=true;scene.add(m);
     if(h>90){
-      const cap=new THREE.Mesh(new THREE.ConeGeometry(w*.31,h*.22,6),snowMat);
+      const cap=new THREE.Mesh(new THREE.ConeGeometry(w*.31,h*.22,24,3),snowMat);
       cap.position.set(x,h*.88-8,z);cap.rotation.y=m.rotation.y;scene.add(cap);
     }
   }
@@ -196,12 +212,12 @@ function addMountains() {
 
 function addForest() {
   const trunkGeo=new THREE.CylinderGeometry(.12,.22,2.6,6);
-  const crownGeo=new THREE.ConeGeometry(1.55,4.4,7);
+  const crownGeo=new THREE.ConeGeometry(1.55,4.4,16,3);
   const trunkMat=new THREE.MeshStandardMaterial({color:0x604a38,roughness:1});
   const leafMats=[
-    new THREE.MeshStandardMaterial({color:0x315b4a,roughness:1,flatShading:true}),
-    new THREE.MeshStandardMaterial({color:0x416c53,roughness:1,flatShading:true}),
-    new THREE.MeshStandardMaterial({color:0x547d5b,roughness:1,flatShading:true})
+    new THREE.MeshStandardMaterial({color:0x315b4a,roughness:.94}),
+    new THREE.MeshStandardMaterial({color:0x416c53,roughness:.94}),
+    new THREE.MeshStandardMaterial({color:0x547d5b,roughness:.94})
   ];
   const count=520;
   const trunks=new THREE.InstancedMesh(trunkGeo,trunkMat,count);
@@ -339,43 +355,50 @@ function makeCar(color) {
   return g;
 }
 
-function updateCarPaint() {
-  if(player && player.userData.bodyMat) player.userData.bodyMat.color.set(state.paint);
-  if(cockpitPaintMaterial)cockpitPaintMaterial.color.set(state.paint);
-  if(player && player.userData.loadedModel) player.userData.loadedModel.traverse(obj=>{
-    if(obj.isMesh){
-      const mats=Array.isArray(obj.material)?obj.material:[obj.material];
-      mats.forEach(m=>{const n=(m.name||"").toLowerCase();if(n.includes("body")||n.includes("paint")||n.includes("car"))m.color.set(state.paint);});
-    }
+function updateCarPaint(){
+  if(playerFallback?.userData.bodyMat)playerFallback.userData.bodyMat.color.set(state.paint);
+  if(player?.userData.loadedModel)player.userData.loadedModel.traverse(obj=>{
+    if(!obj.isMesh)return;
+    const mats=Array.isArray(obj.material)?obj.material:[obj.material];
+    mats.forEach(m=>{const n=(m.name||"").toLowerCase();if(n.includes("spectral blue")||n.includes("paint")||n.includes("body paint"))m.color.set(state.paint);});
   });
 }
 
-function loadPremiumCar() {
+function loadPremiumCar(){
   const loader=new GLTFLoader();
-  const url="https://raw.githubusercontent.com/ivanivorontsov-sudo/car-simulator/main/assets/models/cars/sedan-sports.glb";
+  const url="https://raw.githubusercontent.com/JaronKBragg7337/spectral-gt-rs/main/spectral_gt_rs_game_ready.glb";
   loader.load(url,(gltf)=>{
     if(!player)return;
     const model=gltf.scene;
-    model.rotation.y=Math.PI;
-    const box=new THREE.Box3().setFromObject(model);
-    const size=box.getSize(new THREE.Vector3());
-    const span=Math.max(size.x,size.z)||4;
-    model.scale.setScalar(4.35/span);
-    const fit=new THREE.Box3().setFromObject(model);
-    model.position.y-=fit.min.y;
+    // В GLB перед автомобиля направлен по +X; +90° совмещает его с трассой (-Z).
+    model.rotation.y=Math.PI/2;
+    const bounds=new THREE.Box3().setFromObject(model);
+    model.position.y-=bounds.min.y;
+    const rollingWheels=[];let wheelSteering=null;
     model.traverse(obj=>{
-      if(obj.isMesh){obj.castShadow=true;obj.receiveShadow=true;
-        if(Array.isArray(obj.material))obj.material=obj.material.map(m=>m.clone());else if(obj.material)obj.material=obj.material.clone();
-        const mats=Array.isArray(obj.material)?obj.material:[obj.material];
-        mats.forEach(m=>{const n=(m.name||"").toLowerCase();if(n.includes("body")||n.includes("paint")||n.includes("car"))m.color.set(state.paint);});
-      }
+      if(!obj.isMesh)return;
+      obj.castShadow=true;obj.receiveShadow=true;
+      if(Array.isArray(obj.material))obj.material=obj.material.map(m=>m.clone());
+      else if(obj.material)obj.material=obj.material.clone();
+      const mats=Array.isArray(obj.material)?obj.material:[obj.material];
+      mats.forEach(m=>{const n=(m.name||"").toLowerCase();if(n.includes("spectral blue")||n.includes("paint"))m.color.set(state.paint);});
+      if(/^(front|rear)_(left|right)_tire$/i.test(obj.name))rollingWheels.push(obj);
+      if(obj.name.toLowerCase()==="steering_wheel")wheelSteering=obj;
     });
-    if(playerFallback)player.remove(playerFallback);
-    player.add(model);player.userData.loadedModel=model;
-    $("loadStatus").textContent="Автомобиль готов. Можно выезжать.";
+    // Fallback является отдельной дочерней группой, её можно корректно заменить.
+    if(playerFallback){player.remove(playerFallback);playerFallback=null;}
+    player.add(model);
+    player.userData.loadedModel=model;
+    player.userData.rollingWheels=rollingWheels;
+    player.userData.steeringWheel=wheelSteering;
+    player.userData.steeringWheelBase=wheelSteering?wheelSteering.rotation.clone():null;
+    player.updateMatrixWorld(true);
+    $("loadStatus").textContent="Spectral GT RS · детализированная модель готова.";
     updateCarPaint();
-  },undefined,()=>{
-    $("loadStatus").textContent="Готово. Автомобиль собран в браузере.";
+    if(state.camera===1)setMessage("Вид из кабины · настоящий интерьер Spectral GT RS",3);
+  },undefined,(error)=>{
+    console.warn("Premium vehicle unavailable; keeping fallback car",error);
+    $("loadStatus").textContent="Модель не загрузилась · используется резервный автомобиль.";
   });
 }
 
@@ -425,80 +448,30 @@ function updateAudio() {
   engineOsc.frequency.setTargetAtTime(42+Math.max(0,state.speed)*1.8,now,.08);
   engineGain.gain.setTargetAtTime(state.running&&!state.paused?0.035:0.0001,now,.12);
 }
-function setCameraMode() {
-  // На сенсорном экране кнопка камеры должна сразу переключать вид водителя.
-  // Дополнительные ракурсы по-прежнему доступны клавишей C.
+function cameraLabel(){return ["Погоня","Кабина","Капот","Сверху"][state.camera]||"Погоня";}
+function updateCameraButton(){
+  const label=cameraLabel(),button=$("cameraBtn");
+  button.querySelector(".btn-label").textContent=label;
+  button.setAttribute("aria-label","Камера: "+label);
+  button.title="Камера: "+label+" · нажми для переключения вида";
+}
+function setCameraMode(){
+  // Сенсорная кнопка всегда переключает только между видом снаружи и салоном.
   state.camera=state.camera===1?0:1;
-  const label=state.camera===1?"Кабина":"Погоня";
-  $("cameraBtn").querySelector(".btn-label").textContent=label;
-  $("cameraBtn").setAttribute("aria-label",state.camera===1?"Вернуться к виду снаружи":"Перейти к виду из кабины");
-  $("cameraBtn").title=state.camera===1?"Вернуться к виду снаружи":"Перейти к виду из кабины";
-  setMessage(state.camera===1?"Вид из кабины · приборная панель перед вами":"Вид снаружи");
+  updateCameraButton();
+  setMessage(state.camera===1?"Вид водителя · настоящий салон и приборная панель":"Вид снаружи · камера преследования");
+}
+function cycleCameraMode(){
+  state.camera=(state.camera+1)%4;
+  updateCameraButton();
+  setMessage("Камера: "+cameraLabel());
 }
 
-
-function buildCockpit() {
-  cockpitGroup = new THREE.Group();
-  const dashMat = new THREE.MeshPhysicalMaterial({color:0x141d25,roughness:.34,metalness:.28,clearcoat:.55});
-  const trimMat = new THREE.MeshStandardMaterial({color:0x303e48,metalness:.52,roughness:.32});
-  const leatherMat = new THREE.MeshStandardMaterial({color:0x090e13,roughness:.82});
-  const glassMat = new THREE.MeshPhysicalMaterial({color:0x91b9c8,metalness:.05,roughness:.08,transparent:true,opacity:.12,side:THREE.DoubleSide,depthWrite:false});
-  const metalMat = new THREE.MeshStandardMaterial({color:0xaeb9bd,metalness:.86,roughness:.22});
-  const addBox = (w,h,d,mat,x,y,z,rx=0,ry=0,rz=0) => {
-    const m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
-    m.position.set(x,y,z);m.rotation.set(rx,ry,rz);m.renderOrder=4;cockpitGroup.add(m);return m;
-  };
-  // Мягкая передняя панель и приборная консоль находятся в системе координат камеры.
-  addBox(2.42,.34,.62,dashMat,0,-.96,-1.34);
-  addBox(.92,.08,.54,trimMat,0,-.76,-1.55);
-  cockpitPaintMaterial=new THREE.MeshPhysicalMaterial({color:state.paint,metalness:.68,roughness:.25,clearcoat:1});
-  addBox(1.96,.11,1.2,cockpitPaintMaterial,0,-1.36,-2.45);
-  addBox(.1,1.38,.12,leatherMat,-1.12,-.02,-1.62,0,0,-.13);
-  addBox(.1,1.38,.12,leatherMat,1.12,-.02,-1.62,0,0,.13);
-  addBox(2.32,.12,.14,leatherMat,0,.68,-1.66);
-  const windshield=new THREE.Mesh(new THREE.PlaneGeometry(2.08,1.18),glassMat);
-  windshield.position.set(0,.04,-1.7);windshield.renderOrder=3;cockpitGroup.add(windshield);
-  addBox(2.12,.09,.16,trimMat,0,-1.18,-1.53);
-  addBox(.11,.7,.12,leatherMat,-1.03,-.67,-.12,0,0,-.08);
-  addBox(.11,.7,.12,leatherMat,1.03,-.67,-.12,0,0,.08);
-  // Текстурированная приборная панель с цифровыми шкалами.
-  const gaugeCanvas=document.createElement("canvas");gaugeCanvas.width=512;gaugeCanvas.height=180;
-  cockpitGaugeContext=gaugeCanvas.getContext("2d");const gc=cockpitGaugeContext;
-  const gg=gc.createLinearGradient(0,0,0,180);gg.addColorStop(0,"#172a36");gg.addColorStop(1,"#071016");
-  gc.fillStyle=gg;gc.fillRect(0,0,512,180);
-  gc.strokeStyle="#4f9eaa";gc.lineWidth=3;gc.strokeRect(5,5,502,170);
-  for(const x of [115,395]){
-    gc.beginPath();gc.arc(x,88,59,Math.PI*.82,Math.PI*2.18);gc.lineWidth=7;gc.strokeStyle="#80d6cf";gc.stroke();
-    for(let i=0;i<=10;i++){const a=Math.PI*.82+i/10*Math.PI*1.36;gc.beginPath();gc.moveTo(x+Math.cos(a)*46,88+Math.sin(a)*46);gc.lineTo(x+Math.cos(a)*54,88+Math.sin(a)*54);gc.strokeStyle="#d7e8e7";gc.lineWidth=2;gc.stroke();}
-  }
-  gc.fillStyle="#eaf8f5";gc.textAlign="center";gc.font="800 27px Manrope, sans-serif";gc.fillText("DRIVE",256,76);
-  gc.fillStyle="#80d6cf";gc.font="700 14px Manrope, sans-serif";gc.fillText("HORIZON  •  SPORT",256,104);
-  gc.fillStyle="#a8c4cb";gc.font="600 11px Manrope, sans-serif";gc.fillText("KM/H                         RPM",256,137);
-  cockpitGaugeTexture=new THREE.CanvasTexture(gaugeCanvas);cockpitGaugeTexture.colorSpace=THREE.SRGBColorSpace;
-  const gaugeTex=cockpitGaugeTexture;
-  const gauge=new THREE.Mesh(new THREE.PlaneGeometry(1.45,.5),new THREE.MeshBasicMaterial({map:gaugeTex,side:THREE.DoubleSide}));
-  gauge.position.set(0,-.77,-1.005);gauge.renderOrder=5;cockpitGroup.add(gauge);
-  drawCockpitDashboard(0,850,"N");
-  // Руль с металлическими спицами. Он вращается вместе с аналоговым рулевым вводом.
-  steeringWheelVisual=new THREE.Group();steeringWheelVisual.position.set(0,-.52,-.94);
-  const wheelMat=new THREE.MeshStandardMaterial({color:0x10161c,roughness:.48,metalness:.22});
-  const ring=new THREE.Mesh(new THREE.TorusGeometry(.36,.047,14,56),wheelMat);steeringWheelVisual.add(ring);
-  const hub=new THREE.Mesh(new THREE.CylinderGeometry(.105,.105,.09,24),trimMat);hub.rotation.x=Math.PI/2;steeringWheelVisual.add(hub);
-  const spokeA=new THREE.Mesh(new THREE.BoxGeometry(.055,.31,.065),metalMat);spokeA.position.y=.18;steeringWheelVisual.add(spokeA);
-  const spokeB=new THREE.Mesh(new THREE.BoxGeometry(.055,.29,.065),metalMat);spokeB.position.set(-.17,-.19,0);spokeB.rotation.z=-.65;steeringWheelVisual.add(spokeB);
-  const spokeC=new THREE.Mesh(new THREE.BoxGeometry(.055,.29,.065),metalMat);spokeC.position.set(.17,-.19,0);spokeC.rotation.z=.65;steeringWheelVisual.add(spokeC);
-  const badge=new THREE.Mesh(new THREE.CircleGeometry(.075,24),new THREE.MeshStandardMaterial({color:0x8adbd3,metalness:.35,roughness:.3}));
-  badge.position.z=.055;steeringWheelVisual.add(badge);
-  cockpitGroup.add(steeringWheelVisual);
-  // Зеркала и лаконичная рамка лобового стекла добавляют глубину кабине.
-  addBox(.36,.16,.09,trimMat,-1.13,.08,-1.42,0,0,-.12);
-  addBox(.36,.16,.09,trimMat,1.13,.08,-1.42,0,0,.12);
-  const mirrorMat=new THREE.MeshPhysicalMaterial({color:0x4f7481,metalness:.52,roughness:.13});
-  addBox(.32,.14,.1,mirrorMat,0,.55,-1.49);
-  cockpitGroup.visible=false;
-  camera.add(cockpitGroup);
+function buildCockpit(){
+  // Кабина теперь является частью настоящей GLB-модели автомобиля.
+  // Отдельная примитивная панель, прикреплённая к камере, удалена.
+  cockpitGroup=null;steeringWheelVisual=null;
 }
-
 
 function drawCockpitDashboard(speed,rpm,gear) {
   if(!cockpitGaugeContext||!cockpitGaugeTexture)return;
@@ -533,7 +506,7 @@ function placeVehicles(dt) {
   player.position.y+=.13+Math.sin(clock.now*7)*Math.min(.035,state.speed*.0008);
   player.rotation.y=yaw+state.steer*.055;
   player.rotation.z=lerp(player.rotation.z,-state.steer*.065,Math.min(1,dt*5));
-  if(player.userData.wheels)player.userData.wheels.forEach((wheel,i)=>{
+  if(playerFallback?.userData.wheels)playerFallback.userData.wheels.forEach((wheel,i)=>{
     wheel.rotation.x-=state.speed*dt*1.7;
     if(i<2)wheel.rotation.y=state.steer*.12;
   });
@@ -545,16 +518,21 @@ function placeVehicles(dt) {
     car.visual.rotation.z=Math.sin(clock.now*.6+car.wiggle)*.008;
   });
   const chasePos=player.position.clone().addScaledVector(tan,-11.5).add(new THREE.Vector3(0,5.1,0)).addScaledVector(right,state.steer*.65);
-  const cockpitPos=player.localToWorld(new THREE.Vector3(0,1.52,.28));
-  const hoodPos=player.position.clone().addScaledVector(tan,1.35).add(new THREE.Vector3(0,1.52,0));
+  // Глаза водителя находятся внутри импортированного салона.
+  const cockpitPos=player.localToWorld(new THREE.Vector3(.49,1.52,.20));
+  // Камера вынесена за передний бампер: капот не перекрывает изображение.
+  const hoodPos=player.localToWorld(new THREE.Vector3(0,1.42,-2.72));
   const topPos=player.position.clone().add(new THREE.Vector3(0,21,0)).addScaledVector(tan,-1.2);
   const desired=state.camera===0?chasePos:state.camera===1?cockpitPos:state.camera===2?hoodPos:topPos;
-  camera.position.lerp(desired,Math.min(1,dt*(state.camera===3?2.4:state.camera===1?7:4.5)));
-  if(cockpitGroup)cockpitGroup.visible=state.camera===1;
-  if(steeringWheelVisual)steeringWheelVisual.rotation.z=-state.steer*.72;
-  const look=state.camera===3?player.position.clone():player.position.clone().addScaledVector(tan,state.camera===1?45:state.camera===2?25:5).add(new THREE.Vector3(0,.8,0));
+  camera.position.lerp(desired,Math.min(1,dt*(state.camera===3?2.4:state.camera===1?12:state.camera===2?9:4.5)));
+  if(player.userData.steeringWheel&&player.userData.steeringWheelBase){
+    const base=player.userData.steeringWheelBase;
+    player.userData.steeringWheel.rotation.set(base.x,base.y,base.z-state.steer*.55);
+  }
+  if(player.userData.rollingWheels)player.userData.rollingWheels.forEach(w=>{w.rotation.z-=state.speed*dt*1.9;});
+  const look=state.camera===3?player.position.clone():state.camera===1?player.localToWorld(new THREE.Vector3(.49,1.38,-24)):state.camera===2?player.localToWorld(new THREE.Vector3(0,1.2,-30)):player.position.clone().addScaledVector(tan,5).add(new THREE.Vector3(0,.8,0));
   camera.lookAt(look);
-  const targetFov=state.camera===1?78:(isMobile?69:62);
+  const targetFov=state.camera===1?74:(isMobile?69:62);
   if(Math.abs(camera.fov-targetFov)>.1){camera.fov=lerp(camera.fov,targetFov,Math.min(1,dt*4));camera.updateProjectionMatrix();}
 }
 
@@ -611,7 +589,7 @@ function updateGame(dt) {
     $("rpm").textContent=rpmValue+" RPM";
     $("rpmBar").style.width=clamp((Math.abs(state.speed)/58)*100,0,100)+"%";
     $("gear").textContent=gearValue;
-    drawCockpitDashboard(kmh,rpmValue,gearValue);
+    // Скорость и обороты отображаются на штатной приборной панели автомобиля.
     $("distance").innerHTML=(state.distance/1000).toFixed(2)+" <i>KM</i>";
     updateAudio();
   }
@@ -621,7 +599,7 @@ function updateGame(dt) {
 function resize() {
   if(!renderer||!camera)return;
   const w=window.innerWidth,h=window.innerHeight;
-  camera.aspect=w/h;camera.fov=state.camera===1?78:(w<650?69:62);camera.updateProjectionMatrix();
+  camera.aspect=w/h;camera.fov=state.camera===1?74:(w<650?69:62);camera.updateProjectionMatrix();
   renderer.setSize(w,h,false);
   if(composer)composer.setSize(w,h);
 }
@@ -738,7 +716,7 @@ function bindControls() {
   window.addEventListener("keydown",e=>{
     const k=e.key.toLowerCase();
     if(keyMap[k]){controls[keyMap[k]]=true;e.preventDefault();}
-    if(k==="c")setCameraMode();
+    if(k==="c")cycleCameraMode();
     if(k==="r")restartGame();
     if(k==="f1"){e.preventDefault();$("devicePanel").classList.toggle("hidden");refreshDevicePanel();}
     if(k==="escape"&&!$("devicePanel").classList.contains("hidden"))$("devicePanel").classList.add("hidden");
@@ -779,7 +757,7 @@ function bindUI() {
   $("timeBtn").addEventListener("click",()=>{const modes=["sunset","day","night"];applyTime(modes[(modes.indexOf(state.time)+1)%modes.length]);toast("Время суток: "+(state.time==="day"?"день":state.time==="night"?"ночь":"закат"));});
   $("qualityBtn").addEventListener("click",()=>{
     state.quality=!state.quality;renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,state.quality?(isMobile?1.25:1.8):1));
-    renderer.shadowMap.enabled=state.quality;if(bloomPass)bloomPass.strength=state.quality?(isMobile?.16:.34):.1;
+    renderer.shadowMap.enabled=state.quality;if(bloomPass)bloomPass.strength=state.quality?(isMobile?.22:.34):.08;
     renderer.setSize(window.innerWidth,window.innerHeight,false);if(composer){composer.setPixelRatio(renderer.getPixelRatio());composer.setSize(window.innerWidth,window.innerHeight);}
     $("qualityBtn").querySelector(".btn-label").textContent="Графика: "+(state.quality?"высокая":"быстрая");
     toast(state.quality?"Высокое качество":"Режим производительности");
@@ -809,11 +787,11 @@ function loop(now) {
 }
 function init() {
   try{
-    renderer=new THREE.WebGLRenderer({antialias:!isMobile,alpha:false,powerPreference:"high-performance"});
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,state.quality?(isMobile?1.25:1.8):1));
+    renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"high-performance"});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,state.quality?(isMobile?1.4:1.8):1));
     renderer.setSize(window.innerWidth,window.innerHeight,false);
     renderer.outputColorSpace=THREE.SRGBColorSpace;
-    renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.13;
+    renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;
     renderer.shadowMap.enabled=state.quality;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
     sceneHost.appendChild(renderer.domElement);
     composer=new EffectComposer(renderer);
@@ -830,11 +808,11 @@ function init() {
     composer.addPass(new RenderPass(scene,camera));
     bloomPass=new UnrealBloomPass(new THREE.Vector2(window.innerWidth,window.innerHeight),isMobile?.16:.34,.42,.76);
     composer.addPass(bloomPass);composer.addPass(new OutputPass());
-    player=makeCar(state.paint);playerFallback=player;scene.add(player);
-    createTraffic();buildCockpit();drawMiniMap();bindControls();bindUI();window.addEventListener("resize",resize);
+    player=new THREE.Group();playerFallback=makeCar(state.paint);player.add(playerFallback);scene.add(player);
+    createTraffic();buildCockpit();updateCameraButton();drawMiniMap();bindControls();bindUI();window.addEventListener("resize",resize);
     loadInputConfig();refreshDevicePanel();
     loadPremiumCar();
-    $("loadStatus").textContent="Трасса готова. Автомобиль загружается…";
+    $("loadStatus").textContent="Трасса готова. Загружается детализированный автомобиль…";
     $("record").innerHTML=(Number(localStorage.getItem("driveHorizonRecord")||0)/1000).toFixed(2)+" <i>KM</i>";
     setMessage("Держи полосу и наслаждайся дорогой");
     requestAnimationFrame(loop);
