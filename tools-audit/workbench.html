@@ -477,8 +477,9 @@ $("video-run").addEventListener("click",async()=>{
   if(!blob.size)throw Error("Браузер не выдал записанные данные.");
   download(blob,(f.name.replace(/.[^.]+$/,"")||"video")+".webm");
   const originalDuration=videoEl.duration;
-  output("video-out","Готово: "+originalDuration.toFixed(1)+" сек. · "+sizeText(f.size)+" → "+sizeText(blob.size)+" · "+(stream.getAudioTracks().length?"аудиодорожка захвачена":"аудиодорожка не обнаружена")+".
-Результат WebM скачан.","good");
+  const stem=f.name.includes(".")?f.name.slice(0,f.name.lastIndexOf(".")):f.name;
+  download(blob,(stem||"video")+".webm");
+  output("video-out","Готово: "+originalDuration.toFixed(1)+" сек. · "+sizeText(f.size)+" → "+sizeText(blob.size)+" · "+(stream.getAudioTracks().length?"аудиодорожка захвачена":"аудиодорожка не обнаружена")+".\nРезультат WebM скачан.","good");
  }catch(e){
   if(recorder&&recorder.state!=="inactive")try{recorder.stop();}catch{}
   output("video-out","Перекодирование не выполнено: "+e.message,"bad");
