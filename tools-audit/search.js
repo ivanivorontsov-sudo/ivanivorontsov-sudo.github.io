@@ -2,6 +2,7 @@
 const $=id=>document.getElementById(id),ROOT="./",CACHE_KEY="workshop-search-catalog-v1",DB_NAME="workshop-smart-search",DB_VERSION=1;
 let catalog=[],fileRecords=[],fileMap=new Map(),mode="all",searchTimer=0,db=null;
 const providers=[
+["GigaChat","https://giga.chat/","ИИ-ассистент Сбера для диалога, текстов, анализа и повседневных задач.","Универсальный"],
 ["ChatGPT","https://chatgpt.com/","Универсальный ассистент: тексты, анализ, программирование и работа с файлами.","Универсальный"],
 ["Claude","https://claude.ai/new","Длинные тексты, анализ документов, сложное письмо и программирование.","Текст и код"],
 ["Gemini","https://gemini.google.com/app","Мультимодальные задачи и сервисы Google.","Универсальный"],
