@@ -479,58 +479,74 @@ function cycleCameraMode(){
 }
 
 function buildCockpit(){
-  // The Kenney SUV GLB is an exterior shell. Hide its shell in FPS and supply a
-  // light-weight but actual 3D cabin so the driver's view is never inside metal.
+  // Compact, left-hand-drive cabin aligned to the SUV's local forward direction (-Z).
+  // The exterior body is hidden in FPS, so all visible cabin pieces are intentionally
+  // placed around the driver's eye point rather than copied from exterior dimensions.
   cockpitGroup=new THREE.Group();
   player.add(cockpitGroup);
   cockpitGroup.visible=false;
-  const dashMat=new THREE.MeshStandardMaterial({color:0x171d22,roughness:.58,metalness:.14});
-  const softMat=new THREE.MeshStandardMaterial({color:0x0b1015,roughness:.86});
-  const trimMat=new THREE.MeshStandardMaterial({color:0x66727b,roughness:.34,metalness:.62});
-  const seatMat=new THREE.MeshStandardMaterial({color:0x252c32,roughness:.9});
-  const glassMat=new THREE.MeshPhysicalMaterial({color:0x8bb9c9,roughness:.12,metalness:.05,transparent:true,opacity:.105,side:THREE.DoubleSide,depthWrite:false});
+
+  const dashMat=new THREE.MeshStandardMaterial({color:0x20272d,roughness:.56,metalness:.18});
+  const softMat=new THREE.MeshStandardMaterial({color:0x10151a,roughness:.88});
+  const trimMat=new THREE.MeshStandardMaterial({color:0x65717a,roughness:.32,metalness:.62});
+  const seatMat=new THREE.MeshStandardMaterial({color:0x343b41,roughness:.92});
+  const glassMat=new THREE.MeshPhysicalMaterial({color:0xb5d7e2,roughness:.12,metalness:0,transparent:true,opacity:.055,side:THREE.DoubleSide,depthWrite:false});
+
   const box=(w,h,d,mat,x,y,z,rx=0,ry=0,rz=0)=>{
     const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
-    mesh.position.set(x,y,z);mesh.rotation.set(rx,ry,rz);mesh.castShadow=true;mesh.receiveShadow=true;cockpitGroup.add(mesh);return mesh;
+    mesh.position.set(x,y,z);mesh.rotation.set(rx,ry,rz);
+    mesh.castShadow=true;mesh.receiveShadow=true;cockpitGroup.add(mesh);return mesh;
   };
-  // Dash and center stack.
-  box(2.08,.25,.68,dashMat,0,1.16,-.79);
-  box(2.02,.065,.34,softMat,0,1.31,-.91);
-  box(.52,.49,.64,dashMat,0,.87,-.33);
-  box(.48,.045,.35,trimMat,0,1.12,-.47);
-  // Seats, door cards, A-pillars, roof header and a lightly tinted windshield.
+
+  // Dashboard follows the base of the windshield. Keep the center stack low
+  // and narrow so it cannot cover the driver's forward view or steering wheel.
+  box(2.02,.20,.48,dashMat,0,1.13,-.92);
+  box(1.98,.045,.28,softMat,0,1.245,-.96);
+  box(.34,.25,.30,dashMat,.27,.83,-.47);
+  box(.30,.025,.22,trimMat,.27,.965,-.50);
+
+  // Seats are moved rearward and lowered. Their backs stay behind the eye point.
   for(const x of [-.48,.48]){
-    box(.64,.20,.68,seatMat,x,.48,.43);
-    box(.64,.76,.20,seatMat,x,.87,.76,-.12);
-    box(.34,.23,.15,softMat,x,1.30,.76);
+    box(.58,.14,.60,seatMat,x,.39,.77);
+    box(.58,.58,.15,seatMat,x,.73,1.02,-.10);
+    box(.29,.18,.12,softMat,x,1.08,1.04);
   }
-  for(const x of [-1.02,1.02]){
-    box(.13,.64,1.15,softMat,x,.91,.04,0,0,x<0?-.06:.06);
-    box(.035,.055,.68,trimMat,x<0?-.94:.94,.99,.02);
-    box(.105,1.08,.13,softMat,x*.92,1.61,-1.20,0,0,x<0?-.12:.12);
+
+  // Door cards and slim windshield pillars, avoiding bulky shapes near the view.
+  for(const x of [-1.00,1.00]){
+    box(.085,.48,1.05,softMat,x,.86,.04,0,0,x<0?-.035:.035);
+    box(.025,.035,.58,trimMat,x<0?-.94:.94,.99,.02);
+    box(.065,.92,.085,softMat,x*.91,1.57,-1.22,0,0,x<0?-.10:.10);
   }
-  box(2.02,.13,.16,softMat,0,2.13,-1.10);
-  const windshield=new THREE.Mesh(new THREE.PlaneGeometry(1.88,.88),glassMat);
-  windshield.position.set(0,1.64,-1.18);windshield.renderOrder=2;cockpitGroup.add(windshield);
-  box(.10,.10,.32,trimMat,0,2.04,-1.14);
-  // Conventional round steering wheel on the left-hand driver's side.
+  box(1.90,.075,.10,softMat,0,2.02,-1.22);
+  const windshield=new THREE.Mesh(new THREE.PlaneGeometry(1.82,.78),glassMat);
+  windshield.position.set(0,1.60,-1.225);
+  windshield.renderOrder=2;cockpitGroup.add(windshield);
+  box(.075,.075,.20,trimMat,0,1.98,-1.18);
+
+  // Steering wheel now sits in front of the driver, unobstructed by the center stack.
   steeringWheelVisual=new THREE.Group();
-  steeringWheelVisual.position.set(-.48,1.02,-.36);
+  steeringWheelVisual.position.set(-.48,1.02,-.62);
   cockpitGroup.add(steeringWheelVisual);
-  const wheelMat=new THREE.MeshStandardMaterial({color:0x080c10,roughness:.52});
-  const ring=new THREE.Mesh(new THREE.TorusGeometry(.30,.036,14,56),wheelMat);
+  const wheelMat=new THREE.MeshStandardMaterial({color:0x080c10,roughness:.48});
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(.255,.032,14,56),wheelMat);
   steeringWheelVisual.add(ring);
-  const hub=new THREE.Mesh(new THREE.CylinderGeometry(.075,.075,.075,24),trimMat);
+  const hub=new THREE.Mesh(new THREE.CylinderGeometry(.064,.064,.065,24),trimMat);
   hub.rotation.x=Math.PI/2;hub.position.z=.025;steeringWheelVisual.add(hub);
-  for(const [x,y,angle] of [[0,.15,0],[-.13,-.08,-.7],[.13,-.08,.7]]){
-    const spoke=new THREE.Mesh(new THREE.BoxGeometry(.045,.22,.045),trimMat);
+  for(const [x,y,angle] of [[0,.13,0],[-.11,-.07,-.7],[.11,-.07,.7]]){
+    const spoke=new THREE.Mesh(new THREE.BoxGeometry(.035,.19,.035),trimMat);
     spoke.position.set(x,y,.015);spoke.rotation.z=angle;steeringWheelVisual.add(spoke);
   }
+
+  // A small, readable instrument screen is embedded in the dash, directly behind the wheel.
   const canvas=document.createElement("canvas");canvas.width=512;canvas.height=256;
   cockpitGaugeContext=canvas.getContext("2d");
   cockpitGaugeTexture=new THREE.CanvasTexture(canvas);cockpitGaugeTexture.colorSpace=THREE.SRGBColorSpace;
-  const screen=new THREE.Mesh(new THREE.PlaneGeometry(.40,.20),new THREE.MeshBasicMaterial({map:cockpitGaugeTexture,side:THREE.DoubleSide,toneMapped:false}));
-  screen.position.set(-.48,1.39,-1.13);screen.renderOrder=10;cockpitGroup.add(screen);
+  const screen=new THREE.Mesh(
+    new THREE.PlaneGeometry(.34,.16),
+    new THREE.MeshBasicMaterial({map:cockpitGaugeTexture,side:THREE.DoubleSide,toneMapped:false})
+  );
+  screen.position.set(-.48,1.31,-1.17);screen.renderOrder=10;cockpitGroup.add(screen);
   cockpitGaugeLast=0;
   drawCockpitDashboard(0,850,"N",true);
 }
@@ -597,7 +613,7 @@ function placeVehicles(dt) {
   // Глаза водителя находятся внутри импортированного салона.
   // Driver seat and steering wheel after Blender→glTF axis conversion and model yaw.
   // Eye point sits just behind the wheel and below the roof line.
-  const cockpitPos=player.localToWorld(new THREE.Vector3(-.48,1.60,.10));
+  const cockpitPos=player.localToWorld(new THREE.Vector3(-.48,1.48,.12));
   // Камера вынесена за передний бампер: капот не перекрывает изображение.
   const hoodPos=player.localToWorld(new THREE.Vector3(0,1.42,-2.72));
   const topPos=player.position.clone().add(new THREE.Vector3(0,21,0)).addScaledVector(tan,-1.2);
@@ -616,7 +632,7 @@ function placeVehicles(dt) {
   if(player.userData.bodyShell)player.userData.bodyShell.visible=state.camera!==1;
   if(playerFallback)playerFallback.visible=state.camera!==1;
   if(steeringWheelVisual)steeringWheelVisual.rotation.z=-state.steer*.62;
-  const look=state.camera===3?player.position.clone():state.camera===1?player.localToWorld(new THREE.Vector3(-.48,1.48,-35)):state.camera===2?player.localToWorld(new THREE.Vector3(0,1.2,-30)):player.position.clone().addScaledVector(tan,5).add(new THREE.Vector3(0,.8,0));
+  const look=state.camera===3?player.position.clone():state.camera===1?player.localToWorld(new THREE.Vector3(-.48,1.43,-35)):state.camera===2?player.localToWorld(new THREE.Vector3(0,1.2,-30)):player.position.clone().addScaledVector(tan,5).add(new THREE.Vector3(0,.8,0));
   camera.lookAt(look);
   const targetFov=state.camera===1?68:(isMobile?69:62);
   if(Math.abs(camera.fov-targetFov)>.1){camera.fov=lerp(camera.fov,targetFov,Math.min(1,dt*4));camera.updateProjectionMatrix();}
