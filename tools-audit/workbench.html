@@ -146,6 +146,18 @@ footer{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);color:v
 <div id="audio-support" class="output">Проверка возможностей AudioContext…</div>
 <p class="hint">Это преобразование формата, а не студийный редактор. Для многодорожечного монтажа, шумоподавления и точной обработки используйте локальный Audacity или Ardour.</p>
 </article>
+<article class="card wide">
+<h3>Перекодировать видео в WebM</h3><p class="desc">Браузер воспроизводит локальный файл и записывает его заново в WebM с выбранным битрейтом. Встроенная аудиодорожка сохраняется, если браузер её захватывает.</p>
+<div class="field"><label for="video-file">Исходное видео</label><input id="video-file" type="file" accept="video/*,.mp4,.mov,.mkv,.webm"></div>
+<div class="row">
+<div class="field"><label for="video-bitrate">Целевой видеобитрейт</label><select id="video-bitrate"><option value="1000000">1 Мбит/с — меньше размер</option><option value="2500000" selected>2,5 Мбит/с — баланс</option><option value="5000000">5 Мбит/с — качество</option><option value="8000000">8 Мбит/с — высокое качество</option></select></div>
+<div class="field"><label>Возможности</label><div class="output" id="video-support">Проверка MediaRecorder…</div></div>
+</div>
+<video id="video-preview" playsinline style="display:none;width:100%;max-height:280px;border-radius:12px;background:#05080f;margin-top:8px"></video>
+<div class="btns"><button class="btn primary" id="video-run">Перекодировать в WebM</button></div>
+<div class="output" id="video-out" aria-live="polite"></div>
+<p class="hint">Перекодирование идёт в реальном времени и может занимать столько же, сколько длится ролик. Во время обработки может воспроизводиться звук — при необходимости уменьшите громкость устройства. Исходное разрешение не меняется; поддержка исходного контейнера и кодеков зависит от браузера.</p>
+</article>
 </div>
 </section>
 
@@ -416,6 +428,64 @@ $("audio-run").addEventListener("click",async()=>{
   output("audio-out","Готово: "+ab.duration.toFixed(2)+" сек. · "+ab.sampleRate+" Гц · "+ab.numberOfChannels+" канал(а) · "+sizeText(blob.size)+" WAV.\nВозможность декодирования зависит от кодека браузера.","good");
  }catch(e){output("audio-out","Не удалось декодировать аудио. Возможно, кодек не поддерживается браузером. "+e.message,"bad");}
  finally{if(ctx)await ctx.close().catch(()=>{});}
+});
+
+// Browser-native video recoding to WebM using MediaRecorder.
+const videoEl=$("video-preview");let videoObjectUrl=null;
+const videoCaps=window.MediaRecorder&&videoEl&&(videoEl.captureStream||videoEl.mozCaptureStream);
+$("video-support").textContent=videoCaps?"MediaRecorder и захват медиапотока доступны.":"В этом браузере нет MediaRecorder или captureStream.";
+$("video-file").addEventListener("change",()=>{
+ const f=$("video-file").files[0];if(videoObjectUrl)URL.revokeObjectURL(videoObjectUrl);
+ if(!f){videoEl.style.display="none";return;}
+ videoObjectUrl=URL.createObjectURL(f);videoEl.src=videoObjectUrl;videoEl.controls=false;videoEl.muted=false;videoEl.style.display="block";videoEl.load();
+ videoEl.onloadedmetadata=()=>output("video-out","Видео: "+videoEl.videoWidth+" × "+videoEl.videoHeight+" px · "+videoEl.duration.toFixed(1)+" сек. · "+sizeText(f.size));
+ videoEl.onerror=()=>output("video-out","Браузер не смог открыть этот видеоформат или кодек.","bad");
+});
+$("video-run").addEventListener("click",async()=>{
+ const f=$("video-file").files[0],capture=videoEl.captureStream||videoEl.mozCaptureStream;
+ if(!f)return output("video-out","Выберите видеофайл.","bad");
+ if(!window.MediaRecorder||!capture)return output("video-out","Захват видео не поддерживается этим браузером.","bad");
+ if(f.size>1500*1024*1024)return output("video-out","Файл больше 1,5 ГБ. Для браузерной записи выберите меньший файл.","bad");
+ const candidates=["video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"];
+ const mime=candidates.find(x=>MediaRecorder.isTypeSupported(x));
+ if(!mime)return output("video-out","Браузер не поддерживает экспорт WebM через MediaRecorder.","bad");
+ let stream=null,recorder=null,parts=[];
+ try{
+  videoEl.pause();videoEl.currentTime=0;
+  await new Promise((resolve,reject)=>{
+   if(videoEl.readyState>=2)return resolve();
+   const ok=()=>{videoEl.removeEventListener("canplay",ok);videoEl.removeEventListener("error",bad);resolve();};
+   const bad=()=>{videoEl.removeEventListener("canplay",ok);videoEl.removeEventListener("error",bad);reject(Error("Видео не удалось декодировать."));};
+   videoEl.addEventListener("canplay",ok,{once:true});videoEl.addEventListener("error",bad,{once:true});
+  });
+  stream=capture.call(videoEl);
+  if(!stream.getVideoTracks().length)throw Error("Браузер не предоставил видеодорожку.");
+  recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:Number($("video-bitrate").value),audioBitsPerSecond:128000});
+  const done=new Promise((resolve,reject)=>{
+   recorder.ondataavailable=e=>{if(e.data&&e.data.size)parts.push(e.data);};
+   recorder.onerror=e=>reject(e.error||Error("Ошибка MediaRecorder."));
+   recorder.onstop=()=>resolve();
+   videoEl.onended=()=>{if(recorder.state==="recording")recorder.stop();};
+   videoEl.ontimeupdate=()=>output("video-out","Перекодирование: "+videoEl.currentTime.toFixed(1)+" / "+videoEl.duration.toFixed(1)+" сек.");
+  });
+  recorder.start(1000);
+  await videoEl.play();
+  output("video-out","Запись в формате "+mime+" началась. Видео воспроизводится локально…");
+  await done;
+  videoEl.onended=null;videoEl.ontimeupdate=null;
+  const blob=new Blob(parts,{type:recorder.mimeType||mime});
+  if(!blob.size)throw Error("Браузер не выдал записанные данные.");
+  download(blob,(f.name.replace(/.[^.]+$/,"")||"video")+".webm");
+  const originalDuration=videoEl.duration;
+  output("video-out","Готово: "+originalDuration.toFixed(1)+" сек. · "+sizeText(f.size)+" → "+sizeText(blob.size)+" · "+(stream.getAudioTracks().length?"аудиодорожка захвачена":"аудиодорожка не обнаружена")+".
+Результат WebM скачан.","good");
+ }catch(e){
+  if(recorder&&recorder.state!=="inactive")try{recorder.stop();}catch{}
+  output("video-out","Перекодирование не выполнено: "+e.message,"bad");
+ }finally{
+  if(stream)stream.getTracks().forEach(t=>t.stop());
+  videoEl.pause();if(videoEl.src)videoEl.currentTime=0;
+ }
 });
 
 // Text encoders, JSON formatter, Unicode sanitizer and tracking URL cleaner.
