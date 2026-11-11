@@ -540,8 +540,9 @@ function updateGame(dt) {
     state.steerInput=clamp((controls.right?1:0)-(controls.left?1:0)+hardware.steer,-1,1);
     state.steer=lerp(state.steer,state.steerInput,Math.min(1,dt*5.2));
     const hand=(controls.handbrake||hardware.handbrake)?1:0;
-    if(throttle)state.speed=Math.min(58,state.speed+(20.5+state.speed*.08)*dt);
-    else if(brake)state.speed=Math.max(-7,state.speed-31*dt);
+    const gasPower=throttle>.025?throttle:0,brakePower=brake>.025?brake:0;
+    if(gasPower>brakePower)state.speed=Math.min(58,state.speed+(20.5+state.speed*.08)*dt*(gasPower-brakePower));
+    else if(brakePower>gasPower)state.speed=Math.max(-7,state.speed-31*dt*(brakePower-gasPower));
     else if(state.speed>0)state.speed=Math.max(0,state.speed-.62*dt);
     else if(state.speed<0)state.speed=Math.min(0,state.speed+.8*dt);
     if(hand)state.speed=Math.max(0,state.speed-9.5*dt);
