@@ -38,7 +38,7 @@ check(missing.length === 0, "All direct DOM lookups exist" + (missing.length ? "
 check(js.includes('car: "spectral"'), "Spectral GT RS is the first-run default");
 check(js.includes("spectral_gt_rs_game_ready.glb"), "Premium Spectral model is registered");
 check(js.includes('id:"suv"'), "Kenney SUV remains selectable");
-check(js.includes('localStorage.setItem("driveHorizonCar",carId)'), "Vehicle selection persists locally");
+check(js.includes('localStorage.setItem("driveHorizonCarV2",carId)'), "Vehicle selection persists with a fresh default preference key");
 check(js.includes('axis==="z"?w.rotateZ(spin):w.rotateX(spin)'), "Each model rotates wheels around its own axle axis");
 check(js.includes("player.userData.loadedModel.visible=state.camera!==1"), "Imported exterior is hidden in driver view");
 check(js.includes("const eyeX=state.driverSide*.49"), "Driver eye point follows the selected car's seating side");
@@ -48,7 +48,7 @@ check(js.includes("const dt=Math.min(.033"), "Frame delta is capped to reduce ac
 check(js.includes("new THREE.PlaneGeometry(.68,.34)"), "Wide digital driver cluster is present");
 check(js.includes("new THREE.PlaneGeometry(.48,.27)"), "Separate center infotainment display is present");
 check(js.includes("clusterScreen.position.set(driverX,1.43,-1.155)"), "Driver display is in front of its bezel");
-check(js.includes("centerScreen.position.set(0,1.00,-.745)"), "Center display is in front of its bezel");
+check(js.includes("centerScreen.position.set(0,1.00,-.475)"), "Center display is moved to the visible front face of the center stack");
 check(html.includes('data-car="spectral"') && html.includes('data-car="suv"'), "Both vehicle choices exist in the menu");
 check(css.includes(".vehicle-picker"), "Garage selection is styled");
 
