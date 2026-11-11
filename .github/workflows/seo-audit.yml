@@ -1,0 +1,35 @@
+name: SEO audit
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**/*.html"
+      - "sitemap.xml"
+      - "robots.txt"
+      - "scripts/seo_audit.py"
+      - ".github/workflows/seo-audit.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "**/*.html"
+      - "sitemap.xml"
+      - "robots.txt"
+      - "scripts/seo_audit.py"
+      - ".github/workflows/seo-audit.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  seo-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Validate SEO, metadata, links and sitemap
+        run: python scripts/seo_audit.py
