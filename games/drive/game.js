@@ -113,11 +113,11 @@ function applyTime(mode) {
   if(mode!=="night"){
     for(let i=0;i<34;i++){
       const x=rand()*skyCanvas.width,y=95+rand()*230,rx=45+rand()*120,ry=9+rand()*25;
-      const cloud=skyContext.createRadialGradient(x,y,2,x,y,rx);
+      skyContext.save();skyContext.translate(x,y);skyContext.scale(1,ry/rx);
+      const cloud=skyContext.createRadialGradient(0,0,2,0,0,rx);
       cloud.addColorStop(0,mode==="sunset"?"rgba(255,226,205,.25)":"rgba(255,255,255,.24)");
       cloud.addColorStop(.55,mode==="sunset"?"rgba(255,220,198,.11)":"rgba(255,255,255,.10)");
       cloud.addColorStop(1,"rgba(255,255,255,0)");
-      skyContext.save();skyContext.translate(x,y);skyContext.scale(1,ry/rx);
       skyContext.fillStyle=cloud;skyContext.beginPath();skyContext.arc(0,0,rx,0,Math.PI*2);skyContext.fill();skyContext.restore();
     }
   }
