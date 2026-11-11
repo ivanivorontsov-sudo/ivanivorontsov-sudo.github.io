@@ -127,7 +127,7 @@ function applyTime(mode) {
   directionalLight.intensity=p.direct;
   directionalLight.color.set(mode==="night"?0x9bb8e4:0xffe2c1);
   sun.visible=mode!=="night";stars.visible=mode==="night";
-  const lights=playerFallback?.userData.headlights;
+  const lights=player?.userData.headlights||playerFallback?.userData.headlights;
   if(lights)lights.forEach(l=>l.visible=mode==="night");
   const label = mode==="day"?"День":mode==="night"?"Ночь":"Закат";
   $("timeBtn").querySelector("#timeIcon").textContent=mode==="day"?"☀️":mode==="night"?"🌙":"🌇";
@@ -395,6 +395,7 @@ function loadPremiumCar(){
     player.updateMatrixWorld(true);
     $("loadStatus").textContent="Spectral GT RS · детализированная модель готова.";
     updateCarPaint();
+    createPlayerDashboard();
     if(state.camera===1)setMessage("Вид из кабины · настоящий интерьер Spectral GT RS",3);
   },undefined,(error)=>{
     console.warn("Premium vehicle unavailable; keeping fallback car",error);
@@ -473,30 +474,56 @@ function buildCockpit(){
   cockpitGroup=null;steeringWheelVisual=null;
 }
 
-function drawCockpitDashboard(speed,rpm,gear) {
-  if(!cockpitGaugeContext||!cockpitGaugeTexture)return;
-  const now=performance.now();if(cockpitGaugeLast&&now-cockpitGaugeLast<80)return;cockpitGaugeLast=now;
-  const c=cockpitGaugeContext;
-  const grad=c.createLinearGradient(0,0,0,180);grad.addColorStop(0,"#1b303b");grad.addColorStop(1,"#050b10");
-  c.fillStyle=grad;c.fillRect(0,0,512,180);
-  c.strokeStyle="#4f9eaa";c.lineWidth=3;c.strokeRect(5,5,502,170);
-  for(const x of [115,397]){
-    const max=x===115?240:8000,current=x===115?Math.min(speed,max):Math.min(rpm,max);
-    c.beginPath();c.arc(x,88,59,Math.PI*.82,Math.PI*2.18);c.lineWidth=8;c.strokeStyle="rgba(194,224,225,.16)";c.stroke();
-    c.beginPath();c.arc(x,88,59,Math.PI*.82,Math.PI*.82+Math.PI*1.36*current/max);c.lineWidth=8;c.lineCap="round";c.strokeStyle=x===115?"#80d6cf":"#e9b67e";c.stroke();c.lineCap="butt";
-    for(let i=0;i<=10;i++){
-      const a=Math.PI*.82+i/10*Math.PI*1.36;
-      c.beginPath();c.moveTo(x+Math.cos(a)*45,88+Math.sin(a)*45);c.lineTo(x+Math.cos(a)*54,88+Math.sin(a)*54);
-      c.strokeStyle="#d7e8e7";c.lineWidth=2;c.stroke();
-    }
-    c.fillStyle="#eaf8f5";c.textAlign="center";c.font="800 23px Manrope, sans-serif";
-    c.fillText(x===115?String(Math.round(speed)).padStart(3,"0"):String(Math.round(rpm/100)/10).padStart(3,"0"),x,112);
-    c.fillStyle="#a8c4cb";c.font="600 10px Manrope, sans-serif";c.fillText(x===115?"KM/H":"×1000 RPM",x,132);
+function addPlayerHeadlights(){
+  const lights=[];
+  for(const x of [-.72,.72]){
+    const light=new THREE.SpotLight(0xffe8cb,76,88,Math.PI/7,.52,1.45);
+    light.position.set(x,.95,-2.12);
+    const target=new THREE.Object3D();
+    target.position.set(x,-.18,-55);
+    light.target=target;light.visible=state.time==="night";light.castShadow=false;
+    player.add(light);player.add(target);lights.push(light);
   }
-  c.fillStyle="#eaf8f5";c.textAlign="center";c.font="900 22px Manrope, sans-serif";c.fillText(String(gear),256,91);
-  c.fillStyle="#80d6cf";c.font="800 10px Manrope, sans-serif";c.fillText("DRIVE HORIZON",256,112);
-  c.fillStyle="#a8c4cb";c.font="600 9px Manrope, sans-serif";c.fillText("SPORT   •   NORTH COAST",256,139);
-  cockpitGaugeTexture.needsUpdate=true;
+  player.userData.headlights=lights;
+}
+
+function createPlayerDashboard(){
+  if(!player||player.userData.dashboardContext)return;
+  const canvas=document.createElement("canvas");canvas.width=512;canvas.height=256;
+  const ctx=canvas.getContext("2d");
+  const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;
+  const screen=new THREE.Mesh(
+    new THREE.PlaneGeometry(.38,.19),
+    new THREE.MeshBasicMaterial({map:texture,side:THREE.DoubleSide,toneMapped:false})
+  );
+  // Положение штатного цифрового дисплея по чертежу GLB; экран закреплён в салоне.
+  screen.position.set(.49,1.26,-.605);screen.renderOrder=10;player.add(screen);
+  player.userData.dashboardContext=ctx;
+  player.userData.dashboardTexture=texture;
+  player.userData.dashboardLast=0;
+  drawCockpitDashboard(0,850,"N",true);
+}
+
+function drawCockpitDashboard(speed,rpm,gear,force=false){
+  const ctx=player?.userData.dashboardContext,texture=player?.userData.dashboardTexture;
+  if(!ctx||!texture)return;
+  const now=performance.now();
+  if(!force&&now-(player.userData.dashboardLast||0)<80)return;
+  player.userData.dashboardLast=now;
+  const c=ctx;
+  const bg=c.createLinearGradient(0,0,0,256);bg.addColorStop(0,"#10232f");bg.addColorStop(1,"#03090e");
+  c.fillStyle=bg;c.fillRect(0,0,512,256);
+  c.strokeStyle="#67d9d0";c.lineWidth=5;c.strokeRect(8,8,496,240);
+  c.fillStyle="#82e1d8";c.font="800 20px Manrope, sans-serif";c.fillText("SPECTRAL  /  GT RS",24,38);
+  c.fillStyle="#f0f7f6";c.font="900 104px Manrope, sans-serif";c.fillText(String(Math.round(speed)).padStart(3,"0"),22,156);
+  c.fillStyle="#91b4be";c.font="700 20px Manrope, sans-serif";c.fillText("KM/H",28,190);
+  c.fillStyle="#e7bd83";c.font="800 28px Manrope, sans-serif";c.fillText((rpm/1000).toFixed(1)+"k",354,105);
+  c.fillStyle="#9db4bf";c.font="700 15px Manrope, sans-serif";c.fillText("RPM",364,130);
+  c.fillStyle="#f3f8f7";c.font="900 62px Manrope, sans-serif";c.fillText(String(gear),390,206);
+  c.fillStyle="rgba(255,255,255,.13)";c.fillRect(24,215,330,9);
+  const bar=c.createLinearGradient(24,0,354,0);bar.addColorStop(0,"#62d8cc");bar.addColorStop(1,"#f4a16e");
+  c.fillStyle=bar;c.fillRect(24,215,330*clamp(rpm/8000,0,1),9);
+  texture.needsUpdate=true;
 }
 
 function placeVehicles(dt) {
@@ -589,7 +616,7 @@ function updateGame(dt) {
     $("rpm").textContent=rpmValue+" RPM";
     $("rpmBar").style.width=clamp((Math.abs(state.speed)/58)*100,0,100)+"%";
     $("gear").textContent=gearValue;
-    // Скорость и обороты отображаются на штатной приборной панели автомобиля.
+    drawCockpitDashboard(kmh,rpmValue,gearValue);
     $("distance").innerHTML=(state.distance/1000).toFixed(2)+" <i>KM</i>";
     updateAudio();
   }
@@ -808,7 +835,7 @@ function init() {
     composer.addPass(new RenderPass(scene,camera));
     bloomPass=new UnrealBloomPass(new THREE.Vector2(window.innerWidth,window.innerHeight),isMobile?.16:.34,.42,.76);
     composer.addPass(bloomPass);composer.addPass(new OutputPass());
-    player=new THREE.Group();playerFallback=makeCar(state.paint);player.add(playerFallback);scene.add(player);
+    player=new THREE.Group();playerFallback=makeCar(state.paint);player.add(playerFallback);scene.add(player);addPlayerHeadlights();
     createTraffic();buildCockpit();updateCameraButton();drawMiniMap();bindControls();bindUI();window.addEventListener("resize",resize);
     loadInputConfig();refreshDevicePanel();
     loadPremiumCar();
