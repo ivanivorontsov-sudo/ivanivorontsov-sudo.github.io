@@ -36,7 +36,10 @@ check(missing.length === 0, "All direct DOM lookups exist" + (missing.length ? "
 check(js.includes("assets/models/cars/suv.glb"), "Ordinary SUV is the default imported vehicle");
 check(js.includes("w.rotateX(-state.speed*dt/radius)"), "Wheels rotate around their local axle X");
 check(js.includes('obj.name.toLowerCase()==="body"'), "Imported exterior body shell is identified");
-check(js.includes("player.userData.bodyShell.visible=state.camera!==1"), "Exterior shell is hidden only in driver view");
+check(js.includes("player.userData.loadedModel.visible=state.camera!==1"), "Entire imported SUV is hidden in driver view");
+check(js.includes("camera.position.copy(desired)"), "Driver camera is locked to the eye point without smoothing lag");
+check(js.includes("player.position.y+=.13;"), "Artificial chassis bounce is removed");
+check(js.includes("const dt=Math.min(.033"), "Frame delta is capped to reduce acceleration stutter");
 check(js.includes("if(cockpitGroup)cockpitGroup.visible=state.camera===1"), "Cabin appears in driver view");
 check(js.includes("new THREE.PlaneGeometry(1.82,.78)"), "Compact driver cabin includes windshield geometry");
 check(js.includes("steeringWheelVisual.position.set(-.48,1.02,-.62)"), "Steering wheel is placed in front of driver");
