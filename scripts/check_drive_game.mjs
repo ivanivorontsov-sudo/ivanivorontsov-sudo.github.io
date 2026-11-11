@@ -60,6 +60,8 @@ check(js.includes("function updateSpeedLines"), "Speed lines respect camera, spe
 check(js.includes("function syncCockpitMirror"), "Portrait rear-view mirror is recentered");
 check(js.includes("function drawDigitalCluster"), "Sports car uses a digital instrument cluster");
 check(js.includes("top:194.5"), "Spectral GT RS is geared for a 700 km/h top speed");
+check(js.includes("function dampSpringVec"), "Chase camera uses a critically damped offset spring");
+check(js.includes("baseDist*1.3"), "Chase camera distance is clamped to 1.3x the base offset");
 check(html.includes('data-car="spectral"') && html.includes('data-car="suv"'), "Both vehicle choices exist in the menu");
 check(css.includes(".vehicle-picker"), "Garage selection is styled");
 

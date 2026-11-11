@@ -56,6 +56,13 @@ const state = {
 const controls = { gas:false, brake:false, left:false, right:false, handbrake:false, horn:false };
 let renderer, composer, bloomPass, scene, camera, curve, trackLength, player, playerFallback, carPaintMaterial;
 let cockpitGroup, steeringWheelVisual, cockpitGaugeContext, cockpitGaugeTexture, cockpitCenterContext, cockpitCenterTexture, cockpitGaugeLast=0, inputTelemetryTimer=0;
+const chaseCamOffset=new THREE.Vector3();
+const chaseCamVel=new THREE.Vector3();
+const chaseDesiredOffset=new THREE.Vector3();
+const auxCamOffset=new THREE.Vector3();
+let chaseCamReady=false;
+let auxCamMode=-1;
+let debugSpeedLock=null;
 let mirrorRT, mirrorCam, mirrorMesh, mirrorFrame, mirrorFallback;
 const hardware = { steer:0, throttle:0, brake:0, handbrake:false, horn:false };
 const inputConfig = { steer:"axis0", gas:"button7", brake:"button6", handbrake:"button0", invertSteer:false, invertGas:false, invertBrake:false, pedalsPositive:false, sensitivity:1.25 };
@@ -1684,6 +1691,23 @@ function updateTraffic(dt) {
   });
 }
 
+function dampSpringVec(current,target,velocity,smoothTime,dt){
+  const st=Math.max(1e-4,smoothTime);
+  const omega=2/st;
+  const x=omega*dt;
+  const exp=1/(1+x+0.48*x*x+0.235*x*x*x);
+  const cx=current.x-target.x, cy=current.y-target.y, cz=current.z-target.z;
+  const tx=(velocity.x+cx*omega)*dt;
+  const ty=(velocity.y+cy*omega)*dt;
+  const tz=(velocity.z+cz*omega)*dt;
+  velocity.x=(velocity.x-omega*tx)*exp;
+  velocity.y=(velocity.y-omega*ty)*exp;
+  velocity.z=(velocity.z-omega*tz)*exp;
+  current.x=target.x+(cx+tx)*exp;
+  current.y=target.y+(cy+ty)*exp;
+  current.z=target.z+(cz+tz)*exp;
+}
+
 function placeVehicles(dt) {
   const p=curve.getPointAt(((state.progress%1)+1)%1),tan=curve.getTangentAt(((state.progress%1)+1)%1),right=vecRight(tan);
   const yaw=Math.atan2(-tan.x,-tan.z);
@@ -1711,8 +1735,34 @@ function placeVehicles(dt) {
   const hoodPos=player.localToWorld(new THREE.Vector3(0,1.42,-2.72));
   const topPos=player.position.clone().add(new THREE.Vector3(0,21,0)).addScaledVector(tan,-1.2);
   const desired=state.camera===0?chasePos:state.camera===1?cockpitPos:state.camera===2?hoodPos:topPos;
-  if(state.camera===1)camera.position.copy(desired);
-  else camera.position.lerp(desired,Math.min(1,dt*(state.camera===3?2.4:state.camera===2?9:4.5)));
+  if(state.camera===1){camera.position.copy(desired);chaseCamReady=false;auxCamMode=-1;}
+  else if(state.camera===0){
+    // Speed-independent chase: spring the offset relative to the car, never the world position.
+    chaseDesiredOffset.copy(chasePos).sub(player.position);
+    const baseDist=chaseDesiredOffset.length()||12.58;
+    if(!chaseCamReady){
+      chaseCamOffset.copy(chaseDesiredOffset);
+      chaseCamVel.set(0,0,0);
+      chaseCamReady=true;
+    }else{
+      dampSpringVec(chaseCamOffset,chaseDesiredOffset,chaseCamVel,.14,dt);
+    }
+    const maxDist=baseDist*1.3;
+    const chaseDist=chaseCamOffset.length();
+    if(chaseDist>maxDist&&chaseDist>1e-4) chaseCamOffset.multiplyScalar(maxDist/chaseDist);
+    camera.position.copy(player.position).add(chaseCamOffset);
+    auxCamMode=-1;
+  }else{
+    chaseCamReady=false;
+    chaseDesiredOffset.copy(desired).sub(player.position);
+    if(auxCamMode!==state.camera){
+      auxCamOffset.copy(chaseDesiredOffset);
+      auxCamMode=state.camera;
+    }else{
+      auxCamOffset.lerp(chaseDesiredOffset,Math.min(1,dt*(state.camera===3?2.4:9)));
+    }
+    camera.position.copy(player.position).add(auxCamOffset);
+  }
   const shakeMul=state.camera===1?0.35:1;
   if (state.shake > 0) {
     camera.position.x += (Math.random()-.5) * state.shake * 0.16 * shakeMul;
@@ -1742,6 +1792,7 @@ function placeVehicles(dt) {
   camera.lookAt(look);
   syncViewClasses();
   const baseFov=state.camera===1?(portrait?80:isMobile?70:66):(isMobile?69:62);
+  // Convey speed with a slight FOV kick, not by pulling the chase camera farther back.
   const rawKick=state.camera===1?Math.abs(state.speed)*0.08:Math.abs(state.speed)*0.18;
   const kickCap=Math.abs(state.speed)>70?(state.camera===1?5:10):(state.camera===1?6:14);
   const speedKick=Math.min(kickCap, rawKick);
@@ -1768,6 +1819,7 @@ function updateGame(dt) {
     if ((controls.horn || hardware.horn) && state.hornTimer <= 0) honk(false);
     if (state.hornTimer > 0) state.hornTimer -= dt;
     updateDrivetrain(dt);
+    if(debugSpeedLock!=null&&Number.isFinite(debugSpeedLock)) state.speed=debugSpeedLock;
     updateTraffic(dt);
     updateCheckpoints(dt);
     updateBrakeLights();
@@ -2225,6 +2277,40 @@ function init() {
       prepSpeedRun(){
         state.lateral=0;state.damage=0;state.steer=0;state.steerInput=0;
         traffic.forEach(car=>{car.ghost=true;car.offset=24;car.baseOffset=24;});
+      },
+      setSpeed(mps){
+        debugSpeedLock=(mps==null||mps===false)?null:Number(mps);
+        if(debugSpeedLock!=null&&Number.isFinite(debugSpeedLock)) state.speed=debugSpeedLock;
+        else debugSpeedLock=null;
+      },
+      setCamera(mode){
+        if(mode==null) return state.camera;
+        state.camera=((Number(mode)%4)+4)%4;
+        chaseCamReady=false;
+        auxCamMode=-1;
+        updateCameraButton();
+        syncViewClasses();
+        return state.camera;
+      },
+      getChaseMetrics(){
+        if(!player||!camera) return null;
+        const pts=[[-1.05,.35,-2.3],[1.05,.35,-2.3],[-1.05,1.15,2.3],[1.05,1.15,2.3],[0,.6,0]];
+        let minX=1e9,maxX=-1e9,minY=1e9,maxY=-1e9;
+        for(const [x,y,z] of pts){
+          const p=player.localToWorld(new THREE.Vector3(x,y,z)).project(camera);
+          minX=Math.min(minX,p.x); maxX=Math.max(maxX,p.x);
+          minY=Math.min(minY,p.y); maxY=Math.max(maxY,p.y);
+        }
+        const w=renderer?.domElement?.width||1;
+        const h=renderer?.domElement?.height||1;
+        return {
+          dist:camera.position.distanceTo(player.position),
+          spanPx:(maxX-minX)*0.5*w,
+          spanHpx:(maxY-minY)*0.5*h,
+          fov:camera.fov,
+          speedKmh:Math.abs(state.speed)*3.6,
+          camera:state.camera
+        };
       },
       tick(seconds) {
         const steps = Math.max(1, Math.ceil((seconds||0.033)/0.033));
