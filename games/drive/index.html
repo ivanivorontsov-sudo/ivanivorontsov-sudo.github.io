@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=70b1740">
+  <link rel="stylesheet" href="style.css?v=garage-dashboard-20261111">
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -105,6 +105,19 @@
         <div><b>∞</b><small>СВОБОДНАЯ ЕЗДА</small></div>
         <div><b>60</b><small>КАДРОВ/СЕК*</small></div>
       </div>
+      <div class="choice-title">АВТОМОБИЛЬ · ВЫБЕРИ СВОЙ</div>
+      <div class="vehicle-picker" role="group" aria-label="Выбор автомобиля">
+        <button class="vehicle-card active" type="button" data-car="spectral" aria-pressed="true">
+          <span class="vehicle-art vehicle-art--spectral" aria-hidden="true"></span>
+          <span class="vehicle-copy"><b>SPECTRAL GT RS</b><small>Спортивное купе · низкая посадка</small><em>ПО УМОЛЧАНИЮ</em></span>
+          <span class="vehicle-check" aria-hidden="true">✓</span>
+        </button>
+        <button class="vehicle-card" type="button" data-car="suv" aria-pressed="false">
+          <span class="vehicle-art vehicle-art--suv" aria-hidden="true"></span>
+          <span class="vehicle-copy"><b>KENNEY SUV</b><small>Повседневный дорожный SUV</small><em>КОМФОРТ</em></span>
+          <span class="vehicle-check" aria-hidden="true">✓</span>
+        </button>
+      </div>
       <div class="choice-title">ВРЕМЯ СУТОК</div>
       <div class="mode-row">
         <button class="mode-btn active" data-mode="sunset">🌇 <span>Закат</span></button>
@@ -162,6 +175,6 @@
   <div class="toast" id="toast" role="status"></div>
   <div class="error-box hidden" id="errorBox">Для этой игры нужен браузер с поддержкой WebGL 2. Обнови браузер или попробуй открыть страницу на другом устройстве.</div>
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js"}}</script>
-  <script type="module" src="game.js?v=7957cdf2"></script>
+  <script type="module" src="game.js?v=garage-dashboard-20261111"></script>
 </body>
 </html>
