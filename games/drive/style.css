@@ -30,3 +30,6 @@
 .sensitivity-field{display:grid;grid-template-columns:1fr auto;align-items:center}.sensitivity-field input{grid-column:1/-1;width:100%;accent-color:#78dfd8}.sensitivity-field span{color:#7de0d8}
 .device-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}.device-actions .secondary-btn,.device-actions .start-btn{margin:0;min-height:42px}.device-hint{font-size:9px;line-height:1.6;color:#8296a2;margin-top:14px}
 @media(max-width:650px){.device-panel{padding:22px 17px;border-radius:18px}.device-panel h2{font-size:23px}.device-grid{gap:7px}.device-field{font-size:8px}.device-field select{font-size:10px}.device-options{gap:10px}.device-options label{font-size:8px}.device-actions{grid-template-columns:1fr}.device-actions .start-btn{margin:0}}
+
+
+.device-telemetry{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);border-radius:9px;padding:9px 11px;margin:9px 0 14px;color:#84ddd5;font-size:9px;font-variant-numeric:tabular-nums;line-height:1.6}
