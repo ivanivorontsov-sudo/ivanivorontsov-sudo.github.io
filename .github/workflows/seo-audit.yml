@@ -51,6 +51,8 @@ jobs:
         run: python scripts/check_workshop.py
       - name: Parse local converter engine
         run: node --check tools-audit/workshop/converters.js
+      - name: Parse smart search engine
+        run: node --check tools-audit/search.js
       - name: Parse inline JavaScript
         run: node scripts/check_inline_js.mjs
       - name: Check local browser utilities bundle
