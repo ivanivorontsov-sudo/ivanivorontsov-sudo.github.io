@@ -36,7 +36,8 @@ check(missing.length === 0, "All direct DOM lookups exist" + (missing.length ? "
 
 // Regressions: original sports car default, alternate SUV, clear dashboard and stable camera.
 check(js.includes('car: "spectral"'), "Spectral GT RS is the first-run default");
-check(js.includes("spectral_gt_rs_game_ready.glb"), "Premium Spectral model is registered");
+check(js.includes("function makeHypercar"), "Sports car is a procedural hypercar");
+check(js.includes('builder:"hypercar"'), "Spectral slot uses the in-engine hypercar builder");
 check(js.includes('id:"suv"'), "Kenney SUV remains selectable");
 check(js.includes('localStorage.setItem("driveHorizonCarV2",carId)'), "Vehicle selection persists with a fresh default preference key");
 check(js.includes('axis==="z"?w.rotateZ(spin):w.rotateX(spin)'), "Each model rotates wheels around its own axle axis");
