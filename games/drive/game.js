@@ -19,7 +19,7 @@ const controls = { gas:false, brake:false, left:false, right:false, handbrake:fa
 let renderer, composer, bloomPass, scene, camera, curve, trackLength, player, playerFallback, carPaintMaterial;
 let cockpitGroup, steeringWheelVisual, inputTelemetryTimer=0;
 const hardware = { steer:0, throttle:0, brake:0, handbrake:false };
-const inputConfig = { steer:"axis0", gas:"button7", brake:"button6", handbrake:"button0", invertSteer:false, invertGas:false, invertBrake:false, sensitivity:1.25 };
+const inputConfig = { steer:"axis0", gas:"button7", brake:"button6", handbrake:"button0", invertSteer:false, invertGas:false, invertBrake:false, pedalsPositive:false, sensitivity:1.25 };
 let skyTexture, skyCanvas, skyContext, sun, directionalLight, ambientLight, stars;
 let roadTexture, grassTexture, minimapContext, audioContext, engineOsc, engineGain;
 let traffic = [], lastFrame = performance.now(), frameCount = 0, fpsTime = 0;
@@ -621,7 +621,7 @@ function loadInputConfig() {
   }catch(e){console.warn("Invalid input preferences",e);}
   $("steerSource").value=inputConfig.steer;$("gasSource").value=inputConfig.gas;
   $("brakeSource").value=inputConfig.brake;$("handbrakeSource").value=inputConfig.handbrake;
-  $("invertSteer").checked=!!inputConfig.invertSteer;$("invertGas").checked=!!inputConfig.invertGas;$("invertBrake").checked=!!inputConfig.invertBrake;
+  $("invertSteer").checked=!!inputConfig.invertSteer;$("invertGas").checked=!!inputConfig.invertGas;$("invertBrake").checked=!!inputConfig.invertBrake;$("pedalsPositive").checked=!!inputConfig.pedalsPositive;
   $("steerSensitivity").value=inputConfig.sensitivity;$("sensitivityValue").textContent=Number(inputConfig.sensitivity).toFixed(1)+"×";
 }
 function getPads() {
@@ -650,24 +650,28 @@ function refreshDevicePanel() {
   if(!pads.length)populateInputSources(null);
 }
 function populateInputSources(pad) {
-  const axes=pad?pad.axes.length:4,buttons=pad?pad.buttons.length:18;
+  const axes=pad?pad.axes.length:8,buttons=pad?pad.buttons.length:32;
   const defs=[["steerSource","steer"],["gasSource","gas"],["brakeSource","brake"],["handbrakeSource","handbrake"]];
   defs.forEach(([id,key])=>{
     const el=$(id),old=inputConfig[key];el.innerHTML="";
     for(let i=0;i<axes;i++){const o=document.createElement("option");o.value="axis"+i;o.textContent="Ось "+i;el.appendChild(o);}
     for(let i=0;i<buttons;i++){const o=document.createElement("option");o.value="button"+i;o.textContent="Кнопка "+i;el.appendChild(o);}
-    if(!el.querySelector('option[value="'+old+'"]'))inputConfig[key]=key==="steer"?"axis0":key==="gas"?"button7":key==="brake"?"button6":"button0";
-    el.value=inputConfig[key];
+    if(!el.querySelector('option[value="'+old+'"]')){
+      const saved=document.createElement("option");saved.value=old;saved.textContent="Сохранённое назначение: "+old;el.appendChild(saved);
+    }
+    el.value=old;
   });
 }
 function readBinding(pad,binding,kind,invert=false) {
   if(!pad||!binding)return 0;
   let value=0;
   if(binding.startsWith("axis")){
-    const raw=pad.axes[Number(binding.slice(4))]??0;
+    const axisIndex=Number(binding.slice(4));
+    if(axisIndex<0||axisIndex>=pad.axes.length)return 0;
+    const raw=pad.axes[axisIndex];
     if(kind==="steer"){
       const dead=.07;value=Math.abs(raw)<=dead?0:Math.sign(raw)*(Math.abs(raw)-dead)/(1-dead);
-    }else value=clamp((raw+1)/2,0,1);
+    }else value=clamp(inputConfig.pedalsPositive?raw:(raw+1)/2,0,1);
   }else if(binding.startsWith("button")){
     const b=pad.buttons[Number(binding.slice(6))];value=b?Number(b.value??(b.pressed?1:0)):0;
     if(kind==="steer")value=b&&b.pressed?1:0;
@@ -728,7 +732,7 @@ function bindUI() {
   $("refreshDevicesBtn").addEventListener("click",refreshDevicePanel);
   $("deviceSelect").addEventListener("change",e=>{state.gamepadIndex=e.target.value===""?null:Number(e.target.value);refreshDevicePanel();});
   ["steerSource","gasSource","brakeSource","handbrakeSource"].forEach(id=>$(id).addEventListener("change",e=>{const key={steerSource:"steer",gasSource:"gas",brakeSource:"brake",handbrakeSource:"handbrake"}[id];inputConfig[key]=e.target.value;saveInputConfig();}));
-  [["invertSteer","invertSteer"],["invertGas","invertGas"],["invertBrake","invertBrake"]].forEach(([id,key])=>$(id).addEventListener("change",e=>{inputConfig[key]=e.target.checked;saveInputConfig();}));
+  [["invertSteer","invertSteer"],["invertGas","invertGas"],["invertBrake","invertBrake"],["pedalsPositive","pedalsPositive"]].forEach(([id,key])=>$(id).addEventListener("change",e=>{inputConfig[key]=e.target.checked;saveInputConfig();}));
   $("steerSensitivity").addEventListener("input",e=>{inputConfig.sensitivity=Number(e.target.value);$("sensitivityValue").textContent=inputConfig.sensitivity.toFixed(1)+"×";saveInputConfig();});
   $("timeBtn").addEventListener("click",()=>{const modes=["sunset","day","night"];applyTime(modes[(modes.indexOf(state.time)+1)%modes.length]);toast("Время суток: "+(state.time==="day"?"день":state.time==="night"?"ночь":"закат"));});
   $("qualityBtn").addEventListener("click",()=>{
