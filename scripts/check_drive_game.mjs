@@ -32,17 +32,20 @@ const lookups = new Set([...js.matchAll(/\$\(["']([^"']+)["']\)/g)].map((match) 
 const missing = [...lookups].filter((id) => !ids.has(id));
 check(missing.length === 0, "All direct DOM lookups exist" + (missing.length ? ": " + missing.join(", ") : ""));
 
-// Guard the fixes that previously regressed in the mobile driving scene.
-check(js.includes("assets/models/cars/suv.glb"), "Ordinary SUV is the default imported vehicle");
-check(js.includes("w.rotateX(-state.speed*dt/radius)"), "Wheels rotate around their local axle X");
-check(js.includes('obj.name.toLowerCase()==="body"'), "Imported exterior body shell is identified");
-check(js.includes("player.userData.loadedModel.visible=state.camera!==1"), "Entire imported SUV is hidden in driver view");
-check(js.includes("camera.position.copy(desired)"), "Driver camera is locked to the eye point without smoothing lag");
+// Regressions: original sports car default, alternate SUV, clear dashboard and stable camera.
+check(js.includes('car: "spectral"'), "Spectral GT RS is the first-run default");
+check(js.includes("spectral_gt_rs_game_ready.glb"), "Premium Spectral model is registered");
+check(js.includes('id:"suv"'), "Kenney SUV remains selectable");
+check(js.includes('localStorage.setItem("driveHorizonCar",carId)'), "Vehicle selection persists locally");
+check(js.includes('axis==="z"?w.rotateZ(spin):w.rotateX(spin)'), "Each model rotates wheels around its own axle axis");
+check(js.includes("player.userData.loadedModel.visible=state.camera!==1"), "Imported exterior is hidden in driver view");
+check(js.includes("const eyeX=state.driverSide*.49"), "Driver eye point follows the selected car's seating side");
+check(js.includes("camera.position.copy(desired)"), "Driver camera has no chase smoothing lag");
 check(js.includes("player.position.y+=.13;"), "Artificial chassis bounce is removed");
 check(js.includes("const dt=Math.min(.033"), "Frame delta is capped to reduce acceleration stutter");
-check(js.includes("if(cockpitGroup)cockpitGroup.visible=state.camera===1"), "Cabin appears in driver view");
-check(js.includes("new THREE.PlaneGeometry(1.82,.78)"), "Compact driver cabin includes windshield geometry");
-check(js.includes("steeringWheelVisual.position.set(-.48,1.02,-.62)"), "Steering wheel is placed in front of driver");
-check(js.includes("box(.34,.25,.30,dashMat,.27,.83,-.47)"), "Center stack stays low and narrow");
+check(js.includes("new THREE.PlaneGeometry(.68,.34)"), "Wide digital driver cluster is present");
+check(js.includes("new THREE.PlaneGeometry(.48,.27)"), "Separate center infotainment display is present");
+check(html.includes('data-car="spectral"') && html.includes('data-car="suv"'), "Both vehicle choices exist in the menu");
+check(css.includes(".vehicle-picker"), "Garage selection is styled");
 
 console.log("Drive Horizon validation passed.");
