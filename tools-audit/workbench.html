@@ -556,7 +556,7 @@ function attachChannel(ch){
   if(typeof ev.data==="string"){
    if(ev.data==="MTRX_FILE_END"){
     if(receiving){const blob=new Blob(receiving.parts,{type:receiving.type||"application/octet-stream"});const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=receiving.name; a.textContent="Скачать "+receiving.name+" · "+sizeText(blob.size);a.addEventListener("click",()=>setTimeout(()=>URL.revokeObjectURL(u),30000),{once:true});$("rtc-received").append(a);output("rtc-progress","Файл получен: "+receiving.name+" · "+sizeText(blob.size),"good");receiving=null;}
-   }else{try{const m=JSON.parse(ev.data);if(m.kind==="MTRX_FILE"&&Number.isFinite(m.size)&&m.size>=0){receiving={name:String(m.name||"received.bin").replace(/[\\/:*?""<>|]/g,"_"),type:String(m.type||"application/octet-stream"),size:m.size,parts:[],got:0};output("rtc-progress","Получение "+receiving.name+" · "+sizeText(receiving.size));}}catch{}}
+   }else{try{const m=JSON.parse(ev.data);if(m.kind==="MTRX_FILE"&&Number.isFinite(m.size)&&m.size>=0){receiving={name:String(m.name||"received.bin").replace(/[\\:*?"<>|]/g,"_").replaceAll("/","_"),type:String(m.type||"application/octet-stream"),size:m.size,parts:[],got:0};output("rtc-progress","Получение "+receiving.name+" · "+sizeText(receiving.size));}}catch{}}
   }else if(receiving&&ev.data instanceof ArrayBuffer){receiving.parts.push(ev.data);receiving.got+=ev.data.byteLength;output("rtc-progress","Получено "+sizeText(receiving.got)+" / "+sizeText(receiving.size));}
  };
  channelState();
