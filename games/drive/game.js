@@ -488,7 +488,7 @@ function selectCar(carId){
   if(!CAR_OPTIONS[carId])return;
   if(state.car===carId&&player.userData.loadedModel){updateCarSelectionUI();return;}
   state.car=carId;
-  try{localStorage.setItem("driveHorizonCar",carId);}catch(e){console.warn("Car preference unavailable",e);}
+  try{localStorage.setItem("driveHorizonCarV2",carId);}catch(e){console.warn("Car preference unavailable",e);}
   updateCarSelectionUI();
   loadCar(carId);
   toast("Выбран автомобиль: "+CAR_OPTIONS[carId].name);
@@ -604,13 +604,13 @@ function buildCockpit(){
 
   // The center stack is lower and farther forward, not in the driver's face.
   box(.60,.58,.22,dashMat,0,.82,-.67,-.12);
-  box(.55,.36,.06,screenFrameMat,0,1.00,-.80);
-  box(.48,.018,.025,trimMat,0,.805,-.77);
-  box(.44,.12,.035,softMat,0,.70,-.76);
+  box(.55,.36,.06,screenFrameMat,0,1.00,-.53);
+  box(.48,.018,.025,trimMat,0,.805,-.49);
+  box(.44,.12,.035,softMat,0,.70,-.49);
   for(let i=0;i<3;i++){
-    const knob=cylinder(.047,.05,trimMat,(i-1)*.13,.69,-.80);
+    const knob=cylinder(.047,.05,trimMat,(i-1)*.13,.69,-.48);
     knob.rotation.z=Math.PI/2;
-    const center=cylinder(.018,.052,softMat,(i-1)*.13,.69,-.765);
+    const center=cylinder(.018,.052,softMat,(i-1)*.13,.69,-.455);
     center.rotation.z=Math.PI/2;
   }
   for(const x of [-.74,-.58,.58,.74]){
@@ -669,7 +669,7 @@ function buildCockpit(){
     new THREE.PlaneGeometry(.48,.27),
     new THREE.MeshBasicMaterial({map:cockpitCenterTexture,side:THREE.DoubleSide,toneMapped:false})
   );
-  centerScreen.position.set(0,1.00,-.745);centerScreen.renderOrder=10;cockpitGroup.add(centerScreen);
+  centerScreen.position.set(0,1.00,-.475);centerScreen.renderOrder=10;cockpitGroup.add(centerScreen);
 
   drawCockpitCenterDisplay();
   cockpitGaugeLast=0;
@@ -1117,7 +1117,7 @@ function init() {
     composer.addPass(new RenderPass(scene,camera));
     bloomPass=new UnrealBloomPass(new THREE.Vector2(window.innerWidth,window.innerHeight),isMobile?.16:.34,.42,.76);
     composer.addPass(bloomPass);composer.addPass(new OutputPass());
-    const savedCar=localStorage.getItem("driveHorizonCar");
+    const savedCar=localStorage.getItem("driveHorizonCarV2");
     if(CAR_OPTIONS[savedCar])state.car=savedCar;
     player=new THREE.Group();playerFallback=makeCar(state.paint);player.add(playerFallback);scene.add(player);addPlayerHeadlights();
     createTraffic();buildCockpit();updateCameraButton();drawMiniMap();bindControls();bindUI();window.addEventListener("resize",resize);
