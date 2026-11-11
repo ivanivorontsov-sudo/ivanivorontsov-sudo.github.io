@@ -17,7 +17,7 @@ const state = {
 };
 const controls = { gas:false, brake:false, left:false, right:false, handbrake:false };
 let renderer, composer, bloomPass, scene, camera, curve, trackLength, player, playerFallback, carPaintMaterial;
-let cockpitGroup, steeringWheelVisual;
+let cockpitGroup, steeringWheelVisual, inputTelemetryTimer=0;
 const hardware = { steer:0, throttle:0, brake:0, handbrake:false };
 const inputConfig = { steer:"axis0", gas:"button7", brake:"button6", handbrake:"button0", invertSteer:false, invertGas:false, invertBrake:false, sensitivity:1.25 };
 let skyTexture, skyCanvas, skyContext, sun, directionalLight, ambientLight, stars;
@@ -522,8 +522,16 @@ function placeVehicles(dt) {
 }
 
 function updateGame(dt) {
+  pollHardware();
+  inputTelemetryTimer+=dt;
+  if(inputTelemetryTimer>.12){
+    inputTelemetryTimer=0;
+    const pad=getPads().find(p=>p.index===state.gamepadIndex);
+    $("inputTelemetry").textContent=pad?
+      "Сигналы · руль "+hardware.steer.toFixed(2)+" · газ "+Math.round(hardware.throttle*100)+"% · тормоз "+Math.round(hardware.brake*100)+"% · ручник "+(hardware.handbrake?"ВКЛ":"выкл"):
+      "Сигналы появятся после подключения контроллера";
+  }
   if(state.running&&!state.paused){
-    pollHardware();
     const throttle=Math.max(controls.gas?1:0,hardware.throttle),brake=Math.max(controls.brake?1:0,hardware.brake);
     state.steerInput=clamp((controls.right?1:0)-(controls.left?1:0)+hardware.steer,-1,1);
     state.steer=lerp(state.steer,state.steerInput,Math.min(1,dt*5.2));
@@ -665,8 +673,8 @@ function readBinding(pad,binding,kind,invert=false) {
     if(kind==="steer")value=b&&b.pressed?1:0;
   }
   if(invert)value=kind==="steer"?-value:1-value;
-  if(kind==="steer")value=clamp(value*Number(inputConfig.sensitivity||1),-1,1);
-  return clamp(value,0,1)===value&&kind!=="steer"?value:kind==="steer"?clamp(value,-1,1):0;
+  if(kind==="steer")return clamp(value*Number(inputConfig.sensitivity||1),-1,1);
+  return clamp(value,0,1);
 }
 function pollHardware() {
   const pads=getPads();
@@ -687,7 +695,8 @@ function bindControls() {
     if(k==="c")setCameraMode();
     if(k==="r")restartGame();
     if(k==="f1"){e.preventDefault();$("devicePanel").classList.toggle("hidden");refreshDevicePanel();}
-    if(k==="p"||k==="escape")showPause(!state.paused);
+    if(k==="escape"&&!$("devicePanel").classList.contains("hidden"))$("devicePanel").classList.add("hidden");
+    else if(k==="p"||k==="escape")showPause(!state.paused);
     if(k==="enter"&&!state.running)startGame();
   });
   window.addEventListener("keyup",e=>{const k=e.key.toLowerCase();if(keyMap[k]){controls[keyMap[k]]=false;e.preventDefault();}});
@@ -715,6 +724,7 @@ function bindUI() {
   $("cameraBtn").addEventListener("click",setCameraMode);
   $("devicesBtn").addEventListener("click",()=>{$("devicePanel").classList.remove("hidden");refreshDevicePanel();});
   $("deviceClose").addEventListener("click",()=>$("devicePanel").classList.add("hidden"));
+  $("deviceCloseBottom").addEventListener("click",()=>$("devicePanel").classList.add("hidden"));
   $("refreshDevicesBtn").addEventListener("click",refreshDevicePanel);
   $("deviceSelect").addEventListener("change",e=>{state.gamepadIndex=e.target.value===""?null:Number(e.target.value);refreshDevicePanel();});
   ["steerSource","gasSource","brakeSource","handbrakeSource"].forEach(id=>$(id).addEventListener("change",e=>{const key={steerSource:"steer",gasSource:"gas",brakeSource:"brake",handbrakeSource:"handbrake"}[id];inputConfig[key]=e.target.value;saveInputConfig();}));
