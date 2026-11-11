@@ -38,6 +38,8 @@ check(js.includes("w.rotateX(-state.speed*dt/radius)"), "Wheels rotate around th
 check(js.includes('obj.name.toLowerCase()==="body"'), "Imported exterior body shell is identified");
 check(js.includes("player.userData.bodyShell.visible=state.camera!==1"), "Exterior shell is hidden only in driver view");
 check(js.includes("if(cockpitGroup)cockpitGroup.visible=state.camera===1"), "Cabin appears in driver view");
-check(js.includes("new THREE.PlaneGeometry(1.88,.88)"), "Driver cabin includes windshield geometry");
+check(js.includes("new THREE.PlaneGeometry(1.82,.78)"), "Compact driver cabin includes windshield geometry");
+check(js.includes("steeringWheelVisual.position.set(-.48,1.02,-.62)"), "Steering wheel is placed in front of driver");
+check(js.includes("box(.34,.25,.30,dashMat,.27,.83,-.47)"), "Center stack stays low and narrow");
 
 console.log("Drive Horizon validation passed.");
