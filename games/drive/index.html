@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=horizon-pro-20261111">
+  <link rel="stylesheet" href="style.css?v=horizon-hud-20261111">
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -48,45 +48,46 @@
       <span><b>DRIVE</b><em>HORIZON</em></span>
     </a>
     <div class="route-label"><span class="live-dot"></span><span>СЕВЕРНЫЙ СЕРПАНТИН</span><small>FREE DRIVE · 01</small></div>
-    <div class="top-actions">
+    <button class="glass-btn icon-only more-btn" id="moreBtn" title="Меню" aria-label="Меню" aria-expanded="false">☰</button>
+    <div class="top-actions" id="topActions">
       <button class="glass-btn" id="timeBtn" title="Сменить время суток"><span id="timeIcon">🌇</span><span class="btn-label">Закат</span></button>
       <button class="glass-btn" id="cameraBtn" title="Переключить погоню / кабину" aria-label="Переключить погоню / кабину"><span>◉</span><span class="btn-label">Погоня</span></button>
       <button class="glass-btn" id="devicesBtn" title="Настройка геймпада и руля"><span>🎮</span><span class="btn-label">Руль / геймпад</span></button>
       <button class="glass-btn" id="qualityBtn" title="Переключить качество"><span>✦</span><span class="btn-label">Графика: высокая</span></button>
       <button class="glass-btn icon-only" id="soundBtn" title="Звук включён" aria-label="Звук">♫</button>
       <button class="glass-btn icon-only" id="fullscreenBtn" title="Полный экран" aria-label="Полный экран">⛶</button>
+      <button class="glass-btn icon-only" id="hudToggleBtn" title="Скрыть интерфейс (U)" aria-label="Скрыть интерфейс">HID</button>
     </div>
   </header>
   <main id="hud" class="hud" aria-live="off">
-    <section class="speed-card glass">
-      <div class="eyebrow"><span class="live-dot"></span> ВАША СКОРОСТЬ</div>
-      <div class="speed-line"><strong id="speed">000</strong><span>KM/H</span></div>
-      <div class="rpm-label"><span>ОБОРОТЫ</span><b id="rpm">0 RPM</b></div>
-      <div class="rpm-track"><i id="rpmBar"></i></div>
-      <div class="gear-line"><span>ПЕРЕДАЧА</span><b id="gear">N</b><span class="gear-mode">AUTO</span></div>
+    <section class="hud-strip glass" id="hudStrip">
+      <div class="strip-primary">
+        <strong id="speed">000</strong><span>KM/H</span>
+        <b id="gear">N</b>
+        <small id="rpm">0 RPM</small>
+      </div>
+      <div class="rpm-track strip-rpm"><i id="rpmBar"></i></div>
+      <div class="strip-stats">
+        <span><em>ОЧКИ</em><b id="score">0</b></span>
+        <span><em>КОМБО</em><b id="combo">x1</b></span>
+        <span><em>УРОН</em><b id="damageLabel">0%</b></span>
+        <span><em>ПУТЬ</em><b id="distance">0.00 <i>KM</i></b></span>
+        <span class="strip-record"><em>РЕК</em><b id="record">0.00 <i>KM</i></b></span>
+        <span class="strip-cond"><em>АВТО</em><b class="condition"><span class="condition-dot"></span> Отличное</b></span>
+      </div>
     </section>
-    <section class="map-card glass">
+    <section class="map-card glass" id="mapCard">
       <div class="map-head"><span>МАРШРУТ</span><b>FREE DRIVE</b></div>
       <canvas id="minimap" width="180" height="180" aria-label="Мини-карта трассы"></canvas>
       <div class="map-foot"><span>↗</span> Без финиша. Только дорога.</div>
     </section>
-    <section class="score-card glass">
-      <div><small>ОЧКИ</small><b id="score">0</b></div>
-      <div><small>КОМБО</small><b id="combo">x1</b></div>
-      <div><small>УРОН</small><b id="damageLabel">0%</b></div>
-    </section>
-    <section class="distance-card glass">
-      <div><small>ПРОЙДЕНО</small><b id="distance">0.00 <i>KM</i></b></div>
-      <div><small>ЛИЧНЫЙ РЕКОРД</small><b id="record">0.00 <i>KM</i></b></div>
-      <div><small>СОСТОЯНИЕ</small><b class="condition"><span class="condition-dot"></span> Отличное</b></div>
-    </section>
-    <div class="message-pill" id="message">Держи полосу и наслаждайся дорогой</div>
+    <div class="message-pill hidden" id="message"></div>
   </main>
   <div class="bottom-bar">
     <div class="keyboard-help">
       <span><kbd>W</kbd><kbd>↑</kbd> газ</span><span><kbd>S</kbd><kbd>↓</kbd> тормоз</span>
       <span><kbd>A</kbd><kbd>D</kbd> поворот</span><span><kbd>SHIFT</kbd> ручник</span>
-      <span><kbd>H</kbd> сигнал</span><span><kbd>C</kbd> другие ракурсы</span><span><kbd>F1</kbd> устройства</span><span><kbd>R</kbd> заново</span>
+      <span><kbd>H</kbd> сигнал</span><span><kbd>C</kbd> другие ракурсы</span><span><kbd>U</kbd> скрыть HUD</span><span><kbd>F1</kbd> устройства</span><span><kbd>R</kbd> заново</span>
     </div>
     <div class="touch-controls" aria-label="Сенсорное управление">
       <div class="steer-pair">
@@ -149,6 +150,7 @@
   <section class="pause-panel glass hidden" id="pausePanel">
     <div class="pause-kicker">DRIVE HORIZON</div><h2>Пауза</h2>
     <p>Дорога подождёт. Она вообще очень терпеливая.</p>
+    <p class="pause-stats">Путь <b id="pauseDistance">0.00 км</b> · Рекорд <b id="pauseRecord">0.00 км</b></p>
     <button class="start-btn compact" id="resumeBtn"><span>ПРОДОЛЖИТЬ</span><b>→</b></button>
     <button class="secondary-btn" id="restartBtn">↻ Начать поездку заново</button>
     <button class="secondary-btn" id="menuBtn">⌂ В главное меню</button>
@@ -211,6 +213,6 @@
     }, 18000);
   </script>
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js"}}</script>
-  <script type="module" src="game.js?v=horizon-pro-20261111"></script>
+  <script type="module" src="game.js?v=horizon-hud-20261111"></script>
 </body>
 </html>

@@ -129,3 +129,79 @@ body.playing .back-link{display:none}
   .bottom-bar{min-height:70px;padding:0 14px max(8px,env(safe-area-inset-bottom))}
   .touch-controls{gap:10px}
 }
+
+/* === Compact HUD v2 === */
+.topbar{height:56px;background:linear-gradient(180deg,rgba(5,12,19,.42),rgba(5,12,19,.06));border-bottom-color:rgba(255,255,255,.08)}
+body.playing .topbar{height:52px}
+.more-btn{display:none}
+.hud-strip{position:absolute;left:18px;top:64px;display:flex;align-items:center;gap:14px;padding:7px 12px;border-radius:12px;background:rgba(8,16,23,.76);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(12px);box-shadow:0 8px 28px rgba(0,0,0,.18);pointer-events:none;max-width:min(640px,46vw);z-index:4;color:#eef6f8}
+.strip-primary{display:flex;align-items:baseline;gap:8px;white-space:nowrap}
+.strip-primary strong{font-size:28px;line-height:1;font-weight:800;letter-spacing:-.06em;font-variant-numeric:tabular-nums;color:#fff}
+.strip-primary>span{font-size:9px;font-weight:800;letter-spacing:.14em;color:#9cb4bf}
+.strip-primary b{font-size:18px;color:#f5c58a;margin-left:4px}
+.strip-primary small{font-size:9px;color:#91a3af;letter-spacing:.04em}
+.strip-rpm{width:72px;height:3px;margin:0;background:rgba(255,255,255,.12)}
+.strip-stats{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.strip-stats span{display:flex;flex-direction:column;gap:1px;min-width:34px}
+.strip-stats em{font-style:normal;font-size:7px;letter-spacing:.12em;color:#8ea0aa;font-weight:800}
+.strip-stats b{font-size:12px;font-weight:800;font-variant-numeric:tabular-nums}
+.map-card{top:64px;right:18px;width:168px;padding:8px 10px;background:rgba(8,16,23,.4)}
+.message-pill{bottom:72px;padding:6px 12px;font-size:9px;background:rgba(7,15,22,.5)}
+.message-pill:empty,.message-pill.hidden{opacity:0;visibility:hidden;pointer-events:none}
+body.cam-cockpit .strip-primary,body.cam-cockpit .strip-rpm,body.cam-cockpit .map-card{display:none}
+body.cam-cockpit .hud-strip{left:auto;right:18px;top:64px;max-width:none}
+body.hud-hidden .hud,body.hud-hidden .top-actions,body.hud-hidden .more-btn,body.hud-hidden .keyboard-help,body.hud-hidden .route-label{opacity:0!important;visibility:hidden;pointer-events:none}
+body.hud-hidden .topbar{background:transparent;border-color:transparent}
+body.hud-hidden .touch-controls{opacity:1;visibility:visible;pointer-events:auto}
+
+html.touch-ui .more-btn{display:grid;place-items:center}
+html.touch-ui .top-actions{display:none;position:absolute;top:54px;right:10px;flex-direction:column;align-items:stretch;gap:6px;padding:8px;border-radius:14px;background:rgba(8,16,23,.92);border:1px solid rgba(255,255,255,.12);z-index:8;min-width:186px}
+html.touch-ui .top-actions.open{display:flex}
+html.touch-ui .top-actions .glass-btn{width:auto;justify-content:flex-start;padding:0 10px}
+html.touch-ui .top-actions .btn-label{display:inline}
+html.touch-ui .map-card{display:none}
+html.touch-ui .hud-strip{left:10px;right:56px;top:54px;max-width:none;padding:6px 10px;gap:10px}
+html.touch-ui .strip-primary strong{font-size:22px}
+html.touch-ui body.cam-cockpit .hud-strip,body.cam-cockpit.touch-ui .hud-strip{left:10px;right:56px}
+html.touch-ui .strip-record{display:none}
+html.touch-ui .touch-controls{gap:8px}
+html.touch-ui .touch-btn.steering{width:46px;height:46px;font-size:28px}
+html.touch-ui .touch-btn.brake,html.touch-ui .touch-btn.gas{height:46px;min-width:62px}
+html.touch-ui .touch-btn.horn,html.touch-ui .touch-btn.handbrake{height:40px;min-width:58px;font-size:8px}
+html.touch-ui .util-pair{flex-direction:row}
+html.touch-ui .bottom-bar{min-height:62px;padding:0 10px max(8px,env(safe-area-inset-bottom))}
+html.touch-ui .message-pill{bottom:72px;max-width:58vw}
+
+@media(max-width:650px){
+  .speed-card,.score-card,.distance-card{display:none!important}
+  .hud-strip{display:flex}
+}
+@media(orientation:landscape) and (max-height:520px){
+  .topbar{height:44px}
+  .hud-strip{top:48px;padding:4px 10px}
+  .strip-primary strong{font-size:20px}
+  .message-pill{bottom:64px}
+  html.touch-ui .top-actions{top:46px}
+}
+
+@media(min-width:1100px){
+  .hud-strip{left:22px;top:68px}
+  .map-card{right:22px;top:68px}
+}
+
+.pause-stats{margin:8px 0 14px;font-size:12px;letter-spacing:.04em;color:#9cb8c1}
+.pause-stats b{color:#eaf4f4}
+
+html.touch-ui .hud-strip{left:10px;right:auto;width:auto;max-width:calc(100% - 66px);flex-wrap:nowrap}
+html.touch-ui body.cam-cockpit .hud-strip{left:auto;right:56px;max-width:min(320px,70vw)}
+@media (orientation:portrait) and (max-width:600px){
+  html.touch-ui .strip-rpm,
+  html.touch-ui .strip-primary small,
+  html.touch-ui .strip-stats span:nth-child(2),
+  html.touch-ui .strip-stats span:nth-child(3),
+  html.touch-ui .strip-stats span:nth-child(4),
+  html.touch-ui .strip-cond{display:none}
+  html.touch-ui .hud-strip{top:52px;padding:4px 10px;gap:10px}
+  html.touch-ui .strip-primary strong{font-size:20px}
+  html.touch-ui .strip-stats{gap:8px}
+}

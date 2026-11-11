@@ -45,10 +45,15 @@ check(js.includes("const eyeX=state.driverSide*.49"), "Driver eye point follows 
 check(js.includes("camera.position.copy(desired)"), "Driver camera has no chase smoothing lag");
 check(js.includes("player.position.y+=.13;"), "Artificial chassis bounce is removed");
 check(js.includes("const dt=Math.min(.033"), "Frame delta is capped to reduce acceleration stutter");
-check(js.includes("new THREE.PlaneGeometry(.68,.34)"), "Wide digital driver cluster is present");
-check(js.includes("new THREE.PlaneGeometry(.48,.27)"), "Separate center infotainment display is present");
-check(js.includes("clusterScreen.position.set(driverX,1.43,-1.155)"), "Driver display is in front of its bezel");
-check(js.includes("centerScreen.position.set(0,1.00,-.475)"), "Center display is moved to the visible front face of the center stack");
+check(js.includes("new THREE.PlaneGeometry(.68,.24)"), "Wide analog driver cluster is present");
+check(js.includes("new THREE.PlaneGeometry(.38,.22)"), "Separate center infotainment display is present");
+check(js.includes("clusterScreen.position.set(driverX,1.02,-.92)"), "Driver cluster sits low behind the wheel");
+check(js.includes("centerScreen.position.set(0,.96,-.72)"), "Center display sits on the visible face of the center stack");
+check(js.includes("function drawAnalogGauge"), "Instrument cluster draws analog gauges");
+check(js.includes("mirrorCam"), "Rear-view mirror camera exists");
+check(js.includes("if(k===\"u\")toggleHud();"), "HUD can be hidden with the U key");
+check(html.includes('id="hudStrip"'), "Compact HUD strip exists");
+check(html.includes('id="moreBtn"'), "Mobile header collapses into a menu button");
 check(html.includes('data-car="spectral"') && html.includes('data-car="suv"'), "Both vehicle choices exist in the menu");
 check(css.includes(".vehicle-picker"), "Garage selection is styled");
 
