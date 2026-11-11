@@ -9,15 +9,15 @@ const $ = (id) => document.getElementById(id);
 const sceneHost = $("scene");
 const isMobile = matchMedia("(max-width: 700px)").matches || ("ontouchstart" in window);
 const state = {
-  time: "sunset", paint: "#e5e8eb", quality: true, camera: 0,
+  time: "sunset", paint: "#e5e8eb", quality: true, camera: 0, car: "spectral",
+  driverSide: 1, carLoadToken: 0,
   running: false, paused: false, speed: 0, distance: 0, progress: 0,
   lateral: 0, steer: 0, steerInput: 0, totalDistance: 0, hitCooldown: 0,
   messageTimer: 0, soundOn: true, gamepadIndex: null
-
 };
 const controls = { gas:false, brake:false, left:false, right:false, handbrake:false };
 let renderer, composer, bloomPass, scene, camera, curve, trackLength, player, playerFallback, carPaintMaterial;
-let cockpitGroup, steeringWheelVisual, cockpitPaintMaterial, cockpitGaugeContext, cockpitGaugeTexture, cockpitGaugeLast=0, inputTelemetryTimer=0;
+let cockpitGroup, steeringWheelVisual, cockpitGaugeContext, cockpitGaugeTexture, cockpitCenterContext, cockpitCenterTexture, cockpitGaugeLast=0, inputTelemetryTimer=0;
 const hardware = { steer:0, throttle:0, brake:0, handbrake:false };
 const inputConfig = { steer:"axis0", gas:"button7", brake:"button6", handbrake:"button0", invertSteer:false, invertGas:false, invertBrake:false, pedalsPositive:false, sensitivity:1.25 };
 let skyTexture, skyCanvas, skyContext, sun, directionalLight, ambientLight, stars;
@@ -355,6 +355,41 @@ function makeCar(color) {
   return g;
 }
 
+const CAR_OPTIONS = {
+  spectral: {
+    id:"spectral", name:"Spectral GT RS", type:"Спортивное купе",
+    url:"https://raw.githubusercontent.com/JaronKBragg7337/spectral-gt-rs/main/spectral_gt_rs_game_ready.glb",
+    rotationY:Math.PI/2, driverSide:1, spinAxis:"z", wheelRadius:.36
+  },
+  suv: {
+    id:"suv", name:"Kenney SUV", type:"Повседневный SUV",
+    url:"https://raw.githubusercontent.com/ivanivorontsov-sudo/car-simulator/main/assets/models/cars/suv.glb",
+    rotationY:Math.PI, driverSide:-1, spinAxis:"x", fitLength:4.35, wheelRadius:.30
+  }
+};
+
+function disposeVehicleObject(root){
+  if(!root)return;
+  root.traverse(obj=>{
+    if(obj.geometry)obj.geometry.dispose();
+    const mats=Array.isArray(obj.material)?obj.material:(obj.material?[obj.material]:[]);
+    mats.forEach(mat=>{
+      ["map","normalMap","roughnessMap","metalnessMap","emissiveMap","aoMap","alphaMap"].forEach(key=>{
+        if(mat[key]&&mat[key].dispose)mat[key].dispose();
+      });
+      mat.dispose();
+    });
+  });
+}
+
+function updateCarSelectionUI(){
+  document.querySelectorAll("[data-car]").forEach(btn=>{
+    const active=btn.dataset.car===state.car;
+    btn.classList.toggle("active",active);
+    btn.setAttribute("aria-pressed",String(active));
+  });
+}
+
 function updateCarPaint(){
   if(playerFallback?.userData.bodyMat)playerFallback.userData.bodyMat.color.set(state.paint);
   if(player?.userData.loadedModel)player.userData.loadedModel.traverse(obj=>{
@@ -362,55 +397,101 @@ function updateCarPaint(){
     const mats=Array.isArray(obj.material)?obj.material:[obj.material];
     mats.forEach(m=>{
       const n=(m.name||"").toLowerCase();
-      if(n.includes("colormap")||n.includes("paint")||n.includes("body paint"))m.color.set(state.paint);
+      if(n.includes("colormap")||n.includes("paint")||n.includes("body paint")||n.includes("spectral blue"))m.color.set(state.paint);
     });
   });
 }
 
-function loadDefaultCar(){
+function loadCar(carId){
+  const config=CAR_OPTIONS[carId]||CAR_OPTIONS.spectral;
+  const request=++state.carLoadToken;
+  state.car=config.id;
+  state.driverSide=config.driverSide;
+  updateCarSelectionUI();
+
+  if(player.userData.loadedModel){
+    const old=player.userData.loadedModel;player.remove(old);disposeVehicleObject(old);
+    player.userData.loadedModel=null;
+  }
+  if(playerFallback){
+    player.remove(playerFallback);disposeVehicleObject(playerFallback);playerFallback=null;
+  }
+  playerFallback=makeCar(state.paint);
+  player.add(playerFallback);
+  player.userData.rollingWheels=[];
+  player.userData.wheelSpinAxis=config.spinAxis;
+  player.userData.wheelRadius=config.wheelRadius;
+  player.userData.steeringWheel=null;
+  player.userData.steeringWheelBase=null;
+  buildCockpit();
+  playerFallback.visible=state.camera!==1;
+  $("loadStatus").textContent="Загружается "+config.name+"…";
+
   const loader=new GLTFLoader();
-  const url="https://raw.githubusercontent.com/ivanivorontsov-sudo/car-simulator/main/assets/models/cars/suv.glb";
-  loader.load(url,(gltf)=>{
-    if(!player)return;
+  loader.load(config.url,(gltf)=>{
     const model=gltf.scene;
-    // У обычного Kenney SUV перед направлен вдоль +Z; разворачиваем к дороге (-Z).
-    model.rotation.y=Math.PI;
+    if(request!==state.carLoadToken){disposeVehicleObject(model);return;}
+    model.rotation.y=config.rotationY;
     model.updateMatrixWorld(true);
-    const originalBounds=new THREE.Box3().setFromObject(model);
-    const originalSize=originalBounds.getSize(new THREE.Vector3());
-    const fitScale=4.35/(Math.max(originalSize.x,originalSize.z)||2.7);
-    model.scale.setScalar(fitScale);
-    model.updateMatrixWorld(true);
+    let fitScale=1;
+    if(config.fitLength){
+      const originalBounds=new THREE.Box3().setFromObject(model);
+      const originalSize=originalBounds.getSize(new THREE.Vector3());
+      fitScale=config.fitLength/(Math.max(originalSize.x,originalSize.z)||2.7);
+      model.scale.setScalar(fitScale);
+      model.updateMatrixWorld(true);
+    }
     const bounds=new THREE.Box3().setFromObject(model);
     model.position.y-=bounds.min.y;
-    const rollingWheels=[];let bodyShell=null;
+    const rollingWheels=[];let wheelSteering=null;
     model.traverse(obj=>{
       if(!obj.isMesh)return;
       obj.castShadow=true;obj.receiveShadow=true;
       if(Array.isArray(obj.material))obj.material=obj.material.map(m=>m.clone());
       else if(obj.material)obj.material=obj.material.clone();
       const mats=Array.isArray(obj.material)?obj.material:[obj.material];
-      mats.forEach(m=>{if((m.name||"").toLowerCase().includes("colormap"))m.color.set(state.paint);});
-      if(obj.name.toLowerCase()==="body")bodyShell=obj;
-      // В GLB Kenney ось X проходит через ступицу; запаска wheel-back не анимируется.
-      if(/^wheel-(front|back)-(left|right)$/i.test(obj.name))rollingWheels.push(obj);
+      mats.forEach(m=>{
+        const n=(m.name||"").toLowerCase();
+        if(n.includes("colormap")||n.includes("spectral blue")||n.includes("paint")||n.includes("body paint"))m.color.set(state.paint);
+      });
+      const name=(obj.name||"").toLowerCase();
+      if(config.id==="spectral"&&/^(front|rear)_(left|right)_tire$/i.test(name))rollingWheels.push(obj);
+      if(config.id==="suv"&&/^wheel-(front|back)-(left|right)$/i.test(name))rollingWheels.push(obj);
+      if(name==="steering_wheel")wheelSteering=obj;
     });
-    // Fallback — отдельная дочерняя группа, поэтому заменяем только её.
-    if(playerFallback){player.remove(playerFallback);playerFallback=null;}
+
+    player.remove(playerFallback);
+    disposeVehicleObject(playerFallback);
+    playerFallback=null;
     player.add(model);
     player.userData.loadedModel=model;
-    player.userData.bodyShell=bodyShell;
+    player.userData.bodyShell=null;
     player.userData.rollingWheels=rollingWheels;
-    player.userData.wheelRadius=.30*fitScale;
+    player.userData.wheelSpinAxis=config.spinAxis;
+    player.userData.wheelRadius=config.fitLength ? 0.30*fitScale : (config.wheelRadius||.36);
+    player.userData.steeringWheel=wheelSteering;
+    player.userData.steeringWheelBase=wheelSteering?wheelSteering.rotation.clone():null;
     player.updateMatrixWorld(true);
-    $("loadStatus").textContent="Обычный дорожный SUV готов. Можно выезжать.";
     updateCarPaint();
     createPlayerDashboard();
-    if(state.camera===1)setMessage("Вид водителя · салон обычного автомобиля",3);
+    $("loadStatus").textContent=config.name+" · модель загружена";
+    if(state.camera===1)setMessage("Вид водителя · "+config.name,3);
   },undefined,(error)=>{
-    console.warn("Default SUV unavailable; keeping fallback car",error);
-    $("loadStatus").textContent="Модель SUV не загрузилась · используется резервный автомобиль.";
+    if(request!==state.carLoadToken)return;
+    console.warn(config.name+" unavailable; keeping procedural fallback",error);
+    $("loadStatus").textContent=config.name+" не загрузился · используется резервная машина.";
+    toast("Не удалось загрузить модель. Включена резервная машина.");
   });
+}
+
+function selectCar(carId){
+  if(!CAR_OPTIONS[carId])return;
+  if(state.car===carId&&player.userData.loadedModel){updateCarSelectionUI();return;}
+  state.car=carId;
+  try{localStorage.setItem("driveHorizonCar",carId);}catch(e){console.warn("Car preference unavailable",e);}
+  updateCarSelectionUI();
+  loadCar(carId);
+  toast("Выбран автомобиль: "+CAR_OPTIONS[carId].name);
 }
 
 function createTraffic() {
@@ -479,76 +560,195 @@ function cycleCameraMode(){
 }
 
 function buildCockpit(){
-  // Compact, left-hand-drive cabin aligned to the SUV's local forward direction (-Z).
-  // The exterior body is hidden in FPS, so all visible cabin pieces are intentionally
-  // placed around the driver's eye point rather than copied from exterior dimensions.
+  if(cockpitGroup&&player){
+    player.remove(cockpitGroup);
+    cockpitGroup.traverse(obj=>{
+      if(obj.geometry)obj.geometry.dispose();
+      const mats=Array.isArray(obj.material)?obj.material:(obj.material?[obj.material]:[]);
+      mats.forEach(m=>{if(m.map&&m.map.dispose)m.map.dispose();m.dispose();});
+    });
+  }
+  cockpitGaugeContext=null;cockpitGaugeTexture=null;cockpitCenterContext=null;cockpitCenterTexture=null;
   cockpitGroup=new THREE.Group();
   player.add(cockpitGroup);
-  cockpitGroup.visible=false;
+  cockpitGroup.visible=state.camera===1;
 
-  const dashMat=new THREE.MeshStandardMaterial({color:0x20272d,roughness:.56,metalness:.18});
-  const softMat=new THREE.MeshStandardMaterial({color:0x10151a,roughness:.88});
-  const trimMat=new THREE.MeshStandardMaterial({color:0x65717a,roughness:.32,metalness:.62});
-  const seatMat=new THREE.MeshStandardMaterial({color:0x343b41,roughness:.92});
-  const glassMat=new THREE.MeshPhysicalMaterial({color:0xb5d7e2,roughness:.12,metalness:0,transparent:true,opacity:.055,side:THREE.DoubleSide,depthWrite:false});
-
+  const side=state.driverSide>=0?1:-1;
+  const driverX=side*.49;
+  const dashMat=new THREE.MeshStandardMaterial({color:0x202a31,roughness:.48,metalness:.24});
+  const softMat=new THREE.MeshStandardMaterial({color:0x0b1117,roughness:.86});
+  const trimMat=new THREE.MeshStandardMaterial({color:0x84939a,roughness:.3,metalness:.72});
+  const seatMat=new THREE.MeshStandardMaterial({color:0x272f36,roughness:.94});
+  const leatherMat=new THREE.MeshStandardMaterial({color:0x151c22,roughness:.74});
+  const screenFrameMat=new THREE.MeshStandardMaterial({color:0x080e13,roughness:.28,metalness:.28});
+  const glassMat=new THREE.MeshPhysicalMaterial({color:0xb5d7e2,roughness:.1,metalness:0,transparent:true,opacity:.045,side:THREE.DoubleSide,depthWrite:false});
   const box=(w,h,d,mat,x,y,z,rx=0,ry=0,rz=0)=>{
     const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
     mesh.position.set(x,y,z);mesh.rotation.set(rx,ry,rz);
     mesh.castShadow=true;mesh.receiveShadow=true;cockpitGroup.add(mesh);return mesh;
   };
+  const cylinder=(radius,depth,mat,x,y,z)=>{
+    const mesh=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,depth,28),mat);
+    mesh.rotation.x=Math.PI/2;mesh.position.set(x,y,z);cockpitGroup.add(mesh);return mesh;
+  };
 
-  // Dashboard follows the base of the windshield. Keep the center stack low
-  // and narrow so it cannot cover the driver's forward view or steering wheel.
-  box(2.02,.20,.48,dashMat,0,1.13,-.92);
-  box(1.98,.045,.28,softMat,0,1.245,-.96);
-  box(.34,.25,.30,dashMat,.27,.83,-.47);
-  box(.30,.025,.22,trimMat,.27,.965,-.50);
+  // The dashboard stays about 1.3 m ahead of the driver's eye point.
+  box(2.06,.22,.62,dashMat,0,1.16,-.98,-.035);
+  box(2.02,.055,.58,leatherMat,0,1.295,-.98,-.035);
+  box(1.98,.035,.54,trimMat,0,1.325,-.98,-.035);
+  box(2.02,.11,.18,softMat,0,1.06,-.69);
+  box(.78,.42,.075,screenFrameMat,driverX,1.43,-1.205);
+  box(.60,.035,.07,trimMat,driverX,1.19,-1.17);
+  box(.78,.23,.035,leatherMat,-driverX*.75,.99,-1.02);
+  box(.74,.018,.018,trimMat,-driverX*.75,1.07,-1.045);
 
-  // Seats are moved rearward and lowered. Their backs stay behind the eye point.
-  for(const x of [-.48,.48]){
-    box(.58,.14,.60,seatMat,x,.39,.77);
-    box(.58,.58,.15,seatMat,x,.73,1.02,-.10);
-    box(.29,.18,.12,softMat,x,1.08,1.04);
+  // The center stack is lower and farther forward, not in the driver's face.
+  box(.60,.58,.22,dashMat,0,.82,-.67,-.12);
+  box(.55,.36,.06,screenFrameMat,0,1.00,-.80);
+  box(.48,.018,.025,trimMat,0,.805,-.77);
+  box(.44,.12,.035,softMat,0,.70,-.76);
+  for(let i=0;i<3;i++){
+    const knob=cylinder(.047,.05,trimMat,(i-1)*.13,.69,-.80);
+    knob.rotation.z=Math.PI/2;
+    const center=cylinder(.018,.052,softMat,(i-1)*.13,.69,-.765);
+    center.rotation.z=Math.PI/2;
   }
-
-  // Door cards and slim windshield pillars, avoiding bulky shapes near the view.
-  for(const x of [-1.00,1.00]){
-    box(.085,.48,1.05,softMat,x,.86,.04,0,0,x<0?-.035:.035);
-    box(.025,.035,.58,trimMat,x<0?-.94:.94,.99,.02);
-    box(.065,.92,.085,softMat,x*.91,1.57,-1.22,0,0,x<0?-.10:.10);
+  for(const x of [-.74,-.58,.58,.74]){
+    box(.105,.018,.025,softMat,x,1.17,-1.18);
+    box(.105,.018,.025,trimMat,x,1.135,-1.18);
   }
-  box(1.90,.075,.10,softMat,0,2.02,-1.22);
+  for(const x of [-.96,.96]){
+    box(.075,.72,.08,softMat,x,.92,-.06,0,0,x<0?-.05:.05);
+    box(.065,.91,.075,softMat,x*.94,1.61,-1.27,0,0,x<0?-.1:.1);
+  }
+  box(1.88,.07,.11,softMat,0,2.08,-1.27);
   const windshield=new THREE.Mesh(new THREE.PlaneGeometry(1.82,.78),glassMat);
-  windshield.position.set(0,1.60,-1.225);
+  windshield.position.set(0,1.67,-1.28);
   windshield.renderOrder=2;cockpitGroup.add(windshield);
-  box(.075,.075,.20,trimMat,0,1.98,-1.18);
+  box(1.83,.035,.10,trimMat,0,1.28,-1.28);
 
-  // Steering wheel now sits in front of the driver, unobstructed by the center stack.
+  // Seats are set back so neither seatbacks nor headrests enter the forward view.
+  for(const x of [-.49,.49]){
+    box(.57,.14,.62,seatMat,x,.43,.88);
+    box(.56,.65,.16,seatMat,x,.78,1.14,-.08);
+    box(.34,.15,.13,leatherMat,x,1.12,1.15);
+    box(.11,.50,.15,leatherMat,x-.25,.76,1.05);
+    box(.11,.50,.15,leatherMat,x+.25,.76,1.05);
+  }
+  for(const x of [-.91,.91]){
+    box(.07,.38,1.05,leatherMat,x,.83,.28,0,0,x<0?-.035:.035);
+    box(.12,.035,.33,trimMat,x,.97,.28,0,0,x<0?-.035:.035);
+  }
+
   steeringWheelVisual=new THREE.Group();
-  steeringWheelVisual.position.set(-.48,1.02,-.62);
+  steeringWheelVisual.position.set(driverX,1.025,-.57);
   cockpitGroup.add(steeringWheelVisual);
   const wheelMat=new THREE.MeshStandardMaterial({color:0x080c10,roughness:.48});
-  const ring=new THREE.Mesh(new THREE.TorusGeometry(.255,.032,14,56),wheelMat);
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(.235,.031,16,64),wheelMat);
   steeringWheelVisual.add(ring);
-  const hub=new THREE.Mesh(new THREE.CylinderGeometry(.064,.064,.065,24),trimMat);
+  const hub=new THREE.Mesh(new THREE.CylinderGeometry(.061,.061,.07,24),trimMat);
   hub.rotation.x=Math.PI/2;hub.position.z=.025;steeringWheelVisual.add(hub);
-  for(const [x,y,angle] of [[0,.13,0],[-.11,-.07,-.7],[.11,-.07,.7]]){
-    const spoke=new THREE.Mesh(new THREE.BoxGeometry(.035,.19,.035),trimMat);
+  for(const [x,y,angle] of [[0,.12,0],[-.105,-.065,-.72],[.105,-.065,.72]]){
+    const spoke=new THREE.Mesh(new THREE.BoxGeometry(.032,.17,.034),trimMat);
     spoke.position.set(x,y,.015);spoke.rotation.z=angle;steeringWheelVisual.add(spoke);
   }
 
-  // A small, readable instrument screen is embedded in the dash, directly behind the wheel.
-  const canvas=document.createElement("canvas");canvas.width=512;canvas.height=256;
-  cockpitGaugeContext=canvas.getContext("2d");
-  cockpitGaugeTexture=new THREE.CanvasTexture(canvas);cockpitGaugeTexture.colorSpace=THREE.SRGBColorSpace;
-  const screen=new THREE.Mesh(
-    new THREE.PlaneGeometry(.34,.16),
+  const clusterCanvas=document.createElement("canvas");clusterCanvas.width=1024;clusterCanvas.height=512;
+  cockpitGaugeContext=clusterCanvas.getContext("2d");
+  cockpitGaugeTexture=new THREE.CanvasTexture(clusterCanvas);cockpitGaugeTexture.colorSpace=THREE.SRGBColorSpace;
+  const clusterScreen=new THREE.Mesh(
+    new THREE.PlaneGeometry(.68,.34),
     new THREE.MeshBasicMaterial({map:cockpitGaugeTexture,side:THREE.DoubleSide,toneMapped:false})
   );
-  screen.position.set(-.48,1.31,-1.17);screen.renderOrder=10;cockpitGroup.add(screen);
+  clusterScreen.position.set(driverX,1.43,-1.25);clusterScreen.renderOrder=10;cockpitGroup.add(clusterScreen);
+
+  const centerCanvas=document.createElement("canvas");centerCanvas.width=640;centerCanvas.height=400;
+  cockpitCenterContext=centerCanvas.getContext("2d");
+  cockpitCenterTexture=new THREE.CanvasTexture(centerCanvas);cockpitCenterTexture.colorSpace=THREE.SRGBColorSpace;
+  const centerScreen=new THREE.Mesh(
+    new THREE.PlaneGeometry(.48,.27),
+    new THREE.MeshBasicMaterial({map:cockpitCenterTexture,side:THREE.DoubleSide,toneMapped:false})
+  );
+  centerScreen.position.set(0,1.00,-.842);centerScreen.renderOrder=10;cockpitGroup.add(centerScreen);
+
+  drawCockpitCenterDisplay();
   cockpitGaugeLast=0;
   drawCockpitDashboard(0,850,"N",true);
+}
+
+function drawCockpitCenterDisplay(){
+  if(!cockpitCenterContext||!cockpitCenterTexture)return;
+  const c=cockpitCenterContext;
+  const bg=c.createLinearGradient(0,0,640,400);
+  bg.addColorStop(0,"#102b38");bg.addColorStop(1,"#061119");
+  c.fillStyle=bg;c.fillRect(0,0,640,400);
+  c.fillStyle="#7be2d8";c.font="800 23px Manrope, sans-serif";c.fillText("DRIVE HORIZON",30,42);
+  c.fillStyle="#92aeb9";c.font="700 14px Manrope, sans-serif";c.fillText("LIVE NAVIGATION  ·  FREE DRIVE",30,68);
+  c.strokeStyle="rgba(255,255,255,.12)";c.lineWidth=2;c.beginPath();c.moveTo(28,84);c.lineTo(612,84);c.stroke();
+  c.fillStyle="#eaf4f4";c.font="800 18px Manrope, sans-serif";c.fillText("СЕВЕРНЫЙ СЕРПАНТИН",30,119);
+  c.fillStyle="#7fa0ab";c.font="600 13px Manrope, sans-serif";c.fillText("Маршрут без финиша",30,142);
+  c.save();c.translate(0,18);
+  c.strokeStyle="rgba(113,220,211,.18)";c.lineWidth=26;c.lineCap="round";c.beginPath();
+  c.moveTo(32,250);c.bezierCurveTo(170,135,210,310,335,235);c.bezierCurveTo(430,180,472,110,607,155);c.stroke();
+  c.strokeStyle="#75ded6";c.lineWidth=5;c.setLineDash([12,13]);c.beginPath();
+  c.moveTo(32,250);c.bezierCurveTo(170,135,210,310,335,235);c.bezierCurveTo(430,180,472,110,607,155);c.stroke();
+  c.setLineDash([]);c.fillStyle="#f4c58b";c.beginPath();c.arc(335,235,10,0,Math.PI*2);c.fill();
+  c.restore();
+  c.fillStyle="rgba(255,255,255,.08)";c.fillRect(28,352,584,24);
+  c.fillStyle="#9cb8c1";c.font="700 13px Manrope, sans-serif";c.fillText("SYSTEM  READY",42,369);
+  c.fillStyle="#79dfd7";c.textAlign="right";c.fillText("GPS  ·  ONLINE",598,369);c.textAlign="left";
+  cockpitCenterTexture.needsUpdate=true;
+}
+
+function createPlayerDashboard(){
+  if(!cockpitGaugeContext)buildCockpit();
+  drawCockpitCenterDisplay();
+  drawCockpitDashboard(0,850,"N",true);
+}
+
+function drawCockpitDashboard(speed,rpm,gear,force=false){
+  if(!cockpitGaugeContext||!cockpitGaugeTexture)return;
+  const now=performance.now();
+  if(!force&&now-cockpitGaugeLast<80)return;
+  cockpitGaugeLast=now;
+  const c=cockpitGaugeContext;
+  const bg=c.createLinearGradient(0,0,0,512);
+  bg.addColorStop(0,"#10232f");bg.addColorStop(.55,"#08151e");bg.addColorStop(1,"#03090e");
+  c.fillStyle=bg;c.fillRect(0,0,1024,512);
+  c.strokeStyle="rgba(120,228,218,.85)";c.lineWidth=6;c.strokeRect(10,10,1004,492);
+  c.fillStyle="#82e1d8";c.font="800 28px Manrope, sans-serif";c.fillText("DRIVE HORIZON",34,51);
+  c.fillStyle="#8caab5";c.font="700 16px Manrope, sans-serif";c.fillText("DIGITAL COCKPIT  ·  PERFORMANCE",34,78);
+  c.strokeStyle="rgba(255,255,255,.14)";c.lineWidth=2;c.beginPath();c.moveTo(32,95);c.lineTo(992,95);c.stroke();
+  c.fillStyle="#8caab5";c.font="800 18px Manrope, sans-serif";c.fillText("SPEED",42,132);
+  c.fillStyle="#f5faf9";c.font="900 172px Manrope, sans-serif";c.fillText(String(Math.round(speed)).padStart(3,"0"),36,318);
+  c.fillStyle="#8de4dc";c.font="800 26px Manrope, sans-serif";c.fillText("KM/H",50,359);
+  c.fillStyle="#91aab5";c.font="700 18px Manrope, sans-serif";c.fillText("CURRENT GEAR",54,420);
+  c.fillStyle="#f5c58a";c.font="900 74px Manrope, sans-serif";c.fillText(String(gear),54,486);
+  const cx=770,cy=272,r=150;
+  c.lineWidth=23;c.lineCap="round";c.strokeStyle="rgba(255,255,255,.12)";
+  c.beginPath();c.arc(cx,cy,r,Math.PI*1.12,Math.PI*1.88);c.stroke();
+  const ratio=clamp(rpm/8000,0,1);
+  const rev=c.createLinearGradient(cx-r,cy,cx+r,cy);
+  rev.addColorStop(0,"#5bd9cf");rev.addColorStop(.72,"#e2c17b");rev.addColorStop(1,"#fb795f");
+  c.strokeStyle=rev;c.beginPath();c.arc(cx,cy,r,Math.PI*1.12,Math.PI*1.12+(Math.PI*.76*ratio));c.stroke();
+  for(let i=0;i<=8;i++){
+    const a=Math.PI*1.12+Math.PI*.76*i/8;
+    const x1=cx+Math.cos(a)*(r+20),y1=cy+Math.sin(a)*(r+20);
+    const x2=cx+Math.cos(a)*(r+34),y2=cy+Math.sin(a)*(r+34);
+    c.strokeStyle=i>=7?"#f58a70":"#819aa5";c.lineWidth=4;c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();
+  }
+  c.fillStyle="#8ca7b2";c.font="800 20px Manrope, sans-serif";c.textAlign="center";c.fillText("ENGINE RPM",cx,146);
+  c.fillStyle="#f4f8f7";c.font="900 48px Manrope, sans-serif";c.fillText((rpm/1000).toFixed(1)+"k",cx,275);
+  c.fillStyle="#86dcd5";c.font="700 18px Manrope, sans-serif";c.fillText("RPM",cx,307);
+  c.textAlign="left";
+  c.fillStyle="rgba(255,255,255,.08)";c.fillRect(550,388,408,28);
+  c.fillStyle=rev;c.fillRect(550,388,408*ratio,28);
+  c.fillStyle="#91aab5";c.font="700 17px Manrope, sans-serif";c.fillText("ENGINE LOAD",550,448);
+  c.fillStyle="#e8f1f1";c.font="800 24px Manrope, sans-serif";c.fillText(Math.round(ratio*100)+"%",824,449);
+  c.strokeStyle="rgba(255,255,255,.14)";c.beginPath();c.moveTo(34,463);c.lineTo(992,463);c.stroke();
+  c.fillStyle="#78dfd6";c.font="700 15px Manrope, sans-serif";c.fillText("TEMP  NORMAL",550,482);
+  c.fillStyle="#a5bac2";c.fillText("ABS  ·  ESC  ·  DRIVE",760,482);
+  cockpitGaugeTexture.needsUpdate=true;
 }
 
 function addPlayerHeadlights(){
@@ -613,7 +813,8 @@ function placeVehicles(dt) {
   // Глаза водителя находятся внутри импортированного салона.
   // Driver seat and steering wheel after Blender→glTF axis conversion and model yaw.
   // Eye point sits just behind the wheel and below the roof line.
-  const cockpitPos=player.localToWorld(new THREE.Vector3(-.48,1.58,.08));
+  const eyeX=state.driverSide*.49;
+  const cockpitPos=player.localToWorld(new THREE.Vector3(eyeX,1.58,.38));
   // Камера вынесена за передний бампер: капот не перекрывает изображение.
   const hoodPos=player.localToWorld(new THREE.Vector3(0,1.42,-2.72));
   const topPos=player.position.clone().add(new THREE.Vector3(0,21,0)).addScaledVector(tan,-1.2);
@@ -625,9 +826,11 @@ function placeVehicles(dt) {
     player.userData.steeringWheel.rotation.set(base.x,base.y,base.z-state.steer*.55);
   }
   if(player.userData.rollingWheels){
-    const radius=player.userData.wheelRadius||.48;
-    // Wheel axle is local X in the Kenney GLB. Spin around the hub, not local Z.
-    player.userData.rollingWheels.forEach(w=>w.rotateX(-state.speed*dt/radius));
+    const radius=player.userData.wheelRadius||.36;
+    const spin=-state.speed*dt/radius;
+    const axis=player.userData.wheelSpinAxis||"x";
+    // Spectral uses local Z; Kenney SUV uses local X.
+    player.userData.rollingWheels.forEach(w=>axis==="z"?w.rotateZ(spin):w.rotateX(spin));
   }
   if(cockpitGroup)cockpitGroup.visible=state.camera===1;
   // Use only the procedural cabin in first-person; the imported SUV has extra interior/chassis meshes.
@@ -635,9 +838,9 @@ function placeVehicles(dt) {
   if(player.userData.bodyShell)player.userData.bodyShell.visible=state.camera!==1;
   if(playerFallback)playerFallback.visible=state.camera!==1;
   if(steeringWheelVisual)steeringWheelVisual.rotation.z=-state.steer*.62;
-  const look=state.camera===3?player.position.clone():state.camera===1?player.localToWorld(new THREE.Vector3(-.48,1.58,-35)):state.camera===2?player.localToWorld(new THREE.Vector3(0,1.2,-30)):player.position.clone().addScaledVector(tan,5).add(new THREE.Vector3(0,.8,0));
+  const look=state.camera===3?player.position.clone():state.camera===1?player.localToWorld(new THREE.Vector3(eyeX,1.58,-42)):state.camera===2?player.localToWorld(new THREE.Vector3(0,1.2,-30)):player.position.clone().addScaledVector(tan,5).add(new THREE.Vector3(0,.8,0));
   camera.lookAt(look);
-  const targetFov=state.camera===1?68:(isMobile?69:62);
+  const targetFov=state.camera===1?65:(isMobile?69:62);
   if(Math.abs(camera.fov-targetFov)>.1){camera.fov=lerp(camera.fov,targetFov,Math.min(1,dt*4));camera.updateProjectionMatrix();}
 }
 
@@ -704,7 +907,7 @@ function updateGame(dt) {
 function resize() {
   if(!renderer||!camera)return;
   const w=window.innerWidth,h=window.innerHeight;
-  camera.aspect=w/h;camera.near=.06;camera.fov=state.camera===1?68:(w<650?69:62);camera.updateProjectionMatrix();
+  camera.aspect=w/h;camera.near=.06;camera.fov=state.camera===1?65:(w<650?69:62);camera.updateProjectionMatrix();
   renderer.setSize(w,h,false);
   if(composer)composer.setSize(w,h);
 }
@@ -878,6 +1081,7 @@ function bindUI() {
     else document.exitFullscreen?.();
   });
   document.querySelectorAll(".mode-btn").forEach(btn=>btn.addEventListener("click",()=>applyTime(btn.dataset.mode)));
+  document.querySelectorAll("[data-car]").forEach(btn=>btn.addEventListener("click",()=>selectCar(btn.dataset.car)));
   document.querySelectorAll(".paint").forEach(btn=>btn.addEventListener("click",()=>{
     state.paint=btn.dataset.paint;document.querySelectorAll(".paint").forEach(b=>b.classList.toggle("active",b===btn));updateCarPaint();
   }));
@@ -913,11 +1117,13 @@ function init() {
     composer.addPass(new RenderPass(scene,camera));
     bloomPass=new UnrealBloomPass(new THREE.Vector2(window.innerWidth,window.innerHeight),isMobile?.16:.34,.42,.76);
     composer.addPass(bloomPass);composer.addPass(new OutputPass());
+    const savedCar=localStorage.getItem("driveHorizonCar");
+    if(CAR_OPTIONS[savedCar])state.car=savedCar;
     player=new THREE.Group();playerFallback=makeCar(state.paint);player.add(playerFallback);scene.add(player);addPlayerHeadlights();
     createTraffic();buildCockpit();updateCameraButton();drawMiniMap();bindControls();bindUI();window.addEventListener("resize",resize);
-    loadInputConfig();refreshDevicePanel();
-    loadDefaultCar();
-    $("loadStatus").textContent="Трасса готова. Загружается обычный дорожный автомобиль…";
+    loadInputConfig();refreshDevicePanel();updateCarSelectionUI();
+    loadCar(state.car);
+    $("loadStatus").textContent="Трасса готова. Загружается "+CAR_OPTIONS[state.car].name+"…";
     $("record").innerHTML=(Number(localStorage.getItem("driveHorizonRecord")||0)/1000).toFixed(2)+" <i>KM</i>";
     setMessage("Держи полосу и наслаждайся дорогой");
     requestAnimationFrame(loop);
