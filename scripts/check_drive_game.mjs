@@ -7,8 +7,10 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const gameDir = resolve(root, "games/drive");
 const htmlPath = resolve(gameDir, "index.html");
 const jsPath = resolve(gameDir, "game.js");
+const cssPath = resolve(gameDir, "style.css");
 const html = readFileSync(htmlPath, "utf8");
 const js = readFileSync(jsPath, "utf8");
+const css = readFileSync(cssPath, "utf8");
 
 function check(condition, message) {
   assert.ok(condition, message);
@@ -45,6 +47,8 @@ check(js.includes("player.position.y+=.13;"), "Artificial chassis bounce is remo
 check(js.includes("const dt=Math.min(.033"), "Frame delta is capped to reduce acceleration stutter");
 check(js.includes("new THREE.PlaneGeometry(.68,.34)"), "Wide digital driver cluster is present");
 check(js.includes("new THREE.PlaneGeometry(.48,.27)"), "Separate center infotainment display is present");
+check(js.includes("clusterScreen.position.set(driverX,1.43,-1.155)"), "Driver display is in front of its bezel");
+check(js.includes("centerScreen.position.set(0,1.00,-.745)"), "Center display is in front of its bezel");
 check(html.includes('data-car="spectral"') && html.includes('data-car="suv"'), "Both vehicle choices exist in the menu");
 check(css.includes(".vehicle-picker"), "Garage selection is styled");
 
