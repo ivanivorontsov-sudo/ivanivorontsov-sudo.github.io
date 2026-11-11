@@ -660,7 +660,7 @@ function buildCockpit(){
     new THREE.PlaneGeometry(.68,.34),
     new THREE.MeshBasicMaterial({map:cockpitGaugeTexture,side:THREE.DoubleSide,toneMapped:false})
   );
-  clusterScreen.position.set(driverX,1.43,-1.25);clusterScreen.renderOrder=10;cockpitGroup.add(clusterScreen);
+  clusterScreen.position.set(driverX,1.43,-1.155);clusterScreen.renderOrder=10;cockpitGroup.add(clusterScreen);
 
   const centerCanvas=document.createElement("canvas");centerCanvas.width=640;centerCanvas.height=400;
   cockpitCenterContext=centerCanvas.getContext("2d");
@@ -669,7 +669,7 @@ function buildCockpit(){
     new THREE.PlaneGeometry(.48,.27),
     new THREE.MeshBasicMaterial({map:cockpitCenterTexture,side:THREE.DoubleSide,toneMapped:false})
   );
-  centerScreen.position.set(0,1.00,-.842);centerScreen.renderOrder=10;cockpitGroup.add(centerScreen);
+  centerScreen.position.set(0,1.00,-.745);centerScreen.renderOrder=10;cockpitGroup.add(centerScreen);
 
   drawCockpitCenterDisplay();
   cockpitGaugeLast=0;
