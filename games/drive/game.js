@@ -595,7 +595,7 @@ function placeVehicles(dt) {
   const p=curve.getPointAt(state.progress),tan=curve.getTangentAt(state.progress),right=vecRight(tan);
   const yaw=Math.atan2(-tan.x,-tan.z);
   player.position.copy(p).addScaledVector(right,state.lateral);
-  player.position.y+=.13+Math.sin(clock.now*7)*Math.min(.035,state.speed*.0008);
+  player.position.y+=.13; // Stable chassis: no artificial vertical bob that shakes the driver's camera.
   player.rotation.y=yaw+state.steer*.055;
   player.rotation.z=lerp(player.rotation.z,-state.steer*.065,Math.min(1,dt*5));
   if(playerFallback?.userData.wheels)playerFallback.userData.wheels.forEach((wheel,i)=>{
@@ -613,12 +613,13 @@ function placeVehicles(dt) {
   // Глаза водителя находятся внутри импортированного салона.
   // Driver seat and steering wheel after Blender→glTF axis conversion and model yaw.
   // Eye point sits just behind the wheel and below the roof line.
-  const cockpitPos=player.localToWorld(new THREE.Vector3(-.48,1.48,.12));
+  const cockpitPos=player.localToWorld(new THREE.Vector3(-.48,1.58,.08));
   // Камера вынесена за передний бампер: капот не перекрывает изображение.
   const hoodPos=player.localToWorld(new THREE.Vector3(0,1.42,-2.72));
   const topPos=player.position.clone().add(new THREE.Vector3(0,21,0)).addScaledVector(tan,-1.2);
   const desired=state.camera===0?chasePos:state.camera===1?cockpitPos:state.camera===2?hoodPos:topPos;
-  camera.position.lerp(desired,Math.min(1,dt*(state.camera===3?2.4:state.camera===1?12:state.camera===2?9:4.5)));
+  if(state.camera===1)camera.position.copy(desired);
+  else camera.position.lerp(desired,Math.min(1,dt*(state.camera===3?2.4:state.camera===2?9:4.5)));
   if(player.userData.steeringWheel&&player.userData.steeringWheelBase){
     const base=player.userData.steeringWheelBase;
     player.userData.steeringWheel.rotation.set(base.x,base.y,base.z-state.steer*.55);
@@ -629,10 +630,12 @@ function placeVehicles(dt) {
     player.userData.rollingWheels.forEach(w=>w.rotateX(-state.speed*dt/radius));
   }
   if(cockpitGroup)cockpitGroup.visible=state.camera===1;
+  // Use only the procedural cabin in first-person; the imported SUV has extra interior/chassis meshes.
+  if(player.userData.loadedModel)player.userData.loadedModel.visible=state.camera!==1;
   if(player.userData.bodyShell)player.userData.bodyShell.visible=state.camera!==1;
   if(playerFallback)playerFallback.visible=state.camera!==1;
   if(steeringWheelVisual)steeringWheelVisual.rotation.z=-state.steer*.62;
-  const look=state.camera===3?player.position.clone():state.camera===1?player.localToWorld(new THREE.Vector3(-.48,1.43,-35)):state.camera===2?player.localToWorld(new THREE.Vector3(0,1.2,-30)):player.position.clone().addScaledVector(tan,5).add(new THREE.Vector3(0,.8,0));
+  const look=state.camera===3?player.position.clone():state.camera===1?player.localToWorld(new THREE.Vector3(-.48,1.58,-35)):state.camera===2?player.localToWorld(new THREE.Vector3(0,1.2,-30)):player.position.clone().addScaledVector(tan,5).add(new THREE.Vector3(0,.8,0));
   camera.lookAt(look);
   const targetFov=state.camera===1?68:(isMobile?69:62);
   if(Math.abs(camera.fov-targetFov)>.1){camera.fov=lerp(camera.fov,targetFov,Math.min(1,dt*4));camera.updateProjectionMatrix();}
@@ -882,7 +885,7 @@ function bindUI() {
 }
 function loop(now) {
   requestAnimationFrame(loop);
-  const dt=Math.min(.045,(now-lastFrame)/1000||0);lastFrame=now;clock.now=now/1000;
+  const dt=Math.min(.033,(now-lastFrame)/1000||0);lastFrame=now;clock.now=now/1000;
   updateGame(dt);if(composer)composer.render();else renderer.render(scene,camera);
   frameCount++;fpsTime+=dt;
   if(fpsTime>2){$("startBtn").dataset.fps=Math.round(frameCount/fpsTime);frameCount=0;fpsTime=0;}
