@@ -1170,12 +1170,12 @@ function syncViewClasses(){
 }
 
 function syncCockpitMirror(){
-  const x=0;
+  const x=isPortraitView()?state.driverSide*.32:0;
   const y=1.68, z=-.915;
   if(mirrorFrame) mirrorFrame.position.set(x,y,z);
   if(mirrorMesh) mirrorMesh.position.set(x,y,z+.011);
   if(mirrorFallback) mirrorFallback.position.set(x,y,z+.011);
-  if(cockpitGroup?.userData.mirrorStem) cockpitGroup.userData.mirrorStem.position.set(x,1.745,-.888);
+  if(cockpitGroup?.userData.mirrorStem) cockpitGroup.userData.mirrorStem.position.set(x,1.775,-.888);
 }
 
 function styleLoadedCar(model, config){
@@ -1510,9 +1510,9 @@ function buildCockpit(){
   else {centerScreen.position.set(0,.96,-.72);centerScreen.rotation.x=.25;}
   centerScreen.renderOrder=10;cockpitGroup.add(centerScreen);
 
-  const stem=new THREE.Mesh(new THREE.CylinderGeometry(.01,.014,.09,10),trimMat);
-  stem.position.set(0,1.745,-.888);
-  stem.rotation.x=.22;
+  const stem=new THREE.Mesh(new THREE.CylinderGeometry(.008,.011,.07,10),trimMat);
+  stem.position.set(0,1.775,-.888);
+  stem.rotation.x=.15;
   cockpitGroup.add(stem);
   cockpitGroup.userData.mirrorStem=stem;
 
