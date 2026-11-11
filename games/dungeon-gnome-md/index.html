@@ -11,7 +11,7 @@
 <title>Dungeon Gnome: The Goblin Hold — браузерная roguelike-игра</title>
 <link rel="canonical" href="https://ivanivorontsov-sudo.github.io/games/dungeon-gnome-md/">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<meta property="og:type" content="game">
+<meta property="og:type" content="website">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:site_name" content="Проекты Ивана Воронцова">
 <meta property="og:title" content="Dungeon Gnome: The Goblin Hold — браузерная roguelike-игра">
@@ -38,4 +38,5 @@ function step(dx,dy){if(mode!=='play')return;p.dir=dirs.findIndex(d=>d[0]===dx&&
 function draw(){x.fillStyle='#090914';x.fillRect(0,0,640,448);for(let y=0;y<M;y++)for(let a=0;a<N;a++){x.fillStyle=map[y][a]?'#393348':(a+y)%3?'#242238':'#29243b';x.fillRect(a*S,y*S,S-1,S-1);if(map[y][a]){x.fillStyle='#62566a';x.fillRect(a*S+4,y*S+5,5,3)}}for(let o of items){x.font='24px serif';x.fillText(o.t,o.x*S+4,o.y*S+26)}for(let e of en)if(e.hp>0){x.font='25px serif';x.fillText('👺',e.x*S+2,e.y*S+26)}x.font='28px serif';x.fillText('🧔',p.x*S+1,p.y*S+27);x.fillStyle='#f6d88c';x.font='bold 16px monospace';x.fillText('FLOOR '+floor+'   HP '+hp+'   RUNES '+runes+'/3   BOMBS '+bombs+'   POTIONS '+potions+'   SCORE '+score,10,18);if(mode==='title'||mode==='dead'||mode==='win'){x.fillStyle='#000b';x.fillRect(50,145,540,150);x.fillStyle='#ffdc8c';x.font='bold 28px monospace';x.fillText(mode==='win'?'YOU ESCAPED!':mode==='dead'?'GNOME DOWN':'PRESS ENTER TO START',90,205);x.font='16px monospace';x.fillText('Goblin prison awaits...',185,240)}}
 function act(k){if(k==='Space'){hit();draw()}else if(k==='KeyX'&&mode==='play'){if(bombs){bombs--;en.forEach(e=>{if(Math.abs(e.x-p.x)<=1&&Math.abs(e.y-p.y)<=1)e.hp=0});msg('БОМБА! Гоблины пересматривают карьеру.')}draw()}else if(k==='KeyC'&&mode==='play'){if(potions&&hp<7){potions--;hp=Math.min(7,hp+2);msg('Зелье выпито. Вкус — грибной налог.')}draw()}else if(k==='Enter')start();else if(k.startsWith('Arrow')||k.startsWith('KeyW')||k.startsWith('KeyA')||k.startsWith('KeyS')||k.startsWith('KeyD')){let d=k==='ArrowUp'||k==='KeyW'?[0,-1]:k==='ArrowDown'||k==='KeyS'?[0,1]:k==='ArrowLeft'||k==='KeyA'?[-1,0]:[1,0];step(...d)}}
 addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();act(e.code)});document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>act(b.dataset.k));document.querySelector('#start').onclick=start;floor=1;floorGen();mode='title';draw()})();
-</script></html>
+</script></body>
+</html>
