@@ -677,8 +677,10 @@ function readBinding(pad,binding,kind,invert=false) {
       const dead=.07;value=Math.abs(raw)<=dead?0:Math.sign(raw)*(Math.abs(raw)-dead)/(1-dead);
     }else value=clamp(inputConfig.pedalsPositive?raw:(raw+1)/2,0,1);
   }else if(binding.startsWith("button")){
-    const b=pad.buttons[Number(binding.slice(6))];value=b?Number(b.value??(b.pressed?1:0)):0;
-    if(kind==="steer")value=b&&b.pressed?1:0;
+    const buttonIndex=Number(binding.slice(6)),b=pad.buttons[buttonIndex];
+    if(!b)return 0;
+    value=Number(b.value??(b.pressed?1:0));
+    if(kind==="steer")value=b.pressed?1:0;
   }
   if(invert)value=kind==="steer"?-value:1-value;
   if(kind==="steer")return clamp(value*Number(inputConfig.sensitivity||1),-1,1);
