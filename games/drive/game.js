@@ -17,7 +17,7 @@ const state = {
 };
 const controls = { gas:false, brake:false, left:false, right:false, handbrake:false };
 let renderer, composer, bloomPass, scene, camera, curve, trackLength, player, playerFallback, carPaintMaterial;
-let cockpitGroup, steeringWheelVisual, inputTelemetryTimer=0;
+let cockpitGroup, steeringWheelVisual, cockpitPaintMaterial, inputTelemetryTimer=0;
 const hardware = { steer:0, throttle:0, brake:0, handbrake:false };
 const inputConfig = { steer:"axis0", gas:"button7", brake:"button6", handbrake:"button0", invertSteer:false, invertGas:false, invertBrake:false, pedalsPositive:false, sensitivity:1.25 };
 let skyTexture, skyCanvas, skyContext, sun, directionalLight, ambientLight, stars;
@@ -341,6 +341,7 @@ function makeCar(color) {
 
 function updateCarPaint() {
   if(player && player.userData.bodyMat) player.userData.bodyMat.color.set(state.paint);
+  if(cockpitPaintMaterial)cockpitPaintMaterial.color.set(state.paint);
   if(player && player.userData.loadedModel) player.userData.loadedModel.traverse(obj=>{
     if(obj.isMesh){
       const mats=Array.isArray(obj.material)?obj.material:[obj.material];
@@ -437,7 +438,7 @@ function buildCockpit() {
   const dashMat = new THREE.MeshPhysicalMaterial({color:0x141d25,roughness:.34,metalness:.28,clearcoat:.55});
   const trimMat = new THREE.MeshStandardMaterial({color:0x303e48,metalness:.52,roughness:.32});
   const leatherMat = new THREE.MeshStandardMaterial({color:0x090e13,roughness:.82});
-  const glassMat = new THREE.MeshPhysicalMaterial({color:0x91b9c8,metalness:.05,roughness:.08,transparent:true,opacity:.12,side:THREE.DoubleSide});
+  const glassMat = new THREE.MeshPhysicalMaterial({color:0x91b9c8,metalness:.05,roughness:.08,transparent:true,opacity:.12,side:THREE.DoubleSide,depthWrite:false});
   const metalMat = new THREE.MeshStandardMaterial({color:0xaeb9bd,metalness:.86,roughness:.22});
   const addBox = (w,h,d,mat,x,y,z,rx=0,ry=0,rz=0) => {
     const m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
@@ -446,10 +447,13 @@ function buildCockpit() {
   // Мягкая передняя панель и приборная консоль находятся в системе координат камеры.
   addBox(2.42,.34,.62,dashMat,0,-.96,-1.34);
   addBox(.92,.08,.54,trimMat,0,-.76,-1.55);
-  addBox(1.96,.11,1.2,new THREE.MeshPhysicalMaterial({color:state.paint,metalness:.68,roughness:.25,clearcoat:1}),0,-1.36,-2.45);
+  cockpitPaintMaterial=new THREE.MeshPhysicalMaterial({color:state.paint,metalness:.68,roughness:.25,clearcoat:1});
+  addBox(1.96,.11,1.2,cockpitPaintMaterial,0,-1.36,-2.45);
   addBox(.1,1.38,.12,leatherMat,-1.12,-.02,-1.62,0,0,-.13);
   addBox(.1,1.38,.12,leatherMat,1.12,-.02,-1.62,0,0,.13);
   addBox(2.32,.12,.14,leatherMat,0,.68,-1.66);
+  const windshield=new THREE.Mesh(new THREE.PlaneGeometry(2.08,1.18),glassMat);
+  windshield.position.set(0,.04,-1.7);windshield.renderOrder=3;cockpitGroup.add(windshield);
   addBox(2.12,.09,.16,trimMat,0,-1.18,-1.53);
   addBox(.11,.7,.12,leatherMat,-1.03,-.67,-.12,0,0,-.08);
   addBox(.11,.7,.12,leatherMat,1.03,-.67,-.12,0,0,.08);
