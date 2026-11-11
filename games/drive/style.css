@@ -1,5 +1,5 @@
 :root{color-scheme:dark;--ink:#f4f7fa;--muted:#9eabb7;--cyan:#73e2e2;--gold:#ffc77d;--glass:rgba(11,20,29,.62);--line:rgba(255,255,255,.13);--shadow:0 20px 70px rgba(0,0,0,.36)}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#101923;color:var(--ink);font-family:Manrope,system-ui,-apple-system,"Segoe UI",sans-serif}button,a{font:inherit}button{color:inherit}#scene{position:fixed;inset:0;z-index:0}#scene canvas{display:block;width:100%;height:100%;outline:0}.vignette{position:fixed;inset:0;pointer-events:none;z-index:1;background:linear-gradient(180deg,rgba(4,10,16,.52),transparent 23%,transparent 67%,rgba(4,10,16,.62)),radial-gradient(ellipse at center,transparent 42%,rgba(3,8,13,.26) 100%)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#101923;color:var(--ink);font-family:Manrope,system-ui,-apple-system,"Segoe UI",sans-serif;touch-action:none;-webkit-text-size-adjust:100%}button,a{font:inherit}button{color:inherit}#scene{position:fixed;inset:0;z-index:0}#scene canvas{display:block;width:100%;height:100%;outline:0}.vignette{position:fixed;inset:0;pointer-events:none;z-index:1;background:linear-gradient(180deg,rgba(4,10,16,.52),transparent 23%,transparent 67%,rgba(4,10,16,.62)),radial-gradient(ellipse at center,transparent 42%,rgba(3,8,13,.26) 100%)}
 .topbar{position:fixed;top:0;left:0;right:0;z-index:5;height:78px;padding:0 34px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,rgba(5,12,19,.68),rgba(5,12,19,.10));backdrop-filter:blur(10px)}
 .brand{display:flex;gap:11px;align-items:center;text-decoration:none;color:#fff;font-size:13px;letter-spacing:.17em;line-height:1.05}.brand b,.brand em{display:block;font-style:normal}.brand em{font-size:10px;color:#9bc4d0;letter-spacing:.31em;margin-top:5px}.brand-mark{display:grid;place-items:center;width:39px;height:39px;border-radius:12px;background:linear-gradient(135deg,#82e6df,#e9a86a);color:#14222b;font-weight:900;letter-spacing:-.04em;font-size:15px;box-shadow:0 5px 24px rgba(108,217,217,.2)}
 .route-label{display:flex;align-items:center;gap:9px;font-size:10px;letter-spacing:.18em;font-weight:800;color:#edf5f8}.route-label small{margin-left:8px;color:#9caeb9;font-weight:600;font-size:9px}.live-dot{width:7px;height:7px;display:inline-block;border-radius:99px;background:#7be0c0;box-shadow:0 0 12px #7be0c0;flex:none}
@@ -69,3 +69,63 @@
  .vehicle-copy em{font-size:6px}
 }
 @media(max-width:370px){.vehicle-card{gap:5px;padding:6px}.vehicle-art{flex-basis:58px;width:58px}.vehicle-art:before{width:52px}.vehicle-art:after{left:11px;box-shadow:32px 0 0 -3px #9eafb7,32px 0 0 0 #0a1117}.vehicle-copy b{font-size:7px}}
+
+.score-card{position:absolute;right:34px;bottom:82px;display:flex;gap:18px;padding:12px 17px;border-radius:14px}
+.score-card div{display:flex;flex-direction:column;gap:4px}
+.score-card small{font-size:8px;letter-spacing:.14em;color:#94a6b1;font-weight:800}
+.score-card b{font-size:14px;font-weight:800;font-variant-numeric:tabular-nums}
+.start-btn:disabled{opacity:.62;cursor:wait;filter:saturate(.7);transform:none;box-shadow:none}
+.util-pair{display:flex;flex-direction:column;gap:8px}
+.touch-btn.horn,.touch-btn.handbrake{height:44px;min-width:72px;border-radius:12px;font-size:8px;font-weight:900;letter-spacing:.12em}
+.touch-btn.horn{color:#ffe7a8;border-color:rgba(255,210,120,.5);background:rgba(120,90,30,.28)}
+.touch-btn.handbrake{color:#ffd0c4;border-color:rgba(245,145,126,.4)}
+.speed-lines{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;background:repeating-linear-gradient(90deg,transparent 0 18%,rgba(255,255,255,.07) 20%,transparent 22%);mix-blend-mode:overlay;transition:opacity .18s}
+.crack-overlay{position:fixed;inset:0;z-index:4;pointer-events:none;opacity:0;background:
+  radial-gradient(circle at 30% 20%,rgba(255,255,255,.05),transparent 24%),
+  linear-gradient(118deg,transparent 46%,rgba(255,255,255,.28) 46.3%,transparent 46.6%),
+  linear-gradient(72deg,transparent 52%,rgba(255,255,255,.22) 52.4%,transparent 52.8%),
+  linear-gradient(24deg,transparent 38%,rgba(220,230,240,.18) 38.3%,transparent 38.7%),
+  linear-gradient(154deg,transparent 61%,rgba(255,255,255,.16) 61.35%,transparent 61.7%);
+  mix-blend-mode:screen;transition:opacity .3s}
+
+html.touch-ui .keyboard-help{display:none}
+html.touch-ui .touch-controls{display:flex}
+html.touch-ui .bottom-bar{min-height:84px;align-items:flex-end;padding-bottom:max(10px,env(safe-area-inset-bottom))}
+.topbar{padding-left:max(18px,calc(env(safe-area-inset-left) + 12px));padding-right:max(18px,calc(env(safe-area-inset-right) + 12px))}
+.overlay,.start-card,.device-panel,.pause-panel{touch-action:pan-y}
+
+@media(max-width:900px){
+  .score-card{right:18px;bottom:78px;gap:12px;padding:10px 12px}
+}
+@media(max-width:650px){
+  .map-card{display:none}
+  .score-card{top:72px;right:10px;bottom:auto;flex-direction:column;width:108px;gap:7px;padding:8px 10px;border-radius:13px}
+  .score-card small{font-size:6px}
+  .score-card b{font-size:12px}
+  .touch-btn.steering{width:62px;height:62px}
+  .touch-btn.brake,.touch-btn.gas{height:62px}
+  .touch-btn.horn,.touch-btn.handbrake{height:48px;min-width:68px}
+  .message-pill{max-width:62vw}
+}
+@media(orientation:landscape) and (max-height:520px){
+  .topbar{height:52px}
+  .speed-card{top:58px;transform:scale(.86);transform-origin:top left}
+  .map-card{top:58px;transform:scale(.86);transform-origin:top right}
+  .score-card{bottom:70px}
+  .distance-card{bottom:70px}
+  .message-pill{bottom:118px}
+  .touch-btn.steering{width:66px;height:66px}
+  .touch-btn.gas,.touch-btn.brake{height:66px;min-width:78px}
+  .hero-title{font-size:32px}
+  .start-card{max-height:calc(100svh - 24px)}
+  .overlay{padding:18px 12px}
+}
+
+body.playing .back-link{display:none}
+@media(orientation:landscape) and (max-height:520px){
+  .distance-card,.map-card{display:none}
+  .message-pill{bottom:78px;font-size:8px}
+  .score-card{right:12px;bottom:auto;top:58px;transform:scale(.9);transform-origin:top right}
+  .bottom-bar{min-height:70px;padding:0 14px max(8px,env(safe-area-inset-bottom))}
+  .touch-controls{gap:10px}
+}
