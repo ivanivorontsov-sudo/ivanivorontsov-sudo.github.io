@@ -5,6 +5,7 @@ import { EffectComposer } from "https://cdn.jsdelivr.net/npm/three@0.187.0/examp
 import { RenderPass } from "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { OutputPass } from "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/postprocessing/OutputPass.js";
+import { RGBELoader } from "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/loaders/RGBELoader.js";
 
 const $ = (id) => document.getElementById(id);
 const sceneHost = $("scene");
@@ -70,6 +71,7 @@ const hardware = { steer:0, throttle:0, brake:0, handbrake:false, horn:false };
 const inputConfig = { steer:"axis0", gas:"button7", brake:"button6", handbrake:"button0", invertSteer:false, invertGas:false, invertBrake:false, pedalsPositive:false, sensitivity:1.25 };
 let skyTexture, skyCanvas, skyContext, sun, directionalLight, ambientLight, stars, moon;
 let roadTexture, grassTexture, minimapContext, audioContext, masterGain;
+let roadAsphaltMat=null, barrierConcreteMat=null, envIsHdr=false;
 let engineOsc, engineOsc2, engineGain, engineFilter, windGain, squealGain, noiseSource;
 let traffic = [], lastFrame = performance.now(), frameCount = 0, fpsTime = 0, lowFpsStreak = 0;
 const clock = { now: 0 };
@@ -85,9 +87,9 @@ const TRACK_POINTS = [
   new THREE.Vector3(-119,.8,-107)
 ];
 const PALETTES = {
-  sunset: { top:"#214366", middle:"#e28c74", horizon:"#ffd4a1", fog:0xc88e79, ambient:.74, direct:2.15, env:.95 },
-  day:    { top:"#4288ad", middle:"#9ccbd0", horizon:"#e2e8cf", fog:0xa5c6c2, ambient:1.08, direct:2.75, env:1.05 },
-  night:  { top:"#071326", middle:"#172e4a", horizon:"#34465c", fog:0x1b2b40, ambient:.32, direct:.18, env:.42 }
+  sunset: { top:"#214366", middle:"#e28c74", horizon:"#ffd4a1", fog:0xc88e79, ambient:.74, direct:2.15, env:.95, envHdr:.32 },
+  day:    { top:"#4a90c6", middle:"#7eb4d8", horizon:"#c8d8e6", fog:0x8fadc0, ambient:1.02, direct:2.25, env:1.05, envHdr:.36 },
+  night:  { top:"#071326", middle:"#172e4a", horizon:"#34465c", fog:0x1b2b40, ambient:.32, direct:.18, env:.42, envHdr:.18 }
 };
 const CHECKPOINTS = 8;
 
@@ -201,12 +203,14 @@ function applyTime(mode) {
     grad.addColorStop(0,p.top); grad.addColorStop(.58,p.middle); grad.addColorStop(1,p.horizon);
     skyContext.fillStyle=grad;skyContext.fillRect(0,0,skyCanvas.width,skyCanvas.height);
     if(mode!=="night"){
-      for(let i=0;i<34;i++){
-        const x=rand()*skyCanvas.width,y=95+rand()*230,rx=45+rand()*120,ry=9+rand()*25;
+      const n=mode==="day"?58:36;
+      for(let i=0;i<n;i++){
+        const x=rand()*skyCanvas.width,y=mode==="day"?(36+rand()*210):(95+rand()*230);
+        const rx=52+rand()*150,ry=11+rand()*30;
         skyContext.save();skyContext.translate(x,y);skyContext.scale(1,ry/rx);
         const cloud=skyContext.createRadialGradient(0,0,2,0,0,rx);
-        cloud.addColorStop(0,mode==="sunset"?"rgba(255,226,205,.25)":"rgba(255,255,255,.24)");
-        cloud.addColorStop(.55,mode==="sunset"?"rgba(255,220,198,.11)":"rgba(255,255,255,.10)");
+        cloud.addColorStop(0,mode==="sunset"?"rgba(255,226,205,.28)":"rgba(255,255,255,.42)");
+        cloud.addColorStop(.55,mode==="sunset"?"rgba(255,220,198,.13)":"rgba(248,252,255,.18)");
         cloud.addColorStop(1,"rgba(255,255,255,0)");
         skyContext.fillStyle=cloud;skyContext.beginPath();skyContext.arc(0,0,rx,0,Math.PI*2);skyContext.fill();skyContext.restore();
       }
@@ -222,8 +226,8 @@ function applyTime(mode) {
   if (sun) sun.visible=mode!=="night";
   if (stars) stars.visible=mode==="night";
   if (moon) moon.visible=mode==="night";
-  if (scene) scene.environmentIntensity = p.env;
-  if (bloomPass) bloomPass.strength = (mode==="night" ? 0.55 : 1) * qcfg().bloom;
+  if (scene) scene.environmentIntensity = envIsHdr ? (p.envHdr ?? p.env * 0.34) : p.env;
+  if (bloomPass) bloomPass.strength = (mode==="night" ? 0.55 : 0.78) * qcfg().bloom;
   const lights=player?.userData.headlights||playerFallback?.userData.headlights;
   if(lights)lights.forEach(l=>l.visible=mode==="night" && state.qualityLevel!=="low");
   lampLights.forEach(l=>{ l.visible = mode==="night"; });
@@ -306,6 +310,54 @@ function buildTrack() {
       post.position.copy(p).addScaledVector(r,side*10.8);post.position.y+=.52;scene.add(post);
     }
   }
+  barrierConcreteMat=new THREE.MeshStandardMaterial({color:0xb9b4aa,roughness:.9,metalness:.04});
+  barrierConcreteMat.userData.tint=0xc4bfb4;
+  const barrierStep=state.qualityLevel==="low"?7.2:4.2;
+  const barrierCount=Math.ceil(trackLength/barrierStep)*2+4;
+  const barriers=new THREE.InstancedMesh(new THREE.BoxGeometry(.48,.76,3.5),barrierConcreteMat,barrierCount);
+  const bDummy=new THREE.Object3D();let bi=0;
+  for(let t=0;t<1;t+=barrierStep/trackLength){
+    const p=curve.getPointAt(t),tan=curve.getTangentAt(t),right=vecRight(tan);
+    const quat=new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,0,-1),tan);
+    for(const side of [-1,1]){
+      bDummy.position.copy(p).addScaledVector(right,side*10.52);
+      bDummy.position.y+=.42;
+      bDummy.quaternion.copy(quat);
+      bDummy.scale.set(1,1,1);
+      bDummy.updateMatrix();
+      if(bi<barrierCount) barriers.setMatrixAt(bi++,bDummy.matrix);
+    }
+  }
+  barriers.count=bi;barriers.instanceMatrix.needsUpdate=true;barriers.receiveShadow=true;scene.add(barriers);
+  roadAsphaltMat=asphalt;
+  roadAsphaltMat.userData.tint=0x6a6f74;
+  loadWorldLooks();
+}
+
+function loadWorldLooks(){
+  const texLoader=new THREE.TextureLoader();
+  const apply=(mat,url,repeatX,repeatY)=>{
+    if(!mat) return;
+    texLoader.load(url,(t)=>{
+      t.colorSpace=THREE.SRGBColorSpace;
+      t.wrapS=t.wrapT=THREE.RepeatWrapping;
+      t.repeat.set(repeatX,repeatY);
+      t.anisotropy=qcfg().anisotropy;
+      mat.map=t;
+      mat.color.setHex(mat.userData.tint || 0xffffff);
+      mat.needsUpdate=true;
+    },undefined,()=>{});
+  };
+  apply(roadAsphaltMat,"assets/tex/asphalt031_color.webp",2.4,56);
+  apply(barrierConcreteMat,"assets/tex/concrete034_color.webp",1.1,6);
+  if(state.qualityLevel==="low"||!scene) return;
+  new RGBELoader().load("assets/hdri/kloofendal_48d_partly_cloudy_puresky_1k.hdr",(tex)=>{
+    tex.mapping=THREE.EquirectangularReflectionMapping;
+    scene.environment=tex;
+    envIsHdr=true;
+    const p=PALETTES[state.time]||PALETTES.sunset;
+    scene.environmentIntensity=p.envHdr ?? p.env*0.34;
+  },undefined,()=>{});
 }
 
 function addMountains() {
@@ -1195,6 +1247,36 @@ function addHypercarLightStrips(model){
   mk((maxX-minX)*.52,.022,.03,rearMat,(minX+maxX)/2,minY+(maxY-minY)*.38,maxZ-.05);
 }
 
+function makeWheelLogoTexture(){
+  const c=document.createElement("canvas");c.width=c.height=128;
+  const g=c.getContext("2d");
+  const rg=g.createRadialGradient(46,42,8,64,64,62);
+  rg.addColorStop(0,"#3c444c");rg.addColorStop(1,"#0c1014");
+  g.fillStyle=rg;g.beginPath();g.arc(64,64,62,0,Math.PI*2);g.fill();
+  g.strokeStyle="#9aa3aa";g.lineWidth=4;g.beginPath();g.arc(64,64,56,0,Math.PI*2);g.stroke();
+  g.fillStyle="#e8eef2";g.font="900 40px Manrope, system-ui, sans-serif";
+  g.textAlign="center";g.textBaseline="middle";g.fillText("DH",64,68);
+  const tex=new THREE.CanvasTexture(c);
+  tex.colorSpace=THREE.SRGBColorSpace;tex.generateMipmaps=false;
+  tex.minFilter=THREE.LinearFilter;tex.magFilter=THREE.LinearFilter;
+  return tex;
+}
+
+function drawAnalogHud(speed){
+  const canvas=$("analogHud");
+  if(!canvas) return;
+  const show=state.camera===1 && (state.running||state.paused);
+  canvas.classList.toggle("is-on",show);
+  canvas.setAttribute("aria-hidden", show?"false":"true");
+  if(!show) return;
+  const ctx=canvas.getContext("2d");
+  const w=canvas.width,h=canvas.height;
+  ctx.clearRect(0,0,w,h);
+  const max=Math.max(260, carSpec().speedoMax||260);
+  const step=max>400?50:10, major=max>400?100:20;
+  drawAnalogGauge(ctx,w/2,h/2+8,Math.min(w,h)*0.36,Math.min(max,speed),max,{step,major,label:"SPEED",unit:"KM/H"});
+}
+
 function buildCockpit(){
   if(cockpitGroup&&player){
     player.remove(cockpitGroup);
@@ -1240,8 +1322,13 @@ function buildCockpit(){
   box(1.34,.007,.035,glowMat,0,.922,-.848,-.22);
 
   // Recessed binnacle behind the cluster, not covering the screen.
-  box(.74,.28,.04,screenFrameMat,driverX,1.02,-.975);
-  box(.76,.01,.07,trimMat,driverX,1.15,-.95);
+  if(digital){
+    box(1.08,.3,.036,screenFrameMat,driverX*.4,1.05,-.935);
+    box(1.1,.008,.05,trimMat,driverX*.4,1.2,-.91);
+  }else{
+    box(.74,.28,.04,screenFrameMat,driverX,1.02,-.975);
+    box(.76,.01,.07,trimMat,driverX,1.15,-.95);
+  }
 
   // Center stack, low and inboard of the wheel.
   box(.44,.22,.13,dashMat,0,.82,-.68,-.16);
@@ -1257,13 +1344,25 @@ function buildCockpit(){
     box(.16,.045,.03,trimMat,x,.93,-.79);
     for(let i=-2;i<=2;i++) box(.14,.003,.022,softMat,x,.93+i*.007,-.778);
   }
+  for(const x of [-.16,.16]){
+    box(.13,.038,.026,trimMat,x,.88,-.72);
+    for(let i=-2;i<=2;i++) box(.12,.0024,.018,softMat,x,.88+i*.006,-.708);
+  }
 
-  // Thin A-pillars pushed wide and tilted back so they only frame the glass.
-  box(.02,.03,.95,leatherMat,-1.34,.86,.12);
-  box(.02,.03,.95,leatherMat,1.34,.86,.12);
+  // A-pillars frame the windshield like a modern sedan cabin.
+  box(.055,.92,.12,leatherMat,-1.14,1.38,-.58,.36,0,.2);
+  box(.055,.92,.12,leatherMat,1.14,1.38,-.58,.36,0,-.2);
 
-  // Slim roof lip, high enough to sit at the very top of the frame.
+  // Headliner and a slim roof lip at the top of the frame.
+  box(2.08,.038,1.58,softMat,0,1.92,-.08);
+  box(2.02,.01,1.5,leatherMat,0,1.898,-.08);
   box(1.96,.016,.04,softMat,0,1.94,-1.20);
+
+  // Sun visors hang from the header on either side of the mirror.
+  box(1.88,.05,.12,leatherMat,0,1.7,-1.12);
+  box(.46,.016,.22,leatherMat,-.52,1.68,-.88,.62);
+  box(.46,.016,.22,leatherMat,.52,1.68,-.88,.62);
+  box(.05,.012,.16,trimMat,0,1.72,-.94);
   const windshield=new THREE.Mesh(new THREE.PlaneGeometry(2.12,1.12),glassMat);
   windshield.position.set(0,1.50,-1.24);
   windshield.renderOrder=2;cockpitGroup.add(windshield);
@@ -1280,57 +1379,48 @@ function buildCockpit(){
     box(.01,.05,.28,glowMat,driverX-.38,.98,-.88);
   }
 
-  // Smaller wheel, raised and tilted so the rim sits in the lower frame.
+  // Full round modern wheel with a center logo. Camera sit-back keeps the whole rim on screen.
   steeringWheelVisual=new THREE.Group();
-  steeringWheelVisual.position.set(driverX,.94,-.68);
-  steeringWheelVisual.rotation.x=.32;
+  steeringWheelVisual.position.set(driverX,1.00,-.62);
+  steeringWheelVisual.rotation.x=.12;
   cockpitGroup.add(steeringWheelVisual);
-  const wheelMat=new THREE.MeshStandardMaterial({color:0x090d11,roughness:digital?.7:.42,metalness:digital?.15:0});
-  if(digital){
-    const carbon=new THREE.MeshStandardMaterial({color:0x1a1d21,roughness:.3,metalness:.72});
-    const arc=new THREE.Mesh(new THREE.TorusGeometry(.148,.015,12,40,Math.PI*1.32),wheelMat);
-    arc.rotation.z=Math.PI*.34;steeringWheelVisual.add(arc);
-    const flat=new THREE.Mesh(new THREE.BoxGeometry(.18,.016,.022),carbon);
-    flat.position.y=-.112;steeringWheelVisual.add(flat);
-    const hub=new THREE.Mesh(new THREE.BoxGeometry(.1,.05,.028),carbon);
-    hub.position.z=.014;steeringWheelVisual.add(hub);
-    for(const [x,y,a] of [[-.055,.02,-.55],[.055,.02,.55],[0,-.055,0]]){
-      const spoke=new THREE.Mesh(new THREE.BoxGeometry(.016,.1,.02),carbon);
-      spoke.position.set(x,y,.01);spoke.rotation.z=a;steeringWheelVisual.add(spoke);
-    }
-    if(rich){
-      const btn=new THREE.MeshStandardMaterial({color:0x101318,emissive:0x1ad0c8,emissiveIntensity:.45});
-      for(const x of [-.028,.028]){
-        const b=new THREE.Mesh(new THREE.BoxGeometry(.016,.012,.01),btn);
-        b.position.set(x,.008,.03);steeringWheelVisual.add(b);
-      }
-    }
-  }else{
-    const ring=new THREE.Mesh(new THREE.TorusGeometry(.135,.016,14,56),wheelMat);
-    steeringWheelVisual.add(ring);
-    const hub=new THREE.Mesh(new THREE.CylinderGeometry(.032,.032,.04,22),trimMat);
-    hub.rotation.x=Math.PI/2;hub.position.z=.016;steeringWheelVisual.add(hub);
-    for(const [x,y,angle] of [[0,.072,0],[-.062,-.04,-.72],[.062,-.04,.72]]){
-      const spoke=new THREE.Mesh(new THREE.BoxGeometry(.016,.11,.02),trimMat);
-      spoke.position.set(x,y,.01);spoke.rotation.z=angle;steeringWheelVisual.add(spoke);
+  const wheelMat=new THREE.MeshStandardMaterial({color:0x171c21,roughness:.48,metalness:.18});
+  const carbon=new THREE.MeshStandardMaterial({color:0x2c333a,roughness:.34,metalness:.58});
+  steeringWheelVisual.add(new THREE.Mesh(new THREE.TorusGeometry(.162,.021,16,72),wheelMat));
+  steeringWheelVisual.add(new THREE.Mesh(new THREE.TorusGeometry(.144,.004,8,56),carbon));
+  const hub=new THREE.Mesh(new THREE.CylinderGeometry(.038,.042,.03,28),carbon);
+  hub.rotation.x=Math.PI/2;hub.position.z=.012;steeringWheelVisual.add(hub);
+  for(const [x,y,a] of [[0,.072,0],[-.062,-.038,-.95],[.062,-.038,.95]]){
+    const spoke=new THREE.Mesh(new THREE.BoxGeometry(.02,.118,.018),carbon);
+    spoke.position.set(x,y,.01);spoke.rotation.z=a;steeringWheelVisual.add(spoke);
+  }
+  const logo=new THREE.Mesh(new THREE.CircleGeometry(.03,28),new THREE.MeshBasicMaterial({map:makeWheelLogoTexture(),toneMapped:false}));
+  logo.position.z=.028;steeringWheelVisual.add(logo);
+  if(rich){
+    const btn=new THREE.MeshStandardMaterial({color:0x101318,emissive:0x1ad0c8,emissiveIntensity:.35});
+    for(const x of [-.03,.03]){
+      const b=new THREE.Mesh(new THREE.BoxGeometry(.016,.012,.01),btn);
+      b.position.set(x,.01,.03);steeringWheelVisual.add(b);
     }
   }
 
   const clusterCanvas=document.createElement("canvas");clusterCanvas.width=1024;clusterCanvas.height=512;
   cockpitGaugeContext=clusterCanvas.getContext("2d");
   cockpitGaugeTexture=new THREE.CanvasTexture(clusterCanvas);cockpitGaugeTexture.colorSpace=THREE.SRGBColorSpace;
-  cockpitGaugeTexture.anisotropy=4;
+  cockpitGaugeTexture.anisotropy=8;cockpitGaugeTexture.generateMipmaps=false;
+  cockpitGaugeTexture.minFilter=THREE.LinearFilter;cockpitGaugeTexture.magFilter=THREE.LinearFilter;
   const clusterScreen=new THREE.Mesh(
-    digital?new THREE.PlaneGeometry(.92,.28):new THREE.PlaneGeometry(.68,.24),
+    digital?new THREE.PlaneGeometry(.96,.26):new THREE.PlaneGeometry(.68,.24),
     new THREE.MeshBasicMaterial({map:cockpitGaugeTexture,side:THREE.DoubleSide,toneMapped:false})
   );
-  if(digital) clusterScreen.position.set(driverX,1.04,-.90);
+  if(digital) clusterScreen.position.set(driverX*.4,1.06,-.90);
   else clusterScreen.position.set(driverX,1.02,-.92);
   clusterScreen.rotation.x=.08;clusterScreen.renderOrder=10;cockpitGroup.add(clusterScreen);
 
   const centerCanvas=document.createElement("canvas");centerCanvas.width=768;centerCanvas.height=480;
   cockpitCenterContext=centerCanvas.getContext("2d");
   cockpitCenterTexture=new THREE.CanvasTexture(centerCanvas);cockpitCenterTexture.colorSpace=THREE.SRGBColorSpace;
+  cockpitCenterTexture.generateMipmaps=false;cockpitCenterTexture.minFilter=THREE.LinearFilter;cockpitCenterTexture.magFilter=THREE.LinearFilter;
   const centerScreen=new THREE.Mesh(
     digital?new THREE.PlaneGeometry(.46,.26):new THREE.PlaneGeometry(.38,.22),
     new THREE.MeshBasicMaterial({map:cockpitCenterTexture,side:THREE.DoubleSide,toneMapped:false})
@@ -1353,6 +1443,15 @@ function buildCockpit(){
   }else{
     mirrorFallback=box(.34,.11,.01,new THREE.MeshBasicMaterial({color:0x152028}),0,1.76,-1.088);
   }
+  // Side mirrors sit just outside the A-pillars so landscape/PC see them in the window.
+  for(const s of [-1,1]){
+    box(.05,.042,.13,dashMat,s*1.3,1.2,-.82,.1,s*.32);
+    const glass=new THREE.Mesh(new THREE.PlaneGeometry(.12,.07),new THREE.MeshBasicMaterial({color:0x8aa4b4}));
+    glass.position.set(s*1.36,1.2,-.74);
+    glass.rotation.y=s*-.38;
+    cockpitGroup.add(glass);
+  }
+
   syncCockpitMirror();
 
   drawCockpitCenterDisplay();
@@ -1456,8 +1555,8 @@ function drawDigitalCluster(c,speed,rpm,gear){
   c.strokeStyle=grd;c.beginPath();c.arc(512,390,270,start,start-span*t,true);c.stroke();
   c.fillStyle="rgba(255,255,255,.35)";c.font="700 16px Manrope, sans-serif";c.textAlign="center";
   c.fillText("RPM  "+Math.round(rpm).toLocaleString("en-US"),512,148);
-  c.fillStyle="#f4fbff";c.font="900 148px Manrope, sans-serif";
-  c.fillText(String(Math.min(cap,Math.round(Math.abs(speed)))).padStart(3,"0"),432,340);
+  c.fillStyle="#d5dee6";c.font="800 128px Manrope, sans-serif";
+  c.fillText(String(Math.min(cap,Math.round(Math.abs(speed)))).padStart(3,"0"),432,336);
   c.fillStyle="#8fa3ad";c.font="800 22px Manrope, sans-serif";c.fillText("KM/H",432,382);
   c.fillStyle="#0b1418";
   if(c.roundRect){c.beginPath();c.roundRect(690,250,150,110,18);c.fill();}
@@ -1514,6 +1613,7 @@ function drawCockpitDashboard(speed,rpm,gear,force=false){
     drawDigitalCluster(c,speed,rpm,gear);
     cockpitGaugeTexture.needsUpdate=true;
     if(state.camera===1) drawCockpitCenterDisplay();
+    drawAnalogHud(speed);
     return;
   }
   drawAnalogGauge(c,250,236,148,Math.min(260,speed),260,{step:10,major:20,label:"SPEED",unit:"KM/H"});
@@ -1550,6 +1650,7 @@ function drawCockpitDashboard(speed,rpm,gear,force=false){
   c.textAlign="left";
   cockpitGaugeTexture.needsUpdate=true;
   if(state.camera===1) drawCockpitCenterDisplay();
+  drawAnalogHud(speed);
 }
 
 function renderRearMirror(){
@@ -1777,12 +1878,14 @@ function setCameraMode(){
   state.camera=state.camera===1?0:1;
   updateCameraButton();
   syncViewClasses();
+  updateSpeedLines();
   setMessage(state.camera===1?"Вид водителя · настоящий салон и приборная панель":"Вид снаружи · камера преследования");
 }
 function cycleCameraMode(){
   state.camera=(state.camera+1)%4;
   updateCameraButton();
   syncViewClasses();
+  updateSpeedLines();
   setMessage("Камера: "+cameraLabel());
 }
 
@@ -1819,7 +1922,12 @@ function applyDamage(amount, worldPos) {
   playImpactSound(add);
   updateHudMeta();
   const crack = $("crackOverlay");
-  if (crack) crack.style.opacity = String(clamp(state.damage / 140, 0, 0.72));
+  if (crack) {
+    const o = state.damage>1 ? clamp(state.damage / 140, 0, 0.72) : 0;
+    crack.style.opacity = String(o);
+    crack.classList.toggle("is-on", o>0.02);
+    crack.setAttribute("aria-hidden", o>0.02?"false":"true");
+  }
 }
 
 function awardScore(points, reason) {
@@ -2095,6 +2203,14 @@ function applyDebugViewLock(){
   if(Math.abs(camera.fov-42)>.2){camera.fov=42;camera.updateProjectionMatrix();}
 }
 
+function cockpitCameraRig(){
+  const eyeX=state.driverSide*.49;
+  const x=eyeX;
+  if(isPortraitView()) return {x,y:1.32,z:.40,lookX:x*.16,lookY:1.22,lookZ:-42,fov:64};
+  if(isMobile) return {x,y:1.28,z:.60,lookX:x*.13,lookY:1.22,lookZ:-40,fov:62};
+  return {x,y:1.30,z:.52,lookX:x*.12,lookY:1.23,lookZ:-42,fov:56};
+}
+
 function placeVehicles(dt) {
   const p=curve.getPointAt(((state.progress%1)+1)%1),tan=curve.getTangentAt(((state.progress%1)+1)%1),right=vecRight(tan);
   const yaw=Math.atan2(-tan.x,-tan.z);
@@ -2122,8 +2238,8 @@ function placeVehicles(dt) {
   const chasePos=player.position.clone().addScaledVector(tan,-11.5).add(new THREE.Vector3(0,5.1,0)).addScaledVector(right,state.steer*.65);
   const eyeX=state.driverSide*.49;
   const portrait=isPortraitView();
-  const eyeY=portrait?1.40:1.30;
-  const eyeZ=portrait?-.08:-.05;
+  const rig=cockpitCameraRig();
+  const eyeY=rig.y,eyeZ=rig.z;
   const cockpitPos=player.localToWorld(new THREE.Vector3(eyeX,eyeY,eyeZ));
   const hoodPos=player.localToWorld(new THREE.Vector3(0,1.42,-2.72));
   const topPos=player.position.clone().add(new THREE.Vector3(0,21,0)).addScaledVector(tan,-1.2);
@@ -2180,12 +2296,12 @@ function placeVehicles(dt) {
   if(player.userData.bodyShell)player.userData.bodyShell.visible=state.camera!==1;
   if(playerFallback)playerFallback.visible=state.camera!==1;
   if(steeringWheelVisual)steeringWheelVisual.rotation.z=-state.steer*.62;
-  const lookY=state.camera===1?(portrait?eyeY-5.9:eyeY-1.1):1.58;
-  const look=state.camera===3?player.position.clone():state.camera===1?player.localToWorld(new THREE.Vector3(eyeX*.2,lookY,-42)):state.camera===2?player.localToWorld(new THREE.Vector3(0,1.2,-30)):player.position.clone().addScaledVector(tan,5).add(new THREE.Vector3(0,.8,0));
+  const lookY=state.camera===1?rig.lookY:1.58;
+  const look=state.camera===3?player.position.clone():state.camera===1?player.localToWorld(new THREE.Vector3(rig.lookX,lookY,rig.lookZ)):state.camera===2?player.localToWorld(new THREE.Vector3(0,1.2,-30)):player.position.clone().addScaledVector(tan,5).add(new THREE.Vector3(0,.8,0));
   camera.lookAt(look);
   if(debugViewLock) applyDebugViewLock();
   syncViewClasses();
-  const baseFov=state.camera===1?(portrait?80:isMobile?70:66):(isMobile?69:62);
+  const baseFov=state.camera===1?rig.fov:(isMobile?69:62);
   // Convey speed with a slight FOV kick, not by pulling the chase camera farther back.
   const rawKick=state.camera===1?Math.abs(state.speed)*0.08:Math.abs(state.speed)*0.18;
   const kickCap=Math.abs(state.speed)>70?(state.camera===1?5:10):(state.camera===1?6:14);
@@ -2246,6 +2362,7 @@ function updateGame(dt) {
   } else {
     updateAudio();
   }
+  updateSpeedLines();
   if (player && curve) placeVehicles(dt);
   drawMiniMap();
 }
@@ -2259,6 +2376,7 @@ function updateSpeedLines(){
   const opacity=show?clamp((kmh-150)/90,0,.16):0;
   lines.style.opacity=String(opacity);
   lines.classList.toggle("active", show);
+  lines.setAttribute("aria-hidden", show?"false":"true");
 }
 
 function syncSpeedLineToggles(){
@@ -2311,7 +2429,7 @@ function restartGame() {
   state.damage=0;state.score=0;state.combo=1;state.checkpoint=0;state.sectorTime=0;
   state.collisionCount=0;state.shake=0;state.rpm=850;
   traffic.forEach((car,i)=>{ car.progress=(.06+i*(0.92/Math.max(1,traffic.length)))%1; car.offset=car.baseOffset; car.flee=0; });
-  const crack=$("crackOverlay"); if(crack) crack.style.opacity="0";
+  const crack=$("crackOverlay"); if(crack){crack.style.opacity="0";crack.classList.remove("is-on");crack.setAttribute("aria-hidden","true");}
   const dist=$("distance"); if(dist) dist.innerHTML="0.00 <i>KM</i>";
   updateHudMeta();
   showPause(false);
@@ -2692,6 +2810,24 @@ function init() {
           if(camera&&Math.abs(camera.fov-62)>.5){camera.fov=62;camera.updateProjectionMatrix();}
         }
         return debugViewLock;
+      },
+      getCockpitMetrics(){
+        if(!camera||!steeringWheelVisual) return null;
+        const rim=0.162, ys=[];
+        let minX=1,maxX=-1,minY=1,maxY=-1,off=0;
+        for(let i=0;i<24;i++){
+          const a=(i/24)*Math.PI*2;
+          const p=steeringWheelVisual.localToWorld(new THREE.Vector3(Math.cos(a)*rim,Math.sin(a)*rim,0)).project(camera);
+          minX=Math.min(minX,p.x); maxX=Math.max(maxX,p.x);
+          minY=Math.min(minY,p.y); maxY=Math.max(maxY,p.y);
+          ys.push(p.y);
+          if(Math.abs(p.x)>1||Math.abs(p.y)>1) off++;
+        }
+        return {
+          fov:camera.fov, aspect:camera.aspect, portrait:isPortraitView(),
+          wheel:{minX,maxX,minY,maxY, heightNdc:maxY-minY, offscreen:off},
+          wheelInView:off===0 && minY>-0.90 && maxY<0.98 && minX>-0.98 && maxX<0.98
+        };
       },
       getChaseMetrics(){
         if(!player||!camera) return null;

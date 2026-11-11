@@ -217,3 +217,16 @@ html.touch-ui .toast{top:54px !important}
   .toast{top:54px !important}
   .message-pill{top:54px !important}
 }
+
+
+.speed-lines:not(.active){opacity:0!important;visibility:hidden;display:none}
+.speed-lines.active{display:block;visibility:visible}
+.crack-overlay:not(.is-on){opacity:0!important;visibility:hidden;mix-blend-mode:normal;display:none}
+.crack-overlay.is-on{display:block;visibility:visible}
+.analog-hud{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(22px,env(safe-area-inset-bottom));width:148px;height:148px;z-index:5;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .2s}
+.analog-hud.is-on{opacity:.94;visibility:visible}
+body.hud-hidden .analog-hud{opacity:0!important;visibility:hidden}
+html.touch-ui .analog-hud{width:116px;height:116px;bottom:max(86px,calc(env(safe-area-inset-bottom) + 72px));right:max(12px,env(safe-area-inset-right))}
+@media (orientation:portrait) and (max-width:600px){
+  html.touch-ui .analog-hud{width:104px;height:104px;bottom:max(92px,calc(env(safe-area-inset-bottom) + 78px))}
+}

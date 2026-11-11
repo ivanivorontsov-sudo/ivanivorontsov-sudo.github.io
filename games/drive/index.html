@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=horizon-hypercar-20261111">
+  <link rel="stylesheet" href="style.css?v=horizon-cockpit-20261111">
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -188,6 +188,7 @@
   <div class="toast" id="toast" role="status"></div>
   <div class="speed-lines" id="speedLines" aria-hidden="true"></div>
   <div class="crack-overlay" id="crackOverlay" aria-hidden="true"></div>
+  <canvas class="analog-hud" id="analogHud" width="280" height="280" aria-hidden="true"></canvas>
   <div class="error-box hidden" id="errorBox">Для этой игры нужен браузер с поддержкой WebGL 2. Обнови браузер или попробуй открыть страницу на другом устройстве.</div>
   <script>
     window.__DRIVE_HORIZON_READY = false;
@@ -215,6 +216,6 @@
     }, 18000);
   </script>
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js"}}</script>
-  <script type="module" src="game.js?v=horizon-hypercar-20261111"></script>
+  <script type="module" src="game.js?v=horizon-cockpit-20261111"></script>
 </body>
 </html>
