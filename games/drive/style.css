@@ -33,3 +33,39 @@
 
 
 .device-telemetry{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);border-radius:9px;padding:9px 11px;margin:9px 0 14px;color:#84ddd5;font-size:9px;font-variant-numeric:tabular-nums;line-height:1.6}
+
+
+/* Garage selection */
+.vehicle-picker{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:10px 0 4px}
+.vehicle-card{position:relative;min-width:0;min-height:84px;display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid rgba(255,255,255,.13);border-radius:13px;background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.018));color:#edf5f7;text-align:left;cursor:pointer;transition:border-color .2s,background .2s,transform .2s}
+.vehicle-card:hover{transform:translateY(-2px);border-color:rgba(124,224,218,.45)}
+.vehicle-card.active{border-color:#79e0d8;background:linear-gradient(145deg,rgba(103,218,208,.17),rgba(255,255,255,.035));box-shadow:inset 0 0 0 1px rgba(121,224,216,.18),0 8px 25px rgba(0,0,0,.16)}
+.vehicle-art{position:relative;display:block;flex:0 0 86px;width:86px;height:54px;overflow:hidden;border-radius:9px;background:radial-gradient(ellipse at 50% 100%,rgba(111,208,207,.15),transparent 70%),linear-gradient(145deg,rgba(8,16,23,.75),rgba(39,57,67,.4))}
+.vehicle-art:before{content:"";position:absolute;left:8px;bottom:13px;width:72px;height:22px;background:linear-gradient(180deg,#d9e7eb,#758b98 64%,#26343f);filter:drop-shadow(0 5px 4px rgba(0,0,0,.48))}
+.vehicle-art:after{content:"";position:absolute;left:19px;bottom:7px;width:12px;height:12px;border:3px solid #0a1117;border-radius:50%;background:#9eafb7;box-shadow:45px 0 0 -3px #9eafb7,45px 0 0 0 #0a1117}
+.vehicle-art--spectral:before{clip-path:polygon(0 76%,8% 57%,25% 49%,39% 13%,69% 12%,84% 50%,96% 58%,100% 100%,0 100%);border-radius:10px 18px 6px 6px;background:linear-gradient(180deg,#a8d1e4,#2e79aa 60%,#102d48)}
+.vehicle-art--suv:before{left:10px;bottom:13px;width:68px;height:27px;clip-path:polygon(0 38%,12% 26%,20% 4%,72% 4%,86% 29%,100% 40%,100% 100%,0 100%);border-radius:5px;background:linear-gradient(180deg,#e4e9e9,#89969b 62%,#34414a)}
+.vehicle-copy{display:flex;min-width:0;flex:1;flex-direction:column;gap:3px}
+.vehicle-copy b{font-size:9px;font-weight:900;letter-spacing:.055em;white-space:nowrap}
+.vehicle-copy small{font-size:8px;line-height:1.35;color:#aebdc6}
+.vehicle-copy em{margin-top:2px;color:#77e0d8;font-size:7px;font-style:normal;font-weight:900;letter-spacing:.13em}
+.vehicle-card:not(.active) .vehicle-copy em{color:#80929d}
+.vehicle-check{position:absolute;right:8px;top:7px;width:16px;height:16px;display:grid;place-items:center;border-radius:50%;background:#78e0d8;color:#10242b;font-size:10px;font-weight:900;opacity:0;transform:scale(.7);transition:.18s}
+.vehicle-card.active .vehicle-check{opacity:1;transform:scale(1)}
+/* A scroll-safe garage panel on short phones */
+.start-card{max-height:calc(100svh - 34px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(123,220,215,.4) transparent}
+.overlay{overflow-y:auto}
+@media(max-width:650px){
+ .overlay{align-items:center;padding:70px 10px 18px}
+ .start-card{max-height:calc(100svh - 86px);padding:17px 15px 14px}
+ .vehicle-picker{gap:7px}
+ .vehicle-card{min-height:73px;gap:7px;padding:7px}
+ .vehicle-art{flex-basis:68px;width:68px;height:48px}
+ .vehicle-art:before{left:5px;width:59px}
+ .vehicle-art:after{left:13px;box-shadow:37px 0 0 -3px #9eafb7,37px 0 0 0 #0a1117}
+ .vehicle-art--suv:before{left:7px;width:56px}
+ .vehicle-copy b{font-size:8px}
+ .vehicle-copy small{font-size:7px}
+ .vehicle-copy em{font-size:6px}
+}
+@media(max-width:370px){.vehicle-card{gap:5px;padding:6px}.vehicle-art{flex-basis:58px;width:58px}.vehicle-art:before{width:52px}.vehicle-art:after{left:11px;box-shadow:32px 0 0 -3px #9eafb7,32px 0 0 0 #0a1117}.vehicle-copy b{font-size:7px}}
