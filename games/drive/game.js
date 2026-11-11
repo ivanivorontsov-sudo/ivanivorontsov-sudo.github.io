@@ -426,10 +426,14 @@ function updateAudio() {
   engineGain.gain.setTargetAtTime(state.running&&!state.paused?0.035:0.0001,now,.12);
 }
 function setCameraMode() {
-  state.camera=(state.camera+1)%4;
-  const names=["Погоня","Кабина","Капот","Вид сверху"];
-  $("cameraBtn").querySelector(".btn-label").textContent=names[state.camera];
-  setMessage("Камера: "+names[state.camera]);
+  // На сенсорном экране кнопка камеры должна сразу переключать вид водителя.
+  // Дополнительные ракурсы по-прежнему доступны клавишей C.
+  state.camera=state.camera===1?0:1;
+  const label=state.camera===1?"Кабина":"Погоня";
+  $("cameraBtn").querySelector(".btn-label").textContent=label;
+  $("cameraBtn").setAttribute("aria-label",state.camera===1?"Вернуться к виду снаружи":"Перейти к виду из кабины");
+  $("cameraBtn").title=state.camera===1?"Вернуться к виду снаружи":"Перейти к виду из кабины";
+  setMessage(state.camera===1?"Вид из кабины · приборная панель перед вами":"Вид снаружи");
 }
 
 
