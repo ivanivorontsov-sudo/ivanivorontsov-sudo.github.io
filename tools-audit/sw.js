@@ -1,10 +1,10 @@
-const CACHE_NAME = "tools-audit-shell-v1";
-const CORE = ["./", "./index.html", "./workbench.html", "./manifest.webmanifest", "./icon.svg"];
+const CACHE_NAME = "tools-audit-shell-v2";
+const CORE = ["./", "./index.html", "./workbench.html", "./privacy.html", "./manifest.webmanifest", "./icon.svg"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()));
 });
 self.addEventListener("activate", event => {
-  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))).then(() => self.clients.claim()));
+  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k.startsWith("tools-audit-") && k !== CACHE_NAME).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
 self.addEventListener("fetch", event => {
   const req = event.request;
