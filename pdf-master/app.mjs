@@ -305,10 +305,17 @@ window.pdfjsLib = pdfjsLib;
         const text=$("watermark-text").value.trim(),opacity=Number($("watermark-opacity").value);
         if(!text) throw new Error("Введи текст водяного знака.");
         if(!Number.isFinite(opacity)||opacity<.05||opacity>.8) throw new Error("Прозрачность водяного знака должна быть от 0,05 до 0,8.");
-        const font=await out.embedFont(PDFLib.StandardFonts.HelveticaBold);
+        const first=copied[0],firstSize=first.getSize(),fontPx=Math.max(24,Math.min(72,Math.min(firstSize.width,firstSize.height)*.12));
+        const canvas=document.createElement("canvas"),ctx=canvas.getContext("2d");
+        ctx.font="700 "+Math.round(fontPx*2)+"px system-ui, Arial, sans-serif";
+        canvas.width=Math.min(12000,Math.ceil(ctx.measureText(text).width+48));canvas.height=Math.ceil(fontPx*2.8);
+        ctx.font="700 "+Math.round(fontPx*2)+"px system-ui, Arial, sans-serif";ctx.fillStyle="#888888";ctx.textBaseline="middle";ctx.fillText(text,24,canvas.height/2,canvas.width-48);
+        const watermarkBlob=await new Promise(resolve=>canvas.toBlob(resolve,"image/png"));
+        if(!watermarkBlob)throw new Error("Не удалось создать водяной знак.");
+        const watermark=await out.embedPng(await watermarkBlob.arrayBuffer());
         copied.forEach(page=>{
-          const {width,height}=page.getSize(),size=Math.min(52,Math.max(18,Math.min(width,height)*.1)),tw=font.widthOfTextAtSize(text,size);
-          page.drawText(text,{x:(width-tw)/2,y:height/2,size,font,color:PDFLib.rgb(.55,.55,.55),opacity,rotate:PDFLib.degrees(-35)});
+          const {width,height}=page.getSize(),dims=watermark.scaleToFit(width*.94,height*.28);
+          page.drawImage(watermark,{x:(width-dims.width)/2,y:(height-dims.height)/2,width:dims.width,height:dims.height,opacity,rotate:PDFLib.degrees(-35)});
         });
       }
       if($("signature-enabled").checked){
