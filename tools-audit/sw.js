@@ -1,4 +1,4 @@
-const CACHE_NAME = "tools-audit-shell-v21";
+const CACHE_NAME = "tools-audit-shell-v22";
 const CORE = ["./", "./index.html", "./workbench.html", "./privacy.html", "./manifest.webmanifest", "./icon.svg", "./web-tools.html", "./extra-500.html", "./vendor/JSQR-LICENSE.txt", "./vendor/JSZIP-LICENSE.txt", "./vendor/QRCODE-LICENSE.txt", "./vendor/jsQR.js", "./vendor/jszip.min.js", "./vendor/qrcode-generator.js", "./local-alternatives.html", "./local-suite.html", "./local-plus.html", "./search.html", "./search.js", "./workshop/converters.js"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()));
