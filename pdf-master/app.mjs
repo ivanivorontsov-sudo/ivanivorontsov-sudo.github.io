@@ -301,6 +301,30 @@ window.pdfjsLib = pdfjsLib;
           page.drawText(String(index+1),{x:width-34,y:15,size:9,font,color:PDFLib.rgb(.42,.42,.42)});
         });
       }
+      if($("watermark-enabled").checked){
+        const text=$("watermark-text").value.trim(),opacity=Number($("watermark-opacity").value);
+        if(!text) throw new Error("Введи текст водяного знака.");
+        if(!Number.isFinite(opacity)||opacity<.05||opacity>.8) throw new Error("Прозрачность водяного знака должна быть от 0,05 до 0,8.");
+        const font=await out.embedFont(PDFLib.StandardFonts.HelveticaBold);
+        copied.forEach(page=>{
+          const {width,height}=page.getSize(),size=Math.min(52,Math.max(18,Math.min(width,height)*.1)),tw=font.widthOfTextAtSize(text,size);
+          page.drawText(text,{x:(width-tw)/2,y:height/2,size,font,color:PDFLib.rgb(.55,.55,.55),opacity,rotate:PDFLib.degrees(-35)});
+        });
+      }
+      if($("signature-enabled").checked){
+        const file=$("signature-file").files[0];
+        if(!file) throw new Error("Выбери PNG или JPEG с изображением подписи.");
+        if(file.size>5*1024*1024) throw new Error("Изображение подписи больше 5 МБ.");
+        const data=await file.arrayBuffer();
+        let image;
+        if(file.type==="image/png") image=await out.embedPng(data);
+        else if(file.type==="image/jpeg") image=await out.embedJpg(data);
+        else throw new Error("Поддерживаются только PNG и JPEG.");
+        copied.forEach(page=>{
+          const {width}=page.getSize(),dims=image.scaleToFit(Math.min(180,width*.32),64);
+          page.drawImage(image,{x:width-dims.width-28,y:28,width:dims.width,height:dims.height,opacity:.92});
+        });
+      }
       if($("clear-meta").checked) clearMetadata(out);
       const bytes=await out.save({useObjectStreams:true,addDefaultPage:false});
       const blob=new Blob([bytes],{type:"application/pdf"});
