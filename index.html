@@ -184,10 +184,9 @@ footer{color:var(--mut);text-align:center;padding:32px 0}
 <footer>© 2026 Иван Воронцов · <a href="/legal.html">Правовая информация и жалобы</a> · <a href="/privacy.html">Политика сайта</a> · <a href="https://ivanivorontsov-sudo.github.io/supersmart-privacy/">Политики приложений</a> · Лицензии указаны в каждом репозитории</footer>
 <script>
 const R=document.documentElement,T=document.getElementById('theme');
-const s=localStorage.getItem('theme');if(s)R.dataset.theme=s;
 function lab(){const d=R.dataset.theme?R.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;T.textContent=d?'☀️ Светлая':'🌙 Тёмная';T.setAttribute('aria-label',d?'Включить светлую тему':'Включить тёмную тему')}
 lab();matchMedia('(prefers-color-scheme: dark)').addEventListener('change',lab);
-T.onclick=()=>{const d=R.dataset.theme?R.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;R.dataset.theme=d?'light':'dark';localStorage.setItem('theme',R.dataset.theme);lab()};
+T.onclick=()=>{const d=R.dataset.theme?R.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;R.dataset.theme=d?'light':'dark';lab()};
 const q=document.getElementById('q'),cards=[...document.querySelectorAll('.card')],chips=[...document.querySelectorAll('.chip')];let c='all';
 function f(){const v=q.value.trim().toLowerCase();let n=0;cards.forEach(e=>{const ok=(c==='all'||e.dataset.cat===c)&&e.dataset.q.includes(v);e.hidden=!ok;n+=ok});document.getElementById('empty').style.display=n?'none':'block';document.getElementById('cnt').textContent=n}
 q.oninput=f;chips.forEach(b=>b.onclick=()=>{c=b.dataset.c;chips.forEach(x=>x.setAttribute('aria-pressed',x===b));f()});
