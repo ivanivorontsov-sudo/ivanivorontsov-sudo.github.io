@@ -9,7 +9,7 @@ const csv=(s,d)=>{let rows=[],row=[],v="",q=false;for(let i=0;i<s.length;i++){co
 const csvw=(rows,d)=>rows.map(r=>r.map(v=>{const s=String(v??"");return /["\r\n]/.test(s)||s.includes(d)?'"'+s.replace(/"/g,'""')+'"':s}).join(d)).join("\r\n");
 const deep=v=>Array.isArray(v)?v.map(deep):v&&typeof v==="object"?Object.fromEntries(Object.keys(v).sort().map(k=>[k,deep(v[k])])):v;
 const flat=(v,p,o)=>{if(v&&typeof v==="object")Object.entries(v).forEach(([k,x])=>flat(x,p?p+"."+k:k,o));else o[p]=v;return o};
-const rnd=n=>{const a=new Uint32Array(1),max=Math.floor(4294967296/n)*n;let x;do{crypto.getRandomValues(a);x=a[0]}while(x>=max);return x};
+const rnd=n=>{if(!Number.isSafeInteger(n)||n<1)err("Некорректный размер алфавита");if(!globalThis.crypto?.getRandomValues)err("Криптографический генератор случайных чисел недоступен. Откройте страницу по HTTPS в современном браузере.");const a=new Uint32Array(1),max=Math.floor(4294967296/n)*n;let x;do{crypto.getRandomValues(a);x=a[0]}while(x>=max);return x%n};
 function run(id,s,b){switch(id){
 case "chars":{const p=Array.from(s).length,g=typeof Intl.Segmenter==="function"?Array.from(new Intl.Segmenter("ru",{granularity:"grapheme"}).segment(s)).length:p;return "UTF-16: "+s.length+"\nКодовые точки: "+p+"\nГрафемы: "+g}
 case "words":{const a=s.trim().match(/[\p{L}\p{N}]+/gu)||[];return "Слов: "+a.length+"\nСредняя длина: "+(a.length?a.reduce((n,x)=>n+Array.from(x).length,0)/a.length:0).toFixed(2)}
