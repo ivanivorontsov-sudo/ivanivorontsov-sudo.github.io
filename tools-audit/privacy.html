@@ -12,7 +12,7 @@
 
 <meta name="author" content="Иван Воронцов">
 <meta name="robots" content="index,follow">
-<meta name="referrer" content="strict-origin-when-cross-origin">
+
 <link rel="canonical" href="https://ivanivorontsov-sudo.github.io/tools-audit/privacy.html">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_RU">
@@ -38,7 +38,7 @@
 <li>Текст, JSON, URL и парольные фразы, введённые в поля инструментов.</li>
 <li>Файлы, принятые или отправленные через WebRTC P2P-соединение.</li>
 </ul>
-<p>Обработка выполняется в браузере через File API, Web Crypto API, Canvas API, AudioContext, MediaRecorder и WebRTC. Результаты предлагаются для скачивания. В <code>local-suite.html</code> выбранные файлы и записи задач могут храниться в IndexedDB профиля браузера на устройстве посетителя. Владелец сайта не имеет доступа к этому локальному хранилищу; очистка данных сайта может его удалить. Файловый сейф экспортирует отдельную резервную копию в AES-GCM, однако исходные записи IndexedDB не шифруются на месте.</p>
+<p>Обработка выполняется в браузере через File API, Web Crypto API, Canvas API, AudioContext, MediaRecorder и WebRTC. Результаты предлагаются для скачивания. В <code>local-suite.html</code> выбранные файлы, метаданные и задачи существуют только в памяти открытой вкладки и очищаются после её закрытия; IndexedDB и localStorage для этих данных не используются. Экспортируемая пользователем копия .ivault может быть зашифрована AES-GCM. Отдельный <code>local-plus.html</code> по выбору пользователя хранит в IndexedDB зашифрованные AES-GCM парольные записи и файлы; мастер-пароль и ключ не сохраняются.</p>
 <h2>Технические запросы к хостингу</h2>
 <p>Статические файлы размещены на GitHub Pages. При открытии сайта GitHub может обрабатывать технические сведения HTTP-запроса: IP-адрес, User-Agent, время и запрошенный ресурс. Код сайта не передаёт владельцу собственные журналы посещений и не содержит аналитических или рекламных трекеров. Технические журналы самого хостинга регулируются политикой GitHub.</p>
 <h2>Локальная мастерская</h2>
