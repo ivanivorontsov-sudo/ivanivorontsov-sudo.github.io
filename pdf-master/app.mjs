@@ -15,12 +15,9 @@ window.pdfjsLib = pdfjsLib;
     pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
   }
 
-  const savedTheme = localStorage.getItem("pdf-master-theme");
-  if (savedTheme === "dark" || savedTheme === "light") document.documentElement.dataset.theme = savedTheme;
   $("theme").addEventListener("click", () => {
     const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = next;
-    localStorage.setItem("pdf-master-theme", next);
   });
 
   function status(message, kind = "") {
