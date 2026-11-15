@@ -49,7 +49,7 @@ footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:v
 
 <meta name="author" content="Иван Воронцов">
 <meta name="robots" content="index,follow">
-<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="referrer" content="no-referrer">
 <link rel="canonical" href="https://ivanivorontsov-sudo.github.io/tools-audit/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_RU">
@@ -834,23 +834,20 @@ const queryInput=document.getElementById("q"),shown=document.getElementById("sho
 const tagsOf=card=>(card.dataset.tags||"").split("|").filter(Boolean);
 const normalize=value=>String(value).normalize("NFKC").toLocaleLowerCase("ru");
 const categories=Array.from(category.options).map(x=>x.value).filter(Boolean),tags=Array.from(tag.options).map(x=>x.value).filter(Boolean);
-const params=new URLSearchParams(location.search);
-queryInput.value=params.get("q")||"";
-category.value=categories.includes(params.get("category"))?params.get("category"):"";
-tag.value=tags.includes(params.get("tag"))?params.get("tag"):"";
-let quick=params.get("quick")||"";
-if(!["Файлы на сервере","Реклама","Телеметрия","Платные функции","Водяной знак","Локальная обработка"].includes(quick))quick="";
+// Search and filter values stay in this tab; never copy them into the URL.
+queryInput.value="";
+category.value="";
+tag.value="";
+let quick="";
 function setQuick(){document.querySelectorAll(".filter[data-quick]").forEach(button=>{const active=button.dataset.quick===quick;button.classList.toggle("active",active);button.setAttribute("aria-pressed",active?"true":"false");});}
-function render(updateAddress){
+function render(){
  const q=normalize(queryInput.value.trim()),c=category.value,t=tag.value;let count=0;
  for(const card of cards){const match=(!q||normalize(card.textContent).includes(q))&&(!c||card.dataset.category===c)&&(!t||tagsOf(card).includes(t))&&(!quick||tagsOf(card).includes(quick));card.hidden=!match;if(match)count++;}
  shown.textContent="Показано "+count+" из "+cards.length;empty.hidden=count!==0;
- if(updateAddress!==false&&history.replaceState){const p=new URLSearchParams();if(queryInput.value.trim())p.set("q",queryInput.value.trim());if(c)p.set("category",c);if(t)p.set("tag",t);if(quick)p.set("quick",quick);const url=location.pathname+(p.toString()?"?"+p.toString():"")+location.hash;if(url!==location.pathname+location.search+location.hash)history.replaceState(null,"",url);}
 }
-queryInput.addEventListener("input",()=>render(true));category.addEventListener("change",()=>render(true));tag.addEventListener("change",()=>render(true));
+queryInput.addEventListener("input",render);category.addEventListener("change",render);tag.addEventListener("change",render);
 document.getElementById("quick").addEventListener("click",event=>{const button=event.target.closest("button[data-quick]");if(!button)return;quick=button.dataset.quick;tag.value="";setQuick();render(true);});
-window.addEventListener("popstate",()=>{const p=new URLSearchParams(location.search);queryInput.value=p.get("q")||"";category.value=categories.includes(p.get("category"))?p.get("category"):"";tag.value=tags.includes(p.get("tag"))?p.get("tag"):"";quick=p.get("quick")||"";setQuick();render(false);});
-setQuick();render(false);
+setQuick();render();
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 
 </script>
