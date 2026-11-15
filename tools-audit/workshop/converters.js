@@ -36,7 +36,7 @@ document.querySelectorAll(".convert-tool").forEach(original=>{
       copy.disabled=true;
       return;
     }
-    const result=fmt(Object.is(n,-0)?0:n)+(f.dataset.targetSymbol?" "+f.dataset.targetSymbol:"");
+    const result=fmt.format(Object.is(n,-0)?0:n)+(f.dataset.targetSymbol?" "+f.dataset.targetSymbol:"");
     f.dataset.lastResult=result;
     out.textContent=result;
     status.textContent="Готово. Расчёт выполнен локально.";
