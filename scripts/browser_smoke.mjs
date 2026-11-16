@@ -202,7 +202,8 @@ try {
   await page.locator("#csv-mode").selectOption("csv-json");
   await page.locator("#csv-input").fill('name,age\\n"Alice, A.",30\\nBob,40');
   await page.locator("#csv-run").click();
-  if (!(await page.locator("#csv-output").inputValue()).includes("Alice, A.")) fail("daily-tools: quoted CSV field was not parsed correctly");
+  const csvOutput = await page.locator("#csv-output").inputValue();
+  if (!csvOutput.includes("Alice, A.")) fail("daily-tools: quoted CSV field was not parsed correctly; mode=" + await page.locator("#csv-mode").inputValue() + "; output=" + JSON.stringify(csvOutput));
   dailyStage = "Markdown preview";
   await page.locator("#md-input").fill("# Safe\\n<script>alert(1)</script>\\n**bold**");
   const previewHtml = await page.locator("#md-preview").innerHTML();
