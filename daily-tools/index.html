@@ -46,7 +46,25 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 
 footer{border-top:1px solid var(--line);margin-top:34px;padding-top:18px;color:var(--muted);font-size:.84rem}
 [hidden]{display:none!important}
 @media(max-width:800px){.hero{grid-template-columns:1fr}.promise{max-width:440px}}
-@media(max-width:620px){.head{padding:10px 12px}.headnav a:first-child{display:none}main{padding:20px 12px 44px}.grid{grid-template-columns:1fr}.tool.wide{grid-column:auto}.toolbody{padding:14px}.toolhead{padding:14px}.row{grid-template-columns:1fr}}
+html,body{width:100%;min-width:0}
+.head,main,.hero,.grid,.tool,.toolbody,.toolhead,.row{min-width:0;max-width:100%}
+main{width:100%}
+.toolhead>div{min-width:0}
+.toolhead h2,.toolhead p,.toolbody p,.hint{overflow-wrap:anywhere}
+@media(max-width:620px){
+  .head{width:100%;padding:10px 12px;display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:flex-start;gap:8px}
+  .brand{flex:1 1 100%;min-width:0;white-space:normal;overflow-wrap:anywhere}
+  .headnav{width:100%;min-width:0;max-width:100%;display:flex;flex:1 1 100%;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:7px}
+  .headnav a:first-child{display:none}
+  .headnav a,.headnav button{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+  main{padding:20px 12px 44px}
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .tool.wide{grid-column:auto}
+  .toolbody{padding:14px}
+  .toolhead{padding:14px}
+  .row{grid-template-columns:minmax(0,1fr)}
+}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style><meta name="robots" content="index,follow">
 <meta property="og:type" content="website">
@@ -66,9 +84,9 @@ footer{border-top:1px solid var(--line);margin-top:34px;padding-top:18px;color:v
 <link rel="stylesheet" href="https://ivanivorontsov-sudo.github.io/assets/site-support.css">
 <script src="https://ivanivorontsov-sudo.github.io/assets/site-support.js" defer></script>
 </head><body>
-<header><div class="head"><a class="brand" href="https://ivanivorontsov-sudo.github.io/"><span class="mark">11</span> Ежедневная мастерская</a><nav class="headnav"><a href="https://ivanivorontsov-sudo.github.io/">Главный сайт</a> · <a href="https://ivanivorontsov-sudo.github.io/legal.html">Правовая информация</a><a href="https://ivanivorontsov-sudo.github.io/vizitka/">Визитка</a><button id="theme" type="button" aria-label="Переключить тему">◐ Тема</button></nav></div></header>
+<header><div class="head"><a class="brand" href="https://ivanivorontsov-sudo.github.io/"><span class="mark">12</span> Ежедневная мастерская</a><nav class="headnav"><a href="https://ivanivorontsov-sudo.github.io/">Главный сайт</a> · <a href="https://ivanivorontsov-sudo.github.io/legal.html">Правовая информация</a><a href="https://ivanivorontsov-sudo.github.io/vizitka/">Визитка</a><button id="theme" type="button" aria-label="Переключить тему">◐ Тема</button></nav></div></header>
 <main>
-<section class="hero"><div><div class="eyebrow">ПОВСЕДНЕВНЫЕ ЗАДАЧИ БЕЗ ЛИШНЕГО</div><h1>11 бесплатных инструментов для текста, файлов и фото</h1><p>Инструменты для текста, файлов, фотографий и веба. Без регистрации, рекламных блоков и подписок. Обработка происходит на вашем устройстве — личные файлы и введённый текст не отправляются на сервер.</p></div><div class="promise"><strong>Локальная обработка</strong><span>Один статический сайт. Никаких аккаунтов, рекламных SDK, аналитики и платных лимитов.</span></div></section>
+<section class="hero"><div><div class="eyebrow">ПОВСЕДНЕВНЫЕ ЗАДАЧИ БЕЗ ЛИШНЕГО</div><h1>12 бесплатных инструментов для текста, файлов и фото</h1><p>Инструменты для текста, файлов, фотографий и веба. Без регистрации, рекламных блоков и подписок. Обработка происходит на вашем устройстве — личные файлы и введённый текст не отправляются на сервер.</p></div><div class="promise"><strong>Локальная обработка</strong><span>Один статический сайт. Никаких аккаунтов, рекламных SDK, аналитики и платных лимитов.</span></div></section>
 <div class="pills"><span class="pill"><b>✓</b> Без регистрации</span><span class="pill"><b>✓</b> Без рекламы</span><span class="pill"><b>✓</b> Без подписки</span><span class="pill"><b>✓</b> Без загрузки файлов</span><span class="pill">Работает в браузере</span></div>
 <nav class="jump" aria-label="Быстрый переход"><a href="#diff">Сравнить текст</a><a href="#hash">Хеш файлов</a><a href="#duplicates">Дубликаты</a><a href="#compress">Сжать фото</a><a href="#exif">Очистить EXIF</a><a href="#resize">Размер фото</a><a href="#csv">CSV ↔ JSON</a><a href="#markdown">Markdown</a><a href="#url">URL</a><a href="#clean">Очистить текст</a><a href="#contrast">Контраст</a></nav>
 <div class="grid">
