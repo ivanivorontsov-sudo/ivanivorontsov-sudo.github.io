@@ -153,6 +153,21 @@ main{max-width:1180px;margin:auto;padding:24px 18px 70px}a{color:var(--accent);o
 </div>
 
 <section class="sources">
+<h2>Открытые библиотеки, уже используемые в проектах</h2>
+<ul>
+<li><strong>JSZip 3.10.2 — MIT (проект выбрал вариант MIT из двойной лицензии MIT/GPL-3.0).</strong> Используется в Портале инструментов для создания ZIP и выборочного извлечения файлов. Код хранится локально в <code>tools-portal/assets/js/vendor/</code>; интерфейс ограничивает число файлов и объём архива. Начиная с версии 3.8.0 библиотека нормализует пути ZIP, чтобы снизить риск Zip Slip; портал дополнительно проверяет имена и размеры. <a href="https://github.com/Stuk/JSZip" target="_blank" rel="noopener noreferrer">Репозиторий и релизы</a> · <a href="https://github.com/Stuk/JSZip/blob/v3.10.2/LICENSE.markdown" target="_blank" rel="noopener noreferrer">Лицензия</a>.</li>
+<li><strong>Papa Parse 5.7.1 — MIT.</strong> Используется в Ежедневной мастерской для CSV с кавычками, разделителями и переносами строк внутри полей. Файл библиотеки размещён локально в <code>daily-tools/vendor/</code>; текст и CSV не передаются разработчику библиотеки. <a href="https://github.com/mholt/PapaParse" target="_blank" rel="noopener noreferrer">Репозиторий и лицензия</a>.</li>
+<li><strong>ExifReader 4.54.0 — MPL-2.0.</strong> Используется для чтения EXIF-метаданных фото в той же мастерской. Парсер размещён локально в <code>daily-tools/vendor/</code>. Метаданные из файлов считаются недоверенными: в интерфейсе они выводятся как текст. GPS-координаты могут раскрывать место съёмки. <a href="https://github.com/mattiasw/ExifReader" target="_blank" rel="noopener noreferrer">Репозиторий</a> · <a href="https://github.com/mattiasw/ExifReader/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">Лицензия</a>.</li>
+<li><strong>PDF.js 6.5.438 — Apache-2.0 и pdf-lib 1.17.1 — MIT.</strong> Используются PDF-Мастером для просмотра и построения PDF. Сейчас они загружаются с закреплённых версий публичных CDN, а не из локальной копии; сам PDF остаётся в памяти браузера, но исполняемый код библиотеки имеет доступ к документу в памяти страницы. Для особо чувствительных документов предпочтительна проверенная офлайн-программа. <a href="https://github.com/mozilla/pdf.js" target="_blank" rel="noopener noreferrer">PDF.js</a> · <a href="https://github.com/Hopding/pdf-lib" target="_blank" rel="noopener noreferrer">pdf-lib</a>.</li>
+</ul>
+<p>Библиотеки подключаются только в тех инструментах, которым они нужны. Каждая поставляется с оригинальным текстом лицензии в репозитории. Сведения о лицензии не заменяют проверку транзитивных зависимостей и условий распространения собранного приложения.</p>
+</section>
+<section class="sources">
+<h2>Почему не добавлен FFmpeg.wasm</h2>
+<p>FFmpeg.wasm полезен для конвертации аудио и видео прямо в браузере, но его оболочка, бинарное ядро и дополнительные кодеки могут иметь разные лицензии. Многопоточная сборка также требует cross-origin isolation и корректных заголовков COOP/COEP. Поэтому я не включал её в основной набор до отдельной проверки конкретного ядра, кодеков и условий распространения. <a href="https://github.com/ffmpegwasm/ffmpeg.wasm" target="_blank" rel="noopener noreferrer">Проект FFmpeg.wasm</a> · <a href="https://ffmpeg.org/legal.html" target="_blank" rel="noopener noreferrer">Лицензии FFmpeg</a>.</p>
+</section>
+
+<section class="sources">
 <h2>Правила безопасной проверки</h2>
 <ul>
 <li>Не загружай в онлайн-валидаторы, демонстрации OCR и совместные доски пароли, ключи, медицинские документы, паспорта, закрытые исходники и персональные данные.</li>
