@@ -72,7 +72,7 @@ main{max-width:1180px;margin:auto;padding:24px 18px 70px}a{color:var(--accent);o
 <div class="cards">
 <article class="tool" data-search="excalidraw диаграмма whiteboard доска рисунок collaboration share локально MIT">
 <h3>Excalidraw</h3><span class="pill local">Локальный режим</span><span class="pill mixed">Совместная работа — сеть</span>
-<p>Открытая интерактивная доска для схем, блок-схем и набросков. Рисунок можно экспортировать в файл; при включении совместной работы, публикации или обмена ссылкой данные передаются сетевому сервису. Исходный код — MIT.</p>
+<p>Открытый редактор блок-схем, последовательностей и Gantt-диаграмм. Можно экспортировать SVG или создать ссылку для просмотра/совместного редактирования. При использовании ссылок сам текст диаграммы может оказаться в URL и стать доступен тем, кому передана ссылка. Официальный README указывает MIT-лицензию; аналитика, renderer, Kroki и Mermaid Chart настраиваются при сборке, а в конфигурации по умолчанию аналитика выключена. Экспорт PNG/SVG через renderer или Kroki может отправлять спецификацию диаграммы выбранному внешнему сервису.</p>
 <p class="meta">Подходит: архитектура проектов, схемы, мозговые штурмы.</p>
 <div class="links"><a href="https://excalidraw.com/" target="_blank" rel="noopener noreferrer">Открыть Excalidraw</a><a href="https://github.com/excalidraw/excalidraw" target="_blank" rel="noopener noreferrer">Исходный код и лицензия</a></div>
 </article>
@@ -123,6 +123,24 @@ main{max-width:1180px;margin:auto;padding:24px 18px 70px}a{color:var(--accent);o
 <p>Открытая библиотека автоматической проверки доступности: нарушения контрастности, имен элементов, структуры и другие типовые проблемы. Её можно подключить к тестам Playwright или CI. Автоматическая проверка не заменяет ручную клавиатурную и экранную проверку.</p>
 <p class="meta">Подходит: автоматический аудит доступности сайтов в CI.</p>
 <div class="links"><a href="https://github.com/dequelabs/axe-core" target="_blank" rel="noopener noreferrer">Исходный код и правила</a><a href="https://www.deque.com/axe/" target="_blank" rel="noopener noreferrer">Документация Deque</a></div>
+</article>
+</div>
+</section>
+
+<section class="group" data-group>
+<h2>API, диагностика и безопасность сайтов</h2>
+<div class="cards">
+<article class="tool" data-search="hoppscotch api client rest graphql websocket sse mqtt тестирование запросов oauth open source mit cloud self-host">
+<h3>Hoppscotch</h3><span class="pill local">Можно работать локально / self-host</span><span class="pill mixed">Облачная синхронизация и proxy по выбору</span>
+<p>Открытая среда для отправки HTTP-запросов, тестирования REST и GraphQL API, WebSocket, SSE и MQTT. Community Edition распространяется под MIT. Запросы отправляются на указанный пользователем endpoint; при входе и включённой синхронизации истории, коллекции и рабочие пространства могут передаваться в Hoppscotch Cloud или self-hosted instance. Секретные переменные в Desktop App отмечены как локальные, но обычные данные и коллекции нужно проверять перед синхронизацией. Proxy Mode использует внешний relay Hoppscotch — тогда через него проходят запросы и заголовки. Для чувствительных API предпочитай Desktop/offline или собственный self-host.</p>
+<p class="meta">Подходит: проверка API, заголовков, авторизации, JSON-ответов, WebSocket и GraphQL.</p>
+<div class="links"><a href="https://hoppscotch.io/" target="_blank" rel="noopener noreferrer">Открыть Hoppscotch</a><a href="https://github.com/hoppscotch/hoppscotch" target="_blank" rel="noopener noreferrer">Исходный код</a><a href="https://docs.hoppscotch.io/documentation/self-host/getting-started" target="_blank" rel="noopener noreferrer">Self-host и MIT Community Edition</a><a href="https://github.com/hoppscotch/hoppscotch/security" target="_blank" rel="noopener noreferrer">Модель безопасности</a></div>
+</article>
+<article class="tool" data-search="owasp zap zaproxy security scanner dast proxy passive active scan тестирование безопасности веб приложений apache 2">
+<h3>OWASP ZAP</h3><span class="pill local">Локальный инструмент</span><span class="pill remote">Сканирует выбранный сайт запросами</span>
+<p>Открытый DAST-инструмент для тестирования веб-приложений: прокси, просмотр HTTP-трафика, пассивный анализ, spider и автоматизация в CI. Лицензия основного проекта — Apache-2.0. Пассивный анализ изучает проходящие через ZAP запросы и ответы; активное сканирование посылает специально сформированные тестовые запросы, может повлиять на работу сайта и считается атакующим тестом. Используй активное сканирование только против собственных систем или при явном разрешении владельца. Для закрытых сайтов запускай ZAP локально; он видит трафик, проходящий через прокси.</p>
+<p class="meta">Подходит: проверка собственных сайтов на распространённые веб-уязвимости и регрессии безопасности.</p>
+<div class="links"><a href="https://www.zaproxy.org/" target="_blank" rel="noopener noreferrer">Сайт OWASP ZAP</a><a href="https://github.com/zaproxy/zaproxy" target="_blank" rel="noopener noreferrer">Исходный код и Apache-2.0</a><a href="https://www.zaproxy.org/getting-started/" target="_blank" rel="noopener noreferrer">Руководство</a><a href="https://www.zaproxy.org/docs/desktop/start/features/ascan/" target="_blank" rel="noopener noreferrer">Правила активного сканирования</a></div>
 </article>
 </div>
 </section>
