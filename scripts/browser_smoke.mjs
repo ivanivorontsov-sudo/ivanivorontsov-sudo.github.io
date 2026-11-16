@@ -115,6 +115,67 @@ for (const file of htmlFiles.filter(x => rel(x).includes("/converters/") && rel(
   }
 }
 
+// Daily Tools: exercise all eleven local operations with synthetic inputs.
+try {
+  pageErrors = [];
+  localAssetErrors = [];
+  await page.goto(BASE + "/daily-tools/", { waitUntil: "domcontentloaded", timeout: 20000 });
+  await page.locator("#diff-a").fill("alpha\\nold");
+  await page.locator("#diff-b").fill("alpha\\nnew");
+  await page.locator("#diff-run").click();
+  const diffText = await page.locator("#diff-output").innerText();
+  if (!diffText.includes("old") || !diffText.includes("new")) fail("daily-tools: line comparison did not show changed lines");
+
+  const hello = Buffer.from("hello");
+  await page.locator("#hash-files").setInputFiles({ name: "hello.txt", mimeType: "text/plain", buffer: hello });
+  await page.locator("#hash-run").click();
+  await page.waitForFunction(() => document.querySelector("#hash-output")?.innerText.includes("2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"));
+  await page.locator("#dup-files").setInputFiles([
+    { name: "same-a.txt", mimeType: "text/plain", buffer: Buffer.from("duplicate") },
+    { name: "same-b.txt", mimeType: "text/plain", buffer: Buffer.from("duplicate") },
+    { name: "other.txt", mimeType: "text/plain", buffer: Buffer.from("different") }
+  ]);
+  await page.locator("#dup-run").click();
+  await page.waitForFunction(() => document.querySelector("#dup-output")?.innerText.includes("same-a.txt") && document.querySelector("#dup-output")?.innerText.includes("same-b.txt"));
+
+  const pngFixture = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a3ioAAAAASUVORK5CYII=", "base64");
+  await page.locator("#compress-file").setInputFiles({ name: "tiny.png", mimeType: "image/png", buffer: pngFixture });
+  await page.locator("#compress-target").fill("5");
+  await page.locator("#compress-run").click();
+  await page.waitForSelector("#compress-output a[download]", { timeout: 10000 });
+  await page.locator("#exif-file").setInputFiles({ name: "metadata.png", mimeType: "image/png", buffer: pngFixture });
+  await page.locator("#exif-run").click();
+  await page.waitForSelector("#exif-output a[download]", { timeout: 10000 });
+  await page.locator("#resize-file").setInputFiles({ name: "resize.png", mimeType: "image/png", buffer: pngFixture });
+  await page.locator("#resize-width").fill("16");
+  await page.locator("#resize-height").fill("16");
+  await page.locator("#resize-run").click();
+  await page.waitForSelector("#resize-output a[download]", { timeout: 10000 });
+
+  await page.locator("#csv-mode").selectOption("csv-json");
+  await page.locator("#csv-input").fill('name,age\\n"Alice, A.",30\\nBob,40');
+  await page.locator("#csv-run").click();
+  if (!(await page.locator("#csv-output").inputValue()).includes("Alice, A.")) fail("daily-tools: quoted CSV field was not parsed correctly");
+  await page.locator("#md-input").fill("# Safe\\n<script>alert(1)</script>\\n**bold**");
+  const previewHtml = await page.locator("#md-preview").innerHTML();
+  if (await page.locator("#md-preview script").count()) fail("daily-tools: Markdown preview created an executable script element");
+  if (!previewHtml.includes("&lt;script&gt;")) fail("daily-tools: Markdown raw HTML was not escaped");
+  await page.locator("#url-input").fill("https://example.com/path?a=1&a=2#part");
+  await page.locator("#url-run").click();
+  if (!(await page.locator("#url-output").innerText()).includes("example.com")) fail("daily-tools: URL parser missed host");
+  await page.locator("#clean-input").fill("  a  \\n  a  \\n  b  ");
+  await page.locator("#clean-run").click();
+  if ((await page.locator("#clean-output").inputValue()) !== "a\\nb") fail("daily-tools: text cleanup failed");
+  await page.locator("#fg-hex").fill("#000000");
+  await page.locator("#bg-hex").fill("#FFFFFF");
+  await page.locator("#bg-hex").dispatchEvent("change");
+  if (!(await page.locator("#contrast-output").innerText()).includes("21.00:1")) fail("daily-tools: WCAG black-on-white contrast should be 21:1");
+  for (const message of pageErrors) fail("daily-tools: runtime exception: " + message);
+  for (const item of [...new Set(localAssetErrors)]) fail("daily-tools: local resource " + item);
+} catch (error) {
+  fail("daily-tools interaction test failed: " + error.message);
+}
+
 // Mobile overflow checks for important tool entry points.
 const mobilePages = [
   "index.html",
