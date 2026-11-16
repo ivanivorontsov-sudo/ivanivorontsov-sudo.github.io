@@ -47,8 +47,10 @@ page.on("response", response => {
   }
 });
 page.on("requestfailed", request => {
-  if (request.url().startsWith(BASE)) {
-    localAssetErrors.push("failed " + request.url() + " (" + (request.failure()?.errorText || "unknown") + ")");
+  const reason = request.failure()?.errorText || "unknown";
+  // Chromium reports intentional navigation cancellation as ERR_ABORTED.
+  if (request.url().startsWith(BASE) && reason !== "net::ERR_ABORTED") {
+    localAssetErrors.push("failed " + request.url() + " (" + reason + ")");
   }
 });
 
