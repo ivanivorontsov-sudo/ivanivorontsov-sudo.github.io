@@ -305,29 +305,45 @@ try {
 // Mobile overflow checks for important tool entry points.
 const mobilePages = [
   "index.html",
+  "legal.html",
+  "privacy.html",
   "tools-audit/workbench.html",
   "tools-audit/local-plus.html",
   "tools-audit/local-suite.html",
   "tools-audit/search.html",
   "daily-tools/index.html",
-  "pdf-master/index.html"
+  "daily-tools/privacy.html",
+  "pdf-master/index.html",
+  "pdf-master/privacy.html"
 ];
-await page.setViewportSize({ width: 390, height: 844 });
-for (const relative of mobilePages) {
-  try {
-    await page.goto(BASE + "/" + relative, { waitUntil: "domcontentloaded", timeout: 20000 });
-    await page.waitForTimeout(100);
-    const overflow = await page.evaluate(() => ({
-      width: document.documentElement.clientWidth,
-      scroll: document.documentElement.scrollWidth
-    }));
-    if (overflow.scroll > overflow.width + 2) {
-      warnings.push(relative + ": horizontal overflow at 390px (" + overflow.width + "px viewport, " + overflow.scroll + "px content)");
+for (const width of [320, 360, 390, 430]) {
+  await page.setViewportSize({ width, height: 844 });
+  for (const relative of mobilePages) {
+    try {
+      await page.goto(BASE + "/" + relative, { waitUntil: "domcontentloaded", timeout: 20000 });
+      await page.waitForTimeout(60);
+      const overflow = await page.evaluate(() => ({
+        width: document.documentElement.clientWidth,
+        scroll: document.documentElement.scrollWidth
+      }));
+      if (overflow.scroll > overflow.width + 2) {
+        const message = relative + ": horizontal overflow at " + width + "px (" + overflow.width + "px viewport, " + overflow.scroll + "px content)";
+        if (relative === "daily-tools/index.html" || relative === "index.html" || relative === "legal.html") fail(message);
+        else warnings.push(message);
+      }
+    } catch (error) {
+      fail(relative + ": mobile check at " + width + "px failed: " + error.message);
     }
-  } catch (error) {
-    fail(relative + ": mobile check failed: " + error.message);
   }
 }
+
+// Legal owner details must be rendered once, not duplicated in the page body.
+await page.setViewportSize({ width: 390, height: 844 });
+await page.goto(BASE + "/legal.html", { waitUntil: "domcontentloaded" });
+const ownerCards = await page.locator("main .note").filter({ hasText: "Сведения о владельце сайта для официальных заявлений" }).count();
+if (ownerCards !== 1) fail("legal.html: expected one owner/contact block, found " + ownerCards);
+const addressMentions = await page.locator("main").innerText();
+if ((addressMentions.match(/690089/g) || []).length !== 1) fail("legal.html: address should appear exactly once in the legal disclosure");
 
 await browser.close();
 console.log("Browser smoke: " + checked + "/" + htmlFiles.length + " HTML pages loaded.");
