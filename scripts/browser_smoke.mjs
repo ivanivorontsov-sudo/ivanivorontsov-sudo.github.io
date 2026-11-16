@@ -229,6 +229,32 @@ try {
   fail("daily-tools " + dailyStage + " test failed: " + error.message);
 }
 
+// Funny Tools: run all 100 independent formulas with non-zero, finite sample values.
+try {
+  pageErrors = [];
+  localAssetErrors = [];
+  await page.goto(BASE + "/tools-audit/funny-tools.html", { waitUntil: "domcontentloaded", timeout: 20000 });
+  const cards = page.locator("#grid .card");
+  await page.waitForFunction(() => document.querySelectorAll("#grid .card").length === 100, null, { timeout: 10000 });
+  if (await cards.count() !== 100) fail("funny-tools: expected 100 calculator cards");
+  for (let i = 0; i < await cards.count(); i++) {
+    const card = cards.nth(i);
+    await card.locator("[data-a]").fill(String((i % 7) + 1));
+    await card.locator("[data-b]").fill(String((i % 5) + 2));
+    await card.locator(".calc").click();
+    const result = await card.locator(".result").innerText();
+    if (!result.trim() || result.startsWith("Ошибка:") || !(await card.locator(".result strong").count())) {
+      fail("funny-tools: calculator " + (i + 1) + " failed: " + result);
+    }
+  }
+  await page.locator("#search").fill("калькулятор");
+  if (await cards.filter({ visible: true }).count() === 0) fail("funny-tools: search filter returned no results");
+  for (const message of pageErrors) fail("funny-tools: runtime exception: " + message);
+  for (const item of [...new Set(localAssetErrors)]) fail("funny-tools: local resource " + item);
+} catch (error) {
+  fail("funny-tools interaction test failed: " + error.message);
+}
+
 // Mobile overflow checks for important tool entry points.
 const mobilePages = [
   "index.html",
