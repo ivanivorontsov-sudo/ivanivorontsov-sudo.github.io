@@ -1,19 +1,19 @@
 /* Shared local support link used by first-party project pages. */
 .site-support{
-  box-sizing:border-box;width:min(1160px,calc(100% - 32px));margin:14px auto;
+  box-sizing:border-box;width:min(1160px,calc(100% - 32px));max-width:calc(100% - 20px);min-width:0;margin:14px auto;overflow-wrap:anywhere;
   padding:14px 18px;border:1px solid #e4d7c7;border-radius:18px;
   color:#33271f;background:linear-gradient(120deg,#fff9ef,#fff4e4);
   box-shadow:0 7px 22px rgba(85,54,28,.08);
   font:inherit;line-height:1.5
 }
-.site-support *{box-sizing:border-box}
+.site-support *{box-sizing:border-box;min-width:0;max-width:100%;overflow-wrap:anywhere}
 .site-support-title{font-weight:800;font-size:1.05rem;margin:0 0 4px;letter-spacing:-.01em}
 .site-support-note{font-size:.88rem;color:#6c5a4b;margin:0 0 10px}
 .site-support-link{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:9px 15px;border-radius:11px;background:#91552f;color:#fff;text-decoration:none;font-weight:750}
 .site-support-link:hover{background:#744024;text-decoration:none}
 .site-support-link:focus-visible{outline:3px solid #d5a45b;outline-offset:3px}
 .site-support-footer{margin:8px 0 0;font-size:.8rem;color:#6c5a4b}
-@media(max-width:560px){.site-support{width:calc(100% - 20px);padding:13px;border-radius:15px}.site-support-link{width:100%}}
+@media(max-width:560px){.site-support{width:calc(100% - 20px);max-width:calc(100% - 20px);padding:13px;border-radius:15px}.site-support-link{width:100%;white-space:normal;text-align:center}}
 @media(prefers-color-scheme:dark){
  .site-support{color:#f3e9de;background:linear-gradient(120deg,#2d251f,#35281f);border-color:#594534;box-shadow:0 8px 22px rgba(0,0,0,.22)}
  .site-support-note,.site-support-footer{color:#d1bba4}
