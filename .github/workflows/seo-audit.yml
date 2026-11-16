@@ -59,3 +59,19 @@ jobs:
         run: node scripts/check_inline_js.mjs
       - name: Check local browser utilities bundle
         run: node --check tools-audit/web-tools.js
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Run browser smoke audit
+        run: |
+          set -Eeuo pipefail
+          python -m http.server 8765 --bind 127.0.0.1 >/tmp/site-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8765/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:8765/ >/dev/null
+          node scripts/browser_smoke.mjs
