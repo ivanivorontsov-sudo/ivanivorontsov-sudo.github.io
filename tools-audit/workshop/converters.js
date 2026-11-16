@@ -1,3 +1,17 @@
+/* Shared top-of-page support card; local only, no analytics or network APIs. */
+(() => {
+  if (document.querySelector('script[data-site-support]')) return;
+  const css = document.createElement("link");
+  css.rel = "stylesheet";
+  css.href = "/assets/site-support.css";
+  css.dataset.siteSupport = "true";
+  document.head.append(css);
+  const script = document.createElement("script");
+  script.src = "/assets/site-support.js";
+  script.defer = true;
+  script.dataset.siteSupport = "true";
+  document.head.append(script);
+})();
 (()=>{"use strict";
 const fmt=new Intl.NumberFormat("ru-RU",{maximumSignificantDigits:12});
 document.querySelectorAll(".convert-tool").forEach(original=>{
