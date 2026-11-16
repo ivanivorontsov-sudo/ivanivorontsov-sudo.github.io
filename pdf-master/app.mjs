@@ -11,10 +11,6 @@ window.pdfjsLib = pdfjsLib;
   const fmt = new Intl.NumberFormat("ru-RU", {maximumFractionDigits:1});
   const bytesText = n => n < 1024*1024 ? fmt.format(n/1024)+" КБ" : fmt.format(n/1024/1024)+" МБ";
 
-  if (window.pdfjsLib) {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-  }
-
   $("theme").addEventListener("click", () => {
     const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = next;
