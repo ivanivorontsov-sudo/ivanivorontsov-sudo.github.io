@@ -108,39 +108,44 @@ $("resize-run").addEventListener("click",async()=>{
  }catch(e){bm?.close?.();msg(out,"Ошибка: "+e.message,"bad");}
 });
 
-// 07 — CSV parser respecting quoted delimiters and line breaks.
+// 07 — CSV parser (Papa Parse, MIT) handles quoted commas and multiline fields.
 function parseCSV(text,delimiter){
- const rows=[];let row=[],field="",quoted=false;
- for(let i=0;i<text.length;i++){const ch=text[i],next=text[i+1];
-  if(quoted){if(ch==='"'&&next==='"'){field+='"';i++;}else if(ch==='"')quoted=false;else field+=ch;}
-  else if(ch==='"'&&field==="")quoted=true;
-  else if(ch===delimiter){row.push(field);field="";}
-  else if(ch==="\n"||ch==="\r"){if(ch==="\r"&&next==="\n")i++;row.push(field);rows.push(row);row=[];field="";}
-  else field+=ch;
- }
- if(quoted)throw new Error("Незакрытая кавычка в CSV.");row.push(field);rows.push(row);return rows.filter((r,i)=>!(i===rows.length-1&&r.length===1&&r[0]===""));
+ if(!window.Papa)throw new Error("Локальная библиотека Papa Parse не загружена.");
+ const parsed=Papa.parse(text,{delimiter:delimiter||"",skipEmptyLines:true,dynamicTyping:false});
+ if(parsed.errors.length){const error=parsed.errors[0];throw new Error("CSV: "+error.message+" (строка "+(error.row+1)+").");}
+ return parsed.data;
 }
 function delimiterOf(text){
- let counts={",":0,";":0,"\t":0},quoted=false;
- for(let i=0;i<text.length;i++){const ch=text[i],next=text[i+1];if(ch==='"'&&quoted&&next==='"'){i++;continue;}if(ch==='"'){quoted=!quoted;continue;}if(!quoted&&(ch==="\n"||ch==="\r"))break;if(!quoted&&Object.prototype.hasOwnProperty.call(counts,ch))counts[ch]++;}
- return Object.entries(counts).sort((a,b)=>b[1]-a[1])[0][1] ? Object.entries(counts).sort((a,b)=>b[1]-a[1])[0][0] : ",";
+ if(!window.Papa)throw new Error("Локальная библиотека Papa Parse не загружена.");
+ const parsed=Papa.parse(text,{preview:2,skipEmptyLines:true});
+ return parsed.meta.delimiter||",";
 }
-function csvCell(v){const s=v==null?"":typeof v==="object"?JSON.stringify(v):String(v);return /[",\r\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
 $("csv-run").addEventListener("click",()=>{
  const input=$("csv-input").value,out=$("csv-output");
  try{
   if($("csv-mode").value==="json-csv"){
-   const data=JSON.parse(input);if(!Array.isArray(data)||!data.length||!data.every(x=>x&&typeof x==="object"&&!Array.isArray(x)))throw new Error("Нужен непустой массив объектов JSON.");
-   const heads=[...new Set(data.flatMap(Object.keys))];out.value=[heads.map(csvCell).join(","),...data.map(x=>heads.map(h=>csvCell(x[h])).join(","))].join("\r\n");
+   const data=JSON.parse(input);
+   if(!Array.isArray(data)||!data.length||!data.every(x=>x&&typeof x==="object"&&!Array.isArray(x)))throw new Error("Нужен непустой массив объектов JSON.");
+   out.value=Papa.unparse(data,{newline:"\r\n"});
   }else{
-   const rows=parseCSV(input,delimiterOf(input));if(!rows.length)throw new Error("CSV пуст.");const heads=rows[0].map((x,i)=>x||"column_"+(i+1));
-   out.value=JSON.stringify(rows.slice(1).map((r,i)=>{if(r.length>heads.length)throw new Error("В строке "+(i+2)+" слишком много столбцов.");const o={};heads.forEach((h,j)=>o[h]=r[j]??"");return o;}),null,2);
+   const rows=parseCSV(input,delimiterOf(input));
+   if(!rows.length)throw new Error("CSV пуст.");
+   const heads=rows[0].map((x,i)=>x||"column_"+(i+1));
+   out.value=JSON.stringify(rows.slice(1).map((row,i)=>{
+    if(row.length>heads.length)throw new Error("В строке "+(i+2)+" слишком много столбцов.");
+    const object={};heads.forEach((header,j)=>object[header]=row[j]??"");return object;
+   }),null,2);
   }
   msg(out,"Преобразование готово.","good");
- }catch(e){out.value="";msg(out,e.message,"bad");}
+ }catch(error){out.value="";msg(out,error.message,"bad");}
 });
-$("csv-copy").addEventListener("click",async()=>{try{await copy($("csv-output").value);msg($("csv-output"),"Скопировано.","good");}catch(e){msg($("csv-output"),e.message,"bad");}});
-$("csv-download").addEventListener("click",()=>{const s=$("csv-output").value;if(!s){msg($("csv-output"),"Сначала создай результат.","bad");return;}const csv=$("csv-mode").value==="json-csv";save(new Blob([csv?"\ufeff"+s:s],{type:csv?"text/csv;charset=utf-8":"application/json;charset=utf-8"}),csv?"converted.csv":"converted.json");});
+$("csv-copy").addEventListener("click",async()=>{try{await copy($("csv-output").value);msg($("csv-output"),"Скопировано.","good");}catch(error){msg($("csv-output"),error.message,"bad");}});
+$("csv-download").addEventListener("click",()=>{
+ const value=$("csv-output").value;
+ if(!value){msg($("csv-output"),"Сначала создай результат.","bad");return;}
+ const csv=$("csv-mode").value==="json-csv";
+ save(new Blob([csv?"\ufeff"+value:value],{type:csv?"text/csv;charset=utf-8":"application/json;charset=utf-8"}),csv?"converted.csv":"converted.json");
+});
 
 // 08 — safe Markdown renderer; raw HTML is escaped.
 function inlineMD(text){let s=esc(text);s=s.replace(/\x60([^\x60]+)\x60/g,"<code>$1</code>").replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>").replace(/\*([^*]+)\*/g,"<em>$1</em>");return s.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');}
@@ -160,7 +165,42 @@ function markdown(text){
 }
 $("md-input").addEventListener("input",()=>{$("md-preview").innerHTML=markdown($("md-input").value);});$("md-input").dispatchEvent(new Event("input"));
 
-// 09 — URL parser; it does not visit the provided address.
+// 09 — EXIF metadata reader. The selected File object is parsed locally.
+$("exif-meta-run").addEventListener("click",async()=>{
+ const file=$("exif-meta-file").files[0],out=$("exif-meta-output");out.replaceChildren();
+ if(!file){msg(out,"Выбери изображение.","bad");return;}
+ if(!window.ExifReader){msg(out,"Локальная библиотека ExifReader не загружена. Обнови страницу.","bad");return;}
+ try{
+  const tags=await ExifReader.load(file,{expanded:true});
+  const groups=[tags,...Object.values(tags).filter(value=>value&&typeof value==="object"&&!Array.isArray(value))];
+  const lookup=name=>{for(const group of groups)if(Object.prototype.hasOwnProperty.call(group,name)&&group[name]!=null)return group[name];return null;};
+  const display=value=>{
+   if(value==null)return "";
+   const raw=value.description??value.value??value;
+   if(Array.isArray(raw))return raw.map(item=>typeof item==="object"?JSON.stringify(item):String(item)).join(", ");
+   if(typeof raw==="object")return JSON.stringify(raw);
+   return String(raw);
+  };
+  const rows=[
+   ["Имя файла",file.name],["Тип",file.type||display(lookup("FileType"))],["Размер",bytes(file.size)],
+   ["Ширина",display(lookup("ImageWidth"))],["Высота",display(lookup("ImageHeight"))],
+   ["Производитель",display(lookup("Make"))],["Модель камеры",display(lookup("Model"))],
+   ["Дата съёмки",display(lookup("DateTimeOriginal"))||display(lookup("DateTime"))],
+   ["Ориентация",display(lookup("Orientation"))],
+   ["GPS широта",display(lookup("GPSLatitude"))||display(lookup("Latitude"))],
+   ["GPS долгота",display(lookup("GPSLongitude"))||display(lookup("Longitude"))],
+   ["GPS высота",display(lookup("GPSAltitude"))||display(lookup("Altitude"))]
+  ].filter(row=>row[1]!==""&&row[1]!=null);
+  if(!rows.length)throw new Error("Поддерживаемые метаданные не найдены.");
+  out.append(table(["Поле","Значение"],rows));
+  const hasGps=rows.some(row=>/^GPS /.test(row[0]));
+  const note=document.createElement("p");note.className="hint";
+  note.textContent=hasGps?"В файле найдены геоданные. Они могут раскрывать место съёмки — удали их перед публикацией, если не хочешь указывать местоположение.":"Метаданные прочитаны локально. Отображаемые GPS-координаты не обнаружены.";
+  out.append(note);msg(out,"Метаданные прочитаны в браузере.","good");
+ }catch(error){msg(out,"Не удалось прочитать метаданные: "+(error?.message||String(error)),"bad");}
+});
+
+// 10 — URL parser; it does not visit the provided address.
 function parseURL(){const s=$("url-input").value.trim();if(!s)throw new Error("Введи адрес.");return new URL(/^[a-z][a-z0-9+.-]*:/i.test(s)?s:"https://"+s);}
 $("url-run").addEventListener("click",()=>{
  const out=$("url-output");out.replaceChildren();try{const u=parseURL(),rows=[["Протокол",u.protocol],["Домен",u.hostname],["Порт",u.port||"по умолчанию"],["Путь",u.pathname],["Фрагмент",u.hash||"—"]];out.append(table(["Поле","Значение"],rows));
