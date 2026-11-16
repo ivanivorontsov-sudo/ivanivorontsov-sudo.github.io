@@ -7,6 +7,15 @@
 :root{color-scheme:light dark;--bg:#f7f4ee;--surface:#fffefa;--text:#28231f;--muted:#756b61;--line:#e5ddd2;--accent:#b85b32}
 @media(prefers-color-scheme:dark){:root{--bg:#1c1916;--surface:#28231f;--text:#f5eee6;--muted:#c2b5a8;--line:#4a4037;--accent:#f08a55}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 system-ui,-apple-system,"Segoe UI",sans-serif}.wrap{max-width:850px;margin:auto;padding:28px 18px 60px}h1{font-size:clamp(1.8rem,5vw,2.6rem);line-height:1.15}h2{font-size:1.2rem;margin-top:2em}.note{padding:18px;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:14px;background:var(--surface)}p,li{overflow-wrap:anywhere}a{color:var(--accent)}.muted{color:var(--muted)}footer{margin-top:38px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted)}
+
+/* Narrow-screen safety: long legal references and addresses must wrap inside the viewport. */
+html,body{width:100%;max-width:100%;min-width:0}
+body{overflow-wrap:anywhere}
+main,.wrap,.note,.card,footer{max-width:100%;min-width:0}
+a,code,pre,p,li,small,strong,span{overflow-wrap:anywhere}
+pre{white-space:pre-wrap;word-break:break-word;max-width:100%}
+img,svg,video,canvas,iframe{max-width:100%;height:auto}
+ul,ol{padding-inline-start:1.35em;max-width:100%}
 </style>
 <meta name="robots" content="index,follow">
 <meta property="og:type" content="website">
