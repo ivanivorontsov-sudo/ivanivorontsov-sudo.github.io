@@ -115,6 +115,43 @@ for (const file of htmlFiles.filter(x => rel(x).includes("/converters/") && rel(
   }
 }
 
+// PDF Master: load, preview, combine and export real generated PDF documents.
+try {
+  pageErrors = [];
+  localAssetErrors = [];
+  await page.goto(BASE + "/pdf-master/", { waitUntil: "domcontentloaded", timeout: 20000 });
+  await page.waitForFunction(() => window.PDFLib?.PDFDocument && window.pdfjsLib?.getDocument, null, { timeout: 25000 });
+  const pdfBytes = await page.evaluate(async () => {
+    const make = async (text) => {
+      const doc = await window.PDFLib.PDFDocument.create();
+      const sheet = doc.addPage([300, 400]);
+      sheet.drawText(text, { x: 40, y: 350, size: 16 });
+      return [...await doc.save()];
+    };
+    return [await make("Audit document one"), await make("Audit document two")];
+  });
+  await page.locator("#files").setInputFiles([
+    { name: "audit-one.pdf", mimeType: "application/pdf", buffer: Buffer.from(pdfBytes[0]) },
+    { name: "audit-two.pdf", mimeType: "application/pdf", buffer: Buffer.from(pdfBytes[1]) }
+  ]);
+  await page.waitForFunction(() => document.querySelector("#page-count")?.textContent.includes("2 стр."), null, { timeout: 30000 });
+  await page.waitForFunction(() => document.querySelectorAll("#pages .page-card").length === 2, null, { timeout: 15000 });
+  const downloadPromise = page.waitForEvent("download", { timeout: 20000 });
+  await page.locator("#export-selected").click();
+  const download = await downloadPromise;
+  if (!download.suggestedFilename().toLowerCase().endsWith(".pdf")) fail("PDF Master: exported file does not have a PDF extension");
+  await page.locator("#range").fill("1-9");
+  await page.locator("#export-range").click();
+  const statusText = await page.locator("#status").innerText();
+  if (!statusText.toLowerCase().includes("диапазон") && !statusText.toLowerCase().includes("предел")) {
+    fail("PDF Master: invalid page range was not rejected");
+  }
+  for (const message of pageErrors) fail("PDF Master: runtime exception: " + message);
+  for (const item of [...new Set(localAssetErrors)]) fail("PDF Master: local resource " + item);
+} catch (error) {
+  fail("PDF Master interaction test failed: " + error.message);
+}
+
 // Daily Tools: exercise all eleven local operations with synthetic inputs.
 let dailyStage = "page load";
 try {
