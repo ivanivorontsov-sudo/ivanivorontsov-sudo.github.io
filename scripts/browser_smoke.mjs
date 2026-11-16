@@ -176,7 +176,8 @@ try {
   await page.locator("#url-run").click();
   if (!(await page.locator("#url-output").innerText()).includes("example.com")) fail("daily-tools: URL parser missed host");
   dailyStage = "text cleaning";
-  await page.locator("#clean-input").fill("  a  \\n  a  \\n  b  ");
+  await page.locator("#clean-dedupe").check();
+  await page.locator("#clean-input").fill("a  \\na  \\nb  ");
   await page.locator("#clean-run").click();
   if ((await page.locator("#clean-output").inputValue()) !== "a\\nb") fail("daily-tools: text cleanup failed");
   dailyStage = "WCAG contrast";
