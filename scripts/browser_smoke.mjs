@@ -98,7 +98,7 @@ for (const file of htmlFiles.filter(x => rel(x).includes("/converters/") && rel(
         const value = (await result.textContent())?.trim() || "";
         const message = (await status.textContent())?.trim() || "";
         if (!value || value === "Результат появится здесь" || !message.includes("Готово")) {
-          fail(relative + ": converter " + (i + 1) + " did not produce a result ("" + value + ""; "" + message + "")");
+          fail(relative + ": converter " + (i + 1) + " did not produce a result (" + JSON.stringify(value) + "; " + JSON.stringify(message) + ")");
         }
       } catch (error) {
         fail(relative + ": converter " + (i + 1) + " interaction failed: " + error.message);
