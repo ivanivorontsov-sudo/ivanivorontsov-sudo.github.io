@@ -261,6 +261,47 @@ try {
   fail("funny-tools interaction test failed: " + error.message);
 }
 
+// Shared support banner: verify canonical destination and unique top placement.
+try {
+  pageErrors = [];
+  localAssetErrors = [];
+  await page.goto(BASE + "/index.html", { waitUntil: "domcontentloaded", timeout: 20000 });
+  if (!(await page.locator("#donate").count())) fail("support: main page has no canonical #donate section");
+
+  const supportPages = [
+    "tools-audit/index.html",
+    "tools-audit/open-tools.html",
+    "tools-audit/workbench.html",
+    "tools-audit/local-plus.html",
+    "tools-audit/local-suite.html",
+    "tools-audit/search.html",
+    "tools-audit/web-tools.html",
+    "tools-audit/extra-500.html",
+    "tools-audit/funny-tools.html",
+    "tools-audit/categories/file-converters/index.html",
+    "daily-tools/index.html",
+    "pdf-master/index.html",
+    "tools-audit/workshop/converters/pressure/psi/index.html"
+  ];
+  for (const relative of supportPages) {
+    pageErrors = [];
+    localAssetErrors = [];
+    await page.goto(BASE + "/" + relative, { waitUntil: "domcontentloaded", timeout: 20000 });
+    await page.waitForSelector(".site-support", { timeout: 7000 }).catch(() => fail("support: banner missing on " + relative));
+    const banner = page.locator(".site-support");
+    if (await banner.count()) {
+      const href = await banner.locator("a.site-support-link").getAttribute("href");
+      if (href !== "https://ivanivorontsov-sudo.github.io/#donate") fail("support: incorrect destination on " + relative + ": " + href);
+      const first = await page.locator("body").evaluate(el => el.firstElementChild?.classList.contains("site-support") || false);
+      if (!first) fail("support: banner is not at the top of body on " + relative);
+      if (await page.locator(".site-support").count() !== 1) fail("support: duplicate banner on " + relative);
+    }
+    for (const message of pageErrors) fail("support: runtime exception on " + relative + ": " + message);
+  }
+} catch (error) {
+  fail("shared support banner test failed: " + error.message);
+}
+
 // Mobile overflow checks for important tool entry points.
 const mobilePages = [
   "index.html",
