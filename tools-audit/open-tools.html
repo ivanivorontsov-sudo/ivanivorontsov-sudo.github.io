@@ -72,7 +72,7 @@ main{max-width:1180px;margin:auto;padding:24px 18px 70px}a{color:var(--accent);o
 <div class="cards">
 <article class="tool" data-search="excalidraw диаграмма whiteboard доска рисунок collaboration share локально MIT">
 <h3>Excalidraw</h3><span class="pill local">Локальный режим</span><span class="pill mixed">Совместная работа — сеть</span>
-<p>Открытый редактор блок-схем, последовательностей и Gantt-диаграмм. Можно экспортировать SVG или создать ссылку для просмотра/совместного редактирования. При использовании ссылок сам текст диаграммы может оказаться в URL и стать доступен тем, кому передана ссылка. Официальный README указывает MIT-лицензию; аналитика, renderer, Kroki и Mermaid Chart настраиваются при сборке, а в конфигурации по умолчанию аналитика выключена. Экспорт PNG/SVG через renderer или Kroki может отправлять спецификацию диаграммы выбранному внешнему сервису.</p>
+<p>Открытый редактор блок-схем, последовательностей и Gantt-диаграмм. Можно экспортировать SVG или создать ссылку для просмотра/совместного редактирования; ссылка предназначена для передачи диаграммы другим людям, поэтому не используй её для закрытых схем. Официальный README указывает MIT-лицензию и сообщает, что аналитика в конфигурации сборки по умолчанию отключена. Встроенные в опубликованную сборку функции экспорта PNG/SVG могут обращаться к renderer (по умолчанию mermaid.ink) или Kroki (по умолчанию kroki.io), которым для рендеринга передаётся спецификация диаграммы. При самостоятельном развёртывании можно настроить эти endpoints или отключить функции. Аналитика зависит от конфигурации развёртывания.</p>
 <p class="meta">Подходит: архитектура проектов, схемы, мозговые штурмы.</p>
 <div class="links"><a href="https://excalidraw.com/" target="_blank" rel="noopener noreferrer">Открыть Excalidraw</a><a href="https://github.com/excalidraw/excalidraw" target="_blank" rel="noopener noreferrer">Исходный код и лицензия</a></div>
 </article>
@@ -183,12 +183,7 @@ main{max-width:1180px;margin:auto;padding:24px 18px 70px}a{color:var(--accent);o
 <p class="meta">Подходит: npm, Python, Go, Java, Rust, контейнеры и проверка лицензий зависимостей.</p>
 <div class="links"><a href="https://google.github.io/osv-scanner/" target="_blank" rel="noopener noreferrer">Документация</a><a href="https://github.com/google/osv-scanner" target="_blank" rel="noopener noreferrer">Исходный код и лицензия</a><a href="https://osv.dev/" target="_blank" rel="noopener noreferrer">База OSV</a></div>
 </article>
-<article class="tool" data-search="owasp zap active scan dynamic application security testing dast proxy scanner apache 2.0">
-<h3>OWASP ZAP</h3><span class="pill local">Можно запустить локально</span><span class="pill remote">Активный скан отправляет запросы тестов</span>
-<p>Открытый прокси и DAST-сканер для поиска типовых уязвимостей веб-приложений. Пассивный анализ наблюдает за трафиком, а активный скан отправляет специально сформированные запросы целевому сайту и может изменять тестовые данные. Проверяй только собственные системы или ресурсы с явным разрешением. Лицензия основного приложения — Apache-2.0; у отдельных компонентов могут быть собственные условия.</p>
-<p class="meta">Подходит: проверка своего сайта, API и тестового окружения.</p>
-<div class="links"><a href="https://www.zaproxy.org/" target="_blank" rel="noopener noreferrer">Официальный сайт</a><a href="https://github.com/zaproxy/zaproxy" target="_blank" rel="noopener noreferrer">Исходный код и лицензии</a></div>
-</article>
+
 <article class="tool" data-search="dompurify xss sanitization html svg mathml javascript apache mpl open source">
 <h3>DOMPurify</h3><span class="pill local">Работает локально</span><span class="pill local">Защита от XSS при выводе HTML</span>
 <p>Открытая библиотека очистки HTML, SVG и MathML от опасной разметки перед вставкой в DOM. Подходит как дополнительный уровень защиты при выводе пользовательского HTML; она не заменяет textContent, контекстное экранирование, CSP и безопасные шаблоны. Двойная лицензия: Apache-2.0 или MPL-2.0.</p>
