@@ -200,7 +200,7 @@ try {
 
   dailyStage = "CSV conversion";
   await page.locator("#csv-mode").selectOption("csv-json");
-  await page.locator("#csv-input").fill('name,age\\n"Alice, A.",30\\nBob,40');
+  await page.locator("#csv-input").fill('name,age\n"Alice, A.",30\nBob,40');
   await page.locator("#csv-run").click();
   const csvOutput = await page.locator("#csv-output").inputValue();
   if (!csvOutput.includes("Alice, A.")) fail("daily-tools: quoted CSV field was not parsed correctly; mode=" + await page.locator("#csv-mode").inputValue() + "; output=" + JSON.stringify(csvOutput));
@@ -215,9 +215,9 @@ try {
   if (!(await page.locator("#url-output").innerText()).includes("example.com")) fail("daily-tools: URL parser missed host");
   dailyStage = "text cleaning";
   await page.locator("#clean-dedupe").check();
-  await page.locator("#clean-input").fill("a  \\na  \\nb  ");
+  await page.locator("#clean-input").fill("a  \na  \nb  ");
   await page.locator("#clean-run").click();
-  if ((await page.locator("#clean-output").inputValue()) !== "a\\nb") fail("daily-tools: text cleanup failed");
+  if ((await page.locator("#clean-output").inputValue()) !== "a\nb") fail("daily-tools: text cleanup failed");
   dailyStage = "WCAG contrast";
   await page.locator("#fg-hex").fill("#000000");
   await page.locator("#bg-hex").fill("#FFFFFF");
@@ -247,8 +247,9 @@ try {
       fail("funny-tools: calculator " + (i + 1) + " failed: " + result);
     }
   }
-  await page.locator("#search").fill("калькулятор");
-  if (await cards.filter({ visible: true }).count() === 0) fail("funny-tools: search filter returned no results");
+  const firstCalculatorName = await cards.first().locator("h2").innerText();
+  await page.locator("#search").fill(firstCalculatorName);
+  if (await cards.filter({ visible: true }).count() === 0) fail("funny-tools: search filter returned no results for an existing calculator title");
   for (const message of pageErrors) fail("funny-tools: runtime exception: " + message);
   for (const item of [...new Set(localAssetErrors)]) fail("funny-tools: local resource " + item);
 } catch (error) {
