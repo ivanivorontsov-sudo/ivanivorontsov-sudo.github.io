@@ -146,8 +146,6 @@ try {
   const pngBytes = await page.evaluate(async () => { const canvas=document.createElement("canvas"); canvas.width=16; canvas.height=16; const ctx=canvas.getContext("2d"); ctx.fillStyle="#e07828"; ctx.fillRect(0,0,16,16); const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/png")); return [...new Uint8Array(await blob.arrayBuffer())]; });
   const pngFixture = Buffer.from(pngBytes);
   dailyStage = "image compression";
-  /* replaced fixture */
-  const unusedFixture = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a3ioAAAAASUVORK5CYII=", "base64");
   await page.locator("#compress-file").setInputFiles({ name: "tiny.png", mimeType: "image/png", buffer: pngFixture });
   await page.locator("#compress-target").fill("5");
   await page.locator("#compress-run").click();
