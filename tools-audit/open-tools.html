@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#111827">
+<title>Проверенные полезные веб-инструменты — каталог</title>
+<meta name="description" content="Подборка полезных интернет-инструментов для файлов, изображений, диаграмм, разработки и проверки сайтов. Сравнение открытых лицензий, локальной обработки и передачи данных.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://ivanivorontsov-sudo.github.io/tools-audit/open-tools.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="Проверенные полезные веб-инструменты">
+<meta property="og:description" content="Каталог веб-сервисов с описанием лицензий, локальной обработки, внешних запросов и рисков передачи данных.">
+<meta property="og:url" content="https://ivanivorontsov-sudo.github.io/tools-audit/open-tools.html">
+<link rel="stylesheet" href="/assets/site-support.css">
+<script src="/assets/site-support.js" defer></script>
+<style>
+:root{color-scheme:dark;--bg:#0b1020;--panel:#131b2e;--panel2:#19243a;--line:#2a3852;--text:#edf2ff;--muted:#aab7cf;--accent:#8ab4ff;--green:#83d6b0;--amber:#f2c879;--red:#ff9f9f}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 480px at 8% -12%,#1b2c50 0,transparent 65%),var(--bg);color:var(--text);font:15px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1180px;margin:auto;padding:24px 18px 70px}a{color:var(--accent);overflow-wrap:anywhere}h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.08;letter-spacing:-.04em;margin:12px 0}h2{font-size:1.25rem;margin:0 0 10px}.lead{color:var(--muted);max-width:78ch}.notice{padding:17px 19px;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:15px;background:var(--panel);margin:18px 0}
+.search{width:100%;padding:14px 16px;border:1px solid var(--line);border-radius:13px;background:var(--panel);color:var(--text);font:inherit;margin:12px 0 18px}
+.groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.group{min-width:0}.cards{display:grid;gap:10px}.tool{min-width:0;border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,var(--panel),var(--panel2));padding:16px}
+.tool h3{font-size:1.05rem;margin:0 0 6px}.tool p{margin:7px 0;color:var(--muted);overflow-wrap:anywhere}.tool .meta{font-size:.82rem}.links{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px}.links a{font-weight:650}.pill{display:inline-flex;border-radius:999px;padding:3px 9px;font-size:.75rem;font-weight:750;margin:0 5px 5px 0;border:1px solid var(--line)}.local{color:var(--green);border-color:#34775c}.mixed{color:var(--amber);border-color:#806538}.remote{color:var(--red);border-color:#7f4545}
+.sources{margin-top:30px;padding:18px;border:1px solid var(--line);border-radius:15px;background:var(--panel)}.sources li{margin:7px 0;color:var(--muted)}.empty{display:none;color:var(--muted);padding:18px}.count{color:var(--muted);font-size:.9rem}
+@media(max-width:760px){.groups{grid-template-columns:minmax(0,1fr)}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+<p><a href="/">← Главный сайт</a> · <a href="./web-tools.html">Мастерская из 1000 браузерных инструментов</a> · <a href="./privacy.html">Политика конфиденциальности</a></p>
+<h1>Полезные веб-инструменты и открытые библиотеки</h1>
+<p class="lead">Кураторский каталог сервисов для работы с изображениями, данными, диаграммами, разработкой и проверкой сайтов. Сведения сверены с документацией проектов и официальными страницами лицензий. Обращай внимание не только на то, что умеет сервис, но и на то, куда он отправляет данные.</p>
+<div class="notice"><strong>Как читать статусы</strong><p><span class="pill local">Локально</span> основные операции выполняются в браузере или на устройстве. Это не исключает сетевые запросы за кодом, шрифтами, аналитикой или синхронизацией.</p><p><span class="pill mixed">Смешанный режим</span> локальные функции сочетаются с опциональными облачными функциями или технической телеметрией.</p><p><span class="pill remote">Внешняя обработка</span> содержимое, URL или тестовые данные передаются выбранному внешнему сервису. Не используй его для секретных документов или закрытых исходников без отдельной оценки.</p><p>Ни одна карточка не является гарантией безопасности или юридической рекомендацией. Ссылки и политики внешних поставщиков могут меняться.</p></div>
+<label for="search"><strong>Поиск по названию, назначению и приватности</strong></label>
+<input class="search" id="search" type="search" placeholder="Например: ZIP, OCR, диаграммы, HTML, локально…" autocomplete="off">
+<p class="count" id="count">Показаны все инструменты</p>
+<p class="empty" id="empty">Ничего не найдено.</p>
+
+<div class="groups" id="catalog">
+<section class="group" data-group>
+<h2>Изображения, OCR и обработка файлов</h2>
+<div class="cards">
+<article class="tool" data-search="squoosh изображения конвертация сжатие avif webp png jpeg локально аналитика google apache">
+<h3>Squoosh</h3><span class="pill local">Обработка в браузере</span><span class="pill mixed">Есть аналитика</span>
+<p>Сжатие и перекодирование изображений в WebP, AVIF, MozJPEG и другие форматы с визуальным сравнением качества. Открытый проект Apache-2.0; опубликованная документация описывает локальную обработку изображения, но сайт может собирать технические метрики и сведения об использовании. Не путай метрики с отправкой самого изображения.</p>
+<p class="meta">Подходит: подготовка изображений для сайтов, уменьшение размера, сравнение кодеков.</p>
+<div class="links"><a href="https://squoosh.app/" target="_blank" rel="noopener noreferrer">Открыть Squoosh</a><a href="https://github.com/GoogleChromeLabs/squoosh" target="_blank" rel="noopener noreferrer">Исходный код и лицензия</a></div>
+</article>
+<article class="tool" data-search="tesseract.js ocr распознавание текста изображений сканы pdf javascript apache локально worker language data">
+<h3>Tesseract.js</h3><span class="pill local">Распознавание локально</span><span class="pill mixed">Нужно загрузить языковые данные</span>
+<p>Открытая JavaScript-библиотека OCR на базе WebAssembly. Можно распознавать текст в изображениях и сканах в браузере. При стандартной настройке worker и языковые модели загружаются отдельно; их можно разместить на собственном сервере. Перед использованием проверь конфигурацию источника языковых данных.</p>
+<p class="meta">Подходит: извлечение текста из фото, сканов и изображений.</p>
+<div class="links"><a href="https://tesseract.projectnaptha.com/" target="_blank" rel="noopener noreferrer">Демо OCR</a><a href="https://github.com/naptha/tesseract.js" target="_blank" rel="noopener noreferrer">Исходный код</a></div>
+</article>
+<article class="tool" data-search="photopea редактор изображений psd фото браузер проприетарный онлайн файлы приватность">
+<h3>Photopea</h3><span class="pill mixed">Проверяй настройки сети</span>
+<p>Мощный браузерный редактор растровой графики и PSD. Это не открытая библиотека и не полностью открытый проект. Сервис заявляет локальную обработку файлов в браузере, но загружает собственный код и внешние ресурсы; для конфиденциальных изображений сначала изучи актуальную политику сервиса.</p>
+<p class="meta">Подходит: PSD, слои, маски, быстрое редактирование без установки.</p>
+<div class="links"><a href="https://www.photopea.com/" target="_blank" rel="noopener noreferrer">Открыть Photopea</a><a href="https://www.photopea.com/privacy.html" target="_blank" rel="noopener noreferrer">Политика сервиса</a></div>
+</article>
+</div>
+</section>
+
+<section class="group" data-group>
+<h2>Диаграммы, доски и заметки</h2>
+<div class="cards">
+<article class="tool" data-search="excalidraw диаграмма whiteboard доска рисунок collaboration share локально MIT">
+<h3>Excalidraw</h3><span class="pill local">Локальный режим</span><span class="pill mixed">Совместная работа — сеть</span>
+<p>Открытая интерактивная доска для схем, блок-схем и набросков. Рисунок можно экспортировать в файл; при включении совместной работы, публикации или обмена ссылкой данные передаются сетевому сервису. Исходный код — MIT.</p>
+<p class="meta">Подходит: архитектура проектов, схемы, мозговые штурмы.</p>
+<div class="links"><a href="https://excalidraw.com/" target="_blank" rel="noopener noreferrer">Открыть Excalidraw</a><a href="https://github.com/excalidraw/excalidraw" target="_blank" rel="noopener noreferrer">Исходный код и лицензия</a></div>
+</article>
+<article class="tool" data-search="diagrams.net draw.io diagram flowchart схемы uml локально облако github apache">
+<h3>diagrams.net (draw.io)</h3><span class="pill local">Можно хранить локально</span><span class="pill mixed">Облако по выбору</span>
+<p>Редактор блок-схем, сетевых схем, UML и архитектуры. Можно работать с локальными файлами; при выборе Google Drive, OneDrive, GitHub или другого хранилища данные диаграммы передаются выбранному поставщику. Приложение открыто под Apache-2.0.</p>
+<p class="meta">Подходит: технические схемы и документация.</p>
+<div class="links"><a href="https://app.diagrams.net/" target="_blank" rel="noopener noreferrer">Открыть diagrams.net</a><a href="https://github.com/jgraph/drawio" target="_blank" rel="noopener noreferrer">Исходный код</a></div>
+</article>
+<article class="tool" data-search="cryptpad документы таблицы презентации совместная работа end-to-end encryption open source">
+<h3>CryptPad</h3><span class="pill mixed">Шифрование и облачный сервис</span>
+<p>Открытая платформа совместного редактирования документов, таблиц, презентаций и досок с клиентским шифрованием. При использовании публичного сервера зашифрованные данные всё равно хранятся у выбранного оператора, а сетевые метаданные обрабатываются хостингом. Для максимального контроля можно развернуть собственный экземпляр.</p>
+<p class="meta">Подходит: совместные документы, когда требуется защита содержимого.</p>
+<div class="links"><a href="https://cryptpad.fr/" target="_blank" rel="noopener noreferrer">Открыть CryptPad</a><a href="https://github.com/cryptpad/cryptpad" target="_blank" rel="noopener noreferrer">Исходный код</a><a href="https://docs.cryptpad.org/" target="_blank" rel="noopener noreferrer">Документация</a></div>
+</article>
+</div>
+</section>
+
+<section class="group" data-group>
+<h2>Разработка, тесты и ошибки</h2>
+<div class="cards">
+<article class="tool" data-search="cyberchef анализ данных кодирование декодирование криптография текст локально offline apache gchq">
+<h3>CyberChef</h3><span class="pill local">Локальные операции</span><span class="pill mixed">Есть сетевые операции</span>
+<p>Набор операций для кодирования, декодирования, преобразования, хеширования и анализа данных. Основная обработка выполняется в браузере; отдельные операции вроде HTTP-запросов, DNS-over-HTTPS и отображения на карте обращаются к внешним адресам. Проект Apache-2.0; доступна загрузка для офлайн-работы.</p>
+<p class="meta">Подходит: Base64, URL, хеши, преобразования и анализ строк.</p>
+<div class="links"><a href="https://gchq.github.io/CyberChef/" target="_blank" rel="noopener noreferrer">Открыть CyberChef</a><a href="https://github.com/gchq/CyberChef" target="_blank" rel="noopener noreferrer">Исходный код</a></div>
+</article>
+<article class="tool" data-search="regex101 регулярные выражения regex тестирование сохранение текст тест кейс внешний сервис">
+<h3>Regex101</h3><span class="pill local">Тестирование в браузере</span><span class="pill remote">Сохранение отправляет данные</span>
+<p>Интерактивный тестер регулярных выражений с объяснением совпадений и подсветкой. Обычное редактирование выполняется в браузере; сохранение, публикация или отправка workspace передаёт шаблон и тестовый текст сервису. Не вставляй секретные строки, токены и персональные данные.</p>
+<p class="meta">Подходит: отладка регулярных выражений и обучение.</p>
+<div class="links"><a href="https://regex101.com/" target="_blank" rel="noopener noreferrer">Открыть Regex101</a><a href="https://regex101.com/privacy" target="_blank" rel="noopener noreferrer">Политика сервиса</a></div>
+</article>
+<article class="tool" data-search="w3c nu html checker валидатор html разметка исходный код отправка сервера">
+<h3>W3C Nu HTML Checker</h3><span class="pill remote">Проверяемый код отправляется</span>
+<p>Проверяет HTML на ошибки разметки, некорректную структуру и предупреждения. При отправке исходного кода или URL сервис получает переданное содержимое; используй публичную страницу или локальный экземпляр валидатора, если код закрытый.</p>
+<p class="meta">Подходит: диагностика HTML и поиск структурных ошибок.</p>
+<div class="links"><a href="https://validator.w3.org/nu/" target="_blank" rel="noopener noreferrer">Открыть валидатор</a><a href="https://github.com/validator/validator" target="_blank" rel="noopener noreferrer">Исходный код</a></div>
+</article>
+<article class="tool" data-search="pagespeed insights производительность lighthouse core web vitals seo url google">
+<h3>Google PageSpeed Insights</h3><span class="pill remote">URL передаётся Google</span>
+<p>Проверяет производительность страницы, Core Web Vitals, доступность и SEO-рекомендации. Внешний сервис получает адрес страницы и выполняет анализ; не отправляй приватные URL, ссылки с одноразовыми токенами или внутренние адреса.</p>
+<p class="meta">Подходит: аудит публичных сайтов и оптимизация загрузки.</p>
+<div class="links"><a href="https://pagespeed.web.dev/" target="_blank" rel="noopener noreferrer">Открыть PageSpeed Insights</a><a href="https://developers.google.com/speed/docs/insights/v5/about" target="_blank" rel="noopener noreferrer">Документация API</a></div>
+</article>
+<article class="tool" data-search="axe core accessibility wcag доступность веб сайт локально javascript mit">
+<h3>axe-core</h3><span class="pill local">Проверка в браузере</span><span class="pill mixed">Нужна интеграция</span>
+<p>Открытая библиотека автоматической проверки доступности: нарушения контрастности, имен элементов, структуры и другие типовые проблемы. Её можно подключить к тестам Playwright или CI. Автоматическая проверка не заменяет ручную клавиатурную и экранную проверку.</p>
+<p class="meta">Подходит: автоматический аудит доступности сайтов в CI.</p>
+<div class="links"><a href="https://github.com/dequelabs/axe-core" target="_blank" rel="noopener noreferrer">Исходный код и правила</a><a href="https://www.deque.com/axe/" target="_blank" rel="noopener noreferrer">Документация Deque</a></div>
+</article>
+</div>
+</section>
+
+<section class="group" data-group>
+<h2>Документация и совместимость</h2>
+<div class="cards">
+<article class="tool" data-search="mdn web docs javascript html css api документация mozilla browser">
+<h3>MDN Web Docs</h3><span class="pill local">Справочник</span>
+<p>Техническая документация по HTML, CSS, JavaScript, Web API, HTTP и браузерным ошибкам. Это справочник, а не сервис для загрузки файлов. Для диагностики смотри API, исключения, коды HTTP и совместимость.</p>
+<p class="meta">Подходит: выяснить поведение браузерных API и причины ошибок.</p>
+<div class="links"><a href="https://developer.mozilla.org/" target="_blank" rel="noopener noreferrer">MDN</a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors" target="_blank" rel="noopener noreferrer">JavaScript errors</a><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status" target="_blank" rel="noopener noreferrer">HTTP status codes</a></div>
+</article>
+<article class="tool" data-search="caniuse браузер совместимость css javascript html features">
+<h3>Can I use</h3><span class="pill local">Справочник</span>
+<p>База совместимости HTML, CSS и JavaScript-функций с версиями браузеров. Используй перед внедрением API, которые могут отсутствовать в старых браузерах или мобильных версиях.</p>
+<p class="meta">Подходит: оценить поддержку функций в браузерах.</p>
+<div class="links"><a href="https://caniuse.com/" target="_blank" rel="noopener noreferrer">Открыть Can I use</a></div>
+</article>
+<article class="tool" data-search="chrome devtools lighthouse network performance memory javascript debugging">
+<h3>Chrome DevTools</h3><span class="pill local">Локальная диагностика</span>
+<p>Инструменты разработчика для просмотра ошибок Console, сетевых запросов Network, производительности Performance, памяти и доступности. Анализ локальной страницы можно выполнять без отправки пользовательских файлов на сторонний валидатор.</p>
+<p class="meta">Подходит: найти 404, ошибки JS, долгие задачи, утечки памяти.</p>
+<div class="links"><a href="https://developer.chrome.com/docs/devtools/" target="_blank" rel="noopener noreferrer">Официальная документация</a><a href="https://developer.chrome.com/docs/lighthouse/overview/" target="_blank" rel="noopener noreferrer">Lighthouse</a></div>
+</article>
+</div>
+</section>
+</div>
+
+<section class="sources">
+<h2>Правила безопасной проверки</h2>
+<ul>
+<li>Не загружай в онлайн-валидаторы, демонстрации OCR и совместные доски пароли, ключи, медицинские документы, паспорта, закрытые исходники и персональные данные.</li>
+<li>Перед использованием проверь, где обрабатывается файл, включена ли синхронизация, есть ли аналитика, и что происходит при нажатии «Сохранить», «Поделиться», «Синхронизировать» или «Отправить».</li>
+<li>Для локальной работы скачивай и запускай проверенную версию библиотеки или приложения, сверяй тег/релиз, хеш, лицензию и обновления безопасности.</li>
+<li>Не считай «локальную обработку» доказательством безопасности: JavaScript, загруженный с внешнего CDN, исполняется с доступом к DOM и может получить данные, введённые в эту страницу.</li>
+</ul>
+<h2>Технические и правовые первоисточники</h2>
+<ul>
+<li><a href="https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP DOM-based XSS Prevention</a> — безопасный вывод данных из пользовательского ввода.</li>
+<li><a href="https://www.w3.org/TR/WCAG22/" target="_blank" rel="noopener noreferrer">WCAG 2.2</a> — доступность интерфейсов.</li>
+<li><a href="https://www.consultant.ru/document/cons_doc_LAW_61801/" target="_blank" rel="noopener noreferrer">152-ФЗ «О персональных данных»</a> — актуальная редакция и обязанности операторов.</li>
+<li><a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj" target="_blank" rel="noopener noreferrer">GDPR, Regulation (EU) 2016/679</a> — сфера применения и принципы обработки.</li>
+</ul>
+<p class="meta">Сверено по публичной документации и условиям разработчиков на 16 ноября 2026 года. Внешние сервисы могут менять код, тарифы, политику и сетевое поведение; проверяй первоисточники перед использованием.</p>
+</section>
+</main>
+<script>
+(() => {
+ const input=document.getElementById("search");
+ const cards=[...document.querySelectorAll(".tool")];
+ const groups=[...document.querySelectorAll("[data-group]")];
+ const count=document.getElementById("count"),empty=document.getElementById("empty");
+ function render(){
+  const q=input.value.trim().toLocaleLowerCase("ru");let n=0;
+  for(const card of cards){const match=!q||((card.dataset.search||"")+" "+card.textContent).toLocaleLowerCase("ru").includes(q);card.hidden=!match;if(match)n++;}
+  for(const group of groups)group.hidden=!group.querySelector(".tool:not([hidden])");
+  count.textContent="Показано: "+n+" из "+cards.length;
+  empty.style.display=n?"none":"block";
+ }
+ input.addEventListener("input",render);render();
+})();
+</script>
+</body>
+</html>
