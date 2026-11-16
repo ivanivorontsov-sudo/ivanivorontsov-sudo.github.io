@@ -199,6 +199,11 @@ try {
   await page.waitForSelector("#resize-output a[download]", { timeout: 10000 });
 
   dailyStage = "CSV conversion";
+  dailyStage = "EXIF metadata";
+  await page.locator("#exif-meta-file").setInputFiles({ name: "exif-audit.png", mimeType: "image/png", buffer: pngFixture });
+  await page.locator("#exif-meta-run").click();
+  await page.waitForFunction(() => document.querySelector("#exif-meta-output")?.innerText.includes("exif-audit.png"), null, { timeout: 10000 });
+  if (pageErrors.length) fail("daily-tools EXIF: " + pageErrors.join("; "));
   await page.locator("#csv-mode").selectOption("csv-json");
   await page.locator("#csv-input").fill('name,age\n"Alice, A.",30\nBob,40');
   await page.locator("#csv-run").click();
