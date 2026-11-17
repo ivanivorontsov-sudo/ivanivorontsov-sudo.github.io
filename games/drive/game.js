@@ -2733,7 +2733,8 @@ function placeVehicles(dt) {
     car.visual.position.copy(cp).addScaledVector(cr,car.offset);
     car.visual.position.y+=.13;
     car.visual.rotation.y=Math.atan2(-ct.x,-ct.z);
-    car.visual.rotation.z=Math.sin(clock.now*.6+car.wiggle)*.008;\n    if(car.wheels) car.wheels.forEach(wheel=>{ wheel.rotation.x-=car.speed*dt/.48; });
+    car.visual.rotation.z=Math.sin(clock.now*.6+car.wiggle)*.008;
+    if(car.wheels) car.wheels.forEach(wheel=>{ wheel.rotation.x-=car.speed*dt/.48; });
   });
   const chasePos=player.position.clone().addScaledVector(tan,-11.5).add(new THREE.Vector3(0,5.1,0)).addScaledVector(right,state.steer*.65);
   const eyeX=state.driverSide*.49;
