@@ -19,7 +19,7 @@ try { document.documentElement.classList.toggle("touch-ui", isTouch); document.b
 
 function readSpeedLinesPref() {
   try {
-    const saved = localStorage.getItem("driveHorizonSpeedLines");
+    const saved = localStorage.getItem("driveHorizonSpeedLinesV2");
     if (saved === "on") return true;
     if (saved === "off") return false;
   } catch (e) { /* ignore */ }
@@ -2918,7 +2918,7 @@ function syncSpeedLineToggles(){
 function setSpeedLinesOn(on, persist=true){
   state.speedLinesOn=!!on;
   if(persist){
-    try { localStorage.setItem("driveHorizonSpeedLines", state.speedLinesOn?"on":"off"); } catch(e){ /* ignore */ }
+    try { localStorage.setItem("driveHorizonSpeedLinesV2", state.speedLinesOn?"on":"off"); } catch(e){ /* ignore */ }
   }
   syncSpeedLineToggles();
   updateSpeedLines();
