@@ -23,7 +23,7 @@ function readSpeedLinesPref() {
     if (saved === "on") return true;
     if (saved === "off") return false;
   } catch (e) { /* ignore */ }
-  return !isMobile;
+  return false;
 }
 
 const QUALITY_PRESETS = {
@@ -1493,35 +1493,15 @@ function createTraffic() {
     const color=palette[i%palette.length],visual=makeCar(color);
     visual.scale.setScalar(.88);scene.add(visual);
     traffic.push({
-      visual, progress:(.06+i*(0.92/n))%1, offset:[-5.7,-1.8,1.8,5.7][i%4],
+      visual, wheels:visual.userData.wheels||[], progress:(.06+i*(0.92/n))%1, offset:[-5.7,-1.8,1.8,5.7][i%4],
       speed:21+rand()*14, wiggle:rand()*Math.PI*2, hit:false, hitTimer:0,
       flee:0, honkBack:0, baseOffset:[-5.7,-1.8,1.8,5.7][i%4], color
     });
   }
-  if(!qcfg().modelTraffic) return;
-  const loader=createGLTFLoader();
-  let pending=TRAFFIC_GLBS.length;
-  const prototypes=new Array(TRAFFIC_GLBS.length);
-  const done=()=>{
-    const ready=prototypes.filter(Boolean);
-    if(!ready.length) return;
-    traffic.forEach((car,i)=>{
-      const proto=ready[i%ready.length];
-      const clone=proto.clone(true);
-      tintTrafficModel(clone, car.color);
-      scene.remove(car.visual);
-      disposeVehicleObject(car.visual);
-      scene.add(clone);
-      car.visual=clone;
-    });
-  };
-  TRAFFIC_GLBS.forEach((url,i)=>{
-    loader.load(url,(gltf)=>{
-      try{ prototypes[i]=fitTrafficModel(gltf.scene); }
-      catch(err){ console.warn("Traffic model failed", url, err); }
-      if(--pending===0) done();
-    },undefined,()=>{ if(--pending===0) done(); });
-  });
+  // Keep the fully modelled procedural traffic cars visible as a reliable fallback.
+  // Some external traffic GLBs contain incomplete body meshes on mobile/WebGL drivers;
+  // replacing these cars made only their wheel meshes visible. Do not swap the working
+  // cars until those assets have passed a visual validation.
 }
 
 function drawMiniMap() {
@@ -2691,14 +2671,14 @@ function cockpitCameraRig(){
   if(player?.userData.realInterior && player.userData.interiorEye){
     const e=player.userData.interiorEye;
     const look=player.userData.interiorLook || {x:e.x*.22,y:e.y-.07,z:e.z-40};
-    if(isPortraitView()) return {x:e.x,y:e.y+.08,z:e.z+.16,lookX:look.x,lookY:look.y+.04,lookZ:look.z,fov:64};
-    if(isMobile) return {x:e.x,y:e.y+.04,z:e.z+.14,lookX:look.x,lookY:look.y+.01,lookZ:look.z,fov:58};
-    return {x:e.x,y:e.y+.03,z:e.z+.06,lookX:look.x,lookY:look.y-.02,lookZ:look.z,fov:54};
+    if(isPortraitView()) return {x:e.x,y:e.y+.20,z:e.z+.16,lookX:look.x,lookY:look.y+.10,lookZ:look.z,fov:64};
+    if(isMobile) return {x:e.x,y:e.y+.16,z:e.z+.14,lookX:look.x,lookY:look.y+.08,lookZ:look.z,fov:58};
+    return {x:e.x,y:e.y+.15,z:e.z+.06,lookX:look.x,lookY:look.y+.06,lookZ:look.z,fov:54};
   }
   const x=eyeX;
-  if(isPortraitView()) return {x,y:1.32,z:.34,lookX:x*.12,lookY:1.22,lookZ:-40,fov:60};
-  if(isMobile) return {x,y:1.30,z:.48,lookX:x*.10,lookY:1.24,lookZ:-42,fov:58};
-  return {x,y:1.30,z:.42,lookX:x*.08,lookY:1.24,lookZ:-44,fov:54};
+  if(isPortraitView()) return {x,y:1.50,z:.34,lookX:x*.12,lookY:1.38,lookZ:-40,fov:60};
+  if(isMobile) return {x,y:1.48,z:.48,lookX:x*.10,lookY:1.40,lookZ:-42,fov:58};
+  return {x,y:1.48,z:.42,lookX:x*.08,lookY:1.40,lookZ:-44,fov:54};
 }
 
 function placeVehicles(dt) {
@@ -2729,7 +2709,7 @@ function placeVehicles(dt) {
     car.visual.position.copy(cp).addScaledVector(cr,car.offset);
     car.visual.position.y+=.13;
     car.visual.rotation.y=Math.atan2(-ct.x,-ct.z);
-    car.visual.rotation.z=Math.sin(clock.now*.6+car.wiggle)*.008;
+    car.visual.rotation.z=Math.sin(clock.now*.6+car.wiggle)*.008;\n    if(car.wheels) car.wheels.forEach(wheel=>{ wheel.rotation.x-=car.speed*dt/.48; });
   });
   const chasePos=player.position.clone().addScaledVector(tan,-11.5).add(new THREE.Vector3(0,5.1,0)).addScaledVector(right,state.steer*.65);
   const eyeX=state.driverSide*.49;
