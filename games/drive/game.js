@@ -2695,14 +2695,14 @@ function cockpitCameraRig(){
   if(player?.userData.realInterior && player.userData.interiorEye){
     const e=player.userData.interiorEye;
     const look=player.userData.interiorLook || {x:e.x*.22,y:e.y-.07,z:e.z-40};
-    if(isPortraitView()) return {x:e.x,y:e.y+.20,z:e.z+.16,lookX:look.x,lookY:look.y+.10,lookZ:look.z,fov:64};
-    if(isMobile) return {x:e.x,y:e.y+.16,z:e.z+.14,lookX:look.x,lookY:look.y+.08,lookZ:look.z,fov:58};
-    return {x:e.x,y:e.y+.15,z:e.z+.06,lookX:look.x,lookY:look.y+.06,lookZ:look.z,fov:54};
+    if(isPortraitView()) return {x:e.x,y:e.y-.03,z:e.z+.16,lookX:look.x,lookY:look.y-.10,lookZ:look.z,fov:64};
+    if(isMobile) return {x:e.x,y:e.y-.06,z:e.z+.14,lookX:look.x,lookY:look.y-.10,lookZ:look.z,fov:58};
+    return {x:e.x,y:e.y-.08,z:e.z+.06,lookX:look.x,lookY:look.y-.10,lookZ:look.z,fov:54};
   }
   const x=eyeX;
-  if(isPortraitView()) return {x,y:1.50,z:.34,lookX:x*.12,lookY:1.38,lookZ:-40,fov:60};
-  if(isMobile) return {x,y:1.48,z:.48,lookX:x*.10,lookY:1.40,lookZ:-42,fov:58};
-  return {x,y:1.48,z:.42,lookX:x*.08,lookY:1.40,lookZ:-44,fov:54};
+  if(isPortraitView()) return {x,y:1.32,z:.34,lookX:x*.12,lookY:1.22,lookZ:-40,fov:60};
+  if(isMobile) return {x,y:1.30,z:.48,lookX:x*.10,lookY:1.22,lookZ:-42,fov:58};
+  return {x,y:1.30,z:.42,lookX:x*.08,lookY:1.22,lookZ:-44,fov:54};
 }
 
 function placeVehicles(dt) {
@@ -2899,15 +2899,14 @@ function updateGame(dt) {
 }
 
 function updateSpeedLines(){
+  // The screen-space speed streak overlay caused persistent white bands on some displays.
+  // Keep the setting control compatible, but never render this decorative overlay.
   const lines=$("speedLines");
   if(!lines) return;
-  const kmh=Math.abs(state.speed)*3.6;
-  const chaseOnly=state.camera===0;
-  const show=!!(state.speedLinesOn && chaseOnly && kmh>=150);
-  const opacity=show?clamp((kmh-150)/90,0,.16):0;
-  lines.style.opacity=String(opacity);
-  lines.classList.toggle("active", show);
-  lines.setAttribute("aria-hidden", show?"false":"true");
+  lines.style.opacity="0";
+  lines.style.display="none";
+  lines.classList.remove("active");
+  lines.setAttribute("aria-hidden","true");
 }
 
 function syncSpeedLineToggles(){
