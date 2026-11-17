@@ -132,8 +132,7 @@ function canvasTexture(kind, size=512) {
       ctx.strokeStyle="rgba(8,12,16,.12)";ctx.lineWidth=rand()*2+0.5;
       ctx.beginPath();ctx.moveTo(rand()*size,rand()*size);ctx.lineTo(rand()*size,rand()*size);ctx.stroke();
     }
-    ctx.fillStyle = "rgba(255,255,255,.04)";
-    ctx.fillRect(size*0.48,0,size*0.04,size);
+    // No baked-in pale stripe: it repeated along the asphalt and looked like moving white bands from the cockpit.
   } else if (kind === "grass") {
     ctx.fillStyle="#5d7d56";ctx.fillRect(0,0,size,size);
     for(let i=0;i<9000;i++){
