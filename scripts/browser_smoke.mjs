@@ -340,7 +340,7 @@ for (const width of [320, 360, 390, 430]) {
 // Legal owner details must be rendered once, not duplicated in the page body.
 await page.setViewportSize({ width: 390, height: 844 });
 await page.goto(BASE + "/legal.html", { waitUntil: "domcontentloaded" });
-const ownerCards = await page.locator("main .note").filter({ hasText: "Сведения о владельце сайта для официальных заявлений" }).count();
+const ownerCards = await page.locator("main .note").filter({ hasText: "Владелец сайта:" }).filter({ hasText: "заявления правообладателей" }).count();
 if (ownerCards !== 1) fail("legal.html: expected one owner/contact block, found " + ownerCards);
 const addressMentions = await page.locator("main").innerText();
 if ((addressMentions.match(/690089/g) || []).length !== 1) fail("legal.html: address should appear exactly once in the legal disclosure");
