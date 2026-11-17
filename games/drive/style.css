@@ -234,3 +234,6 @@ html.touch-ui .analog-hud{width:116px;height:116px;bottom:max(86px,calc(env(safe
 .credits-line{margin-top:6px;max-width:46ch;margin-left:auto;margin-right:auto}
 .credits-line a{color:#8faeb8;text-decoration:underline}
 .pause-credits{margin:8px 0 0;color:#8fa3ad;font-size:11px;line-height:1.45}
+
+/* Disable the old screen-space speed streak overlay; it rendered as white bands on some devices. */
+#speedLines,.speed-lines{display:none!important;visibility:hidden!important;opacity:0!important}
