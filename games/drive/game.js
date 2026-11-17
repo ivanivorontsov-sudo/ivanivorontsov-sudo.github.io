@@ -28,8 +28,8 @@ function readSpeedLinesPref() {
 
 const QUALITY_PRESETS = {
   low:    { pixelRatio:1, shadows:false, bloom:0, shadowSize:512, trees:140, bushes:70, mountains:10, ribbon:380, railSeg:0, anisotropy:1, antialias:false, lamps:0, buildings:14, traffic:5, dprCap:1, post:false, realCar:false, hdriBg:false, ssao:false, smaa:false, pbrRoad:false, modelTraffic:false, softShadows:false, glassTransmission:false, shadowExtent:140 },
-  medium: { pixelRatio:1.2, shadows:true, bloom:.12, shadowSize:1024, trees:260, bushes:140, mountains:18, ribbon:700, railSeg:420, anisotropy:2, antialias:false, lamps:2, buildings:26, traffic:7, dprCap:1.25, post:true, realCar:true, hdriBg:true, ssao:false, smaa:true, pbrRoad:true, modelTraffic:true, softShadows:true, glassTransmission:false, shadowExtent:82 },
-  high:   { pixelRatio:1.55, shadows:true, bloom:.22, shadowSize:2048, trees:400, bushes:200, mountains:28, ribbon:1000, railSeg:820, anisotropy:4, antialias:!isMobile, lamps:4, buildings:40, traffic:9, dprCap:isMobile?1.35:1.75, post:true, realCar:true, hdriBg:true, ssao:!isMobile, smaa:true, pbrRoad:true, modelTraffic:true, softShadows:true, glassTransmission:true, shadowExtent:56 }
+  medium: { pixelRatio:1.2, shadows:true, bloom:.12, shadowSize:1024, trees:260, bushes:140, mountains:18, ribbon:700, railSeg:420, anisotropy:2, antialias:false, lamps:2, buildings:26, traffic:7, dprCap:1.25, post:true, realCar:true, hdriBg:true, ssao:false, smaa:true, pbrRoad:true, modelTraffic:false, softShadows:true, glassTransmission:false, shadowExtent:82 },
+  high:   { pixelRatio:1.55, shadows:true, bloom:.22, shadowSize:2048, trees:400, bushes:200, mountains:28, ribbon:1000, railSeg:820, anisotropy:4, antialias:!isMobile, lamps:4, buildings:40, traffic:9, dprCap:isMobile?1.35:1.75, post:true, realCar:true, hdriBg:true, ssao:!isMobile, smaa:true, pbrRoad:true, modelTraffic:false, softShadows:true, glassTransmission:true, shadowExtent:56 }
 };
 const QUALITY_LABELS = { low:"низкая", medium:"средняя", high:"высокая" };
 
@@ -1169,6 +1169,29 @@ function setupConceptCar(model, config){
   });
 
   const rollingWheels=["WheelFrontL","WheelFrontR","WheelRearL","WheelRearR"].map(k=>wheels[k]).filter(Boolean);
+  // Infer each GLB wheel axle from the thinnest local geometry dimension.
+  const wheelLocalAxes=new Map();
+  rollingWheels.forEach(node=>{
+    const box=new THREE.Box3();
+    node.updateWorldMatrix(true,true);
+    const inverse=node.matrixWorld.clone().invert();
+    node.traverse(child=>{
+      if(!child.isMesh||!child.geometry) return;
+      const geometry=child.geometry;
+      if(!geometry.boundingBox) geometry.computeBoundingBox();
+      if(!geometry.boundingBox) return;
+      const b=geometry.boundingBox;
+      for(let ix=0;ix<2;ix++) for(let iy=0;iy<2;iy++) for(let iz=0;iz<2;iz++){
+        const point=new THREE.Vector3(ix?b.max.x:b.min.x,iy?b.max.y:b.min.y,iz?b.max.z:b.min.z);
+        child.localToWorld(point);
+        point.applyMatrix4(inverse);
+        box.expandByPoint(point);
+      }
+    });
+    const size=box.getSize(new THREE.Vector3());
+    const axis=size.x<=size.y&&size.x<=size.z?new THREE.Vector3(1,0,0):size.y<=size.z?new THREE.Vector3(0,1,0):new THREE.Vector3(0,0,1);
+    wheelLocalAxes.set(node,axis);
+  });
   const conceptSteerHubs=["WheelFrontL","WheelFrontR"].map(k=>wheels[k]).filter(Boolean).map(node=>({node, baseQuat:node.quaternion.clone()}));
   const fill=new THREE.PointLight(0xffe6d4,.55,3.4,1.35);
   fill.position.set(0,1.2,0);
@@ -1182,6 +1205,7 @@ function setupConceptCar(model, config){
   player.userData.steerHubs=null;
   player.userData.wheelSpinAxis=config.spinAxis||"x";
   player.userData.wheelSpinWorld=true;
+  player.userData.wheelLocalAxes=wheelLocalAxes;
   player.userData.steeringWheel=steerNode;
   player.userData.steeringWheelBase=steerNode?steerNode.rotation.clone():null;
   player.userData.rearWing=null;
@@ -2766,8 +2790,12 @@ function placeVehicles(dt) {
     const spin=-state.speed*dt/radius;
     const axis=player.userData.wheelSpinAxis||"x";
     if(player.userData.wheelSpinWorld){
-      const worldAxle=new THREE.Vector3(1,0,0).transformDirection(player.matrixWorld).normalize();
-      player.userData.rollingWheels.forEach(w=>w.rotateOnWorldAxis(worldAxle,spin));
+      const axes=player.userData.wheelLocalAxes;
+      player.userData.rollingWheels.forEach(w=>{
+        const localAxis=axes?.get(w)||new THREE.Vector3(1,0,0);
+        const worldAxis=localAxis.clone().applyQuaternion(w.getWorldQuaternion(new THREE.Quaternion())).normalize();
+        w.rotateOnWorldAxis(worldAxis,spin);
+      });
     }else{
       player.userData.rollingWheels.forEach(w=>axis==="z"?w.rotateZ(spin):w.rotateX(spin));
     }
