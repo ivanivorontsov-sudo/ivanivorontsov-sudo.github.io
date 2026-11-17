@@ -1786,7 +1786,6 @@ function buildCockpit(){
   }
 
   // Continuous headliner: ceiling, header rail and side window rails as one material.
-  headGeos.push(boxGeo(2.32,.11,2.04,0,1.865,.18));
   headGeos.push(boxGeo(2.24,.12,.22,0,1.80,-.88));
   headGeos.push(boxGeo(.14,.12,1.92,-1.15,1.785,.10));
   headGeos.push(boxGeo(.14,.12,1.92,1.15,1.785,.10));
@@ -2773,15 +2772,15 @@ function placeVehicles(dt) {
     }
     camera.position.copy(player.position).add(auxCamOffset);
   }
-  const shakeMul=state.camera===1?0.35:1;
-  if (state.shake > 0) {
-    camera.position.x += (Math.random()-.5) * state.shake * 0.16 * shakeMul;
-    camera.position.y += (Math.random()-.5) * state.shake * 0.1 * shakeMul;
-    state.shake = Math.max(0, state.shake - dt * 3.6);
+  // Keep the driver's view rigid and stable. Random per-frame camera offsets made the
+  // dashboard, windshield frame and roof visibly vibrate even on a smooth road.
+  if(state.camera===1){
+    state.shake=0;
+  }else if(state.shake>0){
+    camera.position.x+=(Math.random()-.5)*state.shake*.16;
+    camera.position.y+=(Math.random()-.5)*state.shake*.1;
+    state.shake=Math.max(0,state.shake-dt*3.6);
   }
-  const speedShake = Math.min(0.05, Math.abs(state.speed) * 0.00035) * shakeMul;
-  camera.position.x += (Math.random()-.5) * speedShake;
-  camera.position.y += (Math.random()-.5) * speedShake;
   if(player.userData.steeringWheel&&player.userData.steeringWheelBase){
     const base=player.userData.steeringWheelBase;
     player.userData.steeringWheel.rotation.set(base.x,base.y,base.z-state.steer*.55);
@@ -2899,14 +2898,9 @@ function updateGame(dt) {
 }
 
 function updateSpeedLines(){
-  // The screen-space speed streak overlay caused persistent white bands on some displays.
-  // Keep the setting control compatible, but never render this decorative overlay.
-  const lines=$("speedLines");
-  if(!lines) return;
-  lines.style.opacity="0";
-  lines.style.display="none";
-  lines.classList.remove("active");
-  lines.setAttribute("aria-hidden","true");
+  // Remove every legacy speed-streak overlay node. CSS hiding alone was not reliable
+  // when an older active class or cached markup was still present.
+  document.querySelectorAll("#speedLines,.speed-lines").forEach(el=>el.remove());
 }
 
 function syncSpeedLineToggles(){
