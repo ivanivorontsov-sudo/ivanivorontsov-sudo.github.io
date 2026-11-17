@@ -2947,7 +2947,6 @@ function restartGame() {
   state.damage=0;state.score=0;state.combo=1;state.checkpoint=0;state.sectorTime=0;
   state.collisionCount=0;state.shake=0;state.rpm=850;
   traffic.forEach((car,i)=>{ car.progress=(.06+i*(0.92/Math.max(1,traffic.length)))%1; car.offset=car.baseOffset; car.flee=0; });
-  const crack=$("crackOverlay"); if(crack){crack.style.opacity="0";crack.classList.remove("is-on");crack.setAttribute("aria-hidden","true");}
   const dist=$("distance"); if(dist) dist.innerHTML="0.00 <i>KM</i>";
   updateHudMeta();
   showPause(false);
