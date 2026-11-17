@@ -2406,13 +2406,7 @@ function applyDamage(amount, worldPos) {
   if (worldPos) spawnSparks(worldPos, Math.min(14, 5 + Math.round(add/3)));
   playImpactSound(add);
   updateHudMeta();
-  const crack = $("crackOverlay");
-  if (crack) {
-    const o = state.damage>1 ? clamp(state.damage / 140, 0, 0.72) : 0;
-    crack.style.opacity = String(o);
-    crack.classList.toggle("is-on", o>0.02);
-    crack.setAttribute("aria-hidden", o>0.02?"false":"true");
-  }
+  // Disable the windshield-crack screen overlay: its bright diagonal lines looked like white streaks after collisions.
 }
 
 function awardScore(points, reason) {
