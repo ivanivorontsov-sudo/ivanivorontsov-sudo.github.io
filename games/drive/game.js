@@ -1210,8 +1210,8 @@ function finalizeInteriorCamera(model){
     player.worldToLocal(c);
     wheelLocal.copy(c);
   }
-  const eye=new THREE.Vector3(wheelLocal.x, Math.max(wheelLocal.y+.15, 1.12), wheelLocal.z+.48);
-  const look={x:wheelLocal.x*.18, y:eye.y-.09, z:wheelLocal.z-40};
+  const eye=new THREE.Vector3(wheelLocal.x, Math.max(wheelLocal.y+.28, 1.28), wheelLocal.z+.48);
+  const look={x:wheelLocal.x*.18, y:eye.y-.02, z:wheelLocal.z-40};
   player.userData.interiorEye=eye;
   player.userData.interiorLook=look;
   model.userData.interiorEye=eye;
@@ -2689,7 +2689,7 @@ function placeVehicles(dt) {
   player.rotation.y=yaw+state.steer*.055;
   player.rotation.z=lerp(player.rotation.z,-state.steer*.065,Math.min(1,dt*5));
   if(playerFallback?.userData.wheels)playerFallback.userData.wheels.forEach((wheel,i)=>{
-    wheel.rotation.x-=state.speed*dt*1.7;
+    wheel.rotation.x-=state.speed*dt/.43;
     if(i<2)wheel.rotation.y=state.steer*.12;
   });
   if(player.userData.steerHubs)player.userData.steerHubs.forEach(h=>{h.rotation.y=state.steer*.34;});
