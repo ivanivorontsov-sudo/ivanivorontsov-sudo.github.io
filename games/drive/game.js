@@ -2791,16 +2791,17 @@ function placeVehicles(dt) {
     const radius=player.userData.wheelRadius||.36;
     const spin=-state.speed*dt/radius;
     const axis=player.userData.wheelSpinAxis||"x";
-    if(player.userData.wheelSpinWorld){
-      const axes=player.userData.wheelLocalAxes;
-      player.userData.rollingWheels.forEach(w=>{
-        const localAxis=axes?.get(w)||new THREE.Vector3(1,0,0);
-        const worldAxis=localAxis.clone().applyQuaternion(w.getWorldQuaternion(new THREE.Quaternion())).normalize();
-        w.rotateOnWorldAxis(worldAxis,spin);
-      });
-    }else{
-      player.userData.rollingWheels.forEach(w=>axis==="z"?w.rotateZ(spin):w.rotateX(spin));
-    }
+    // Wheel axes are expressed in each wheel node's local coordinate system.
+    // rotateOnWorldAxis() is unsafe here: Three.js assumes the object has no
+    // rotated parent, while the vehicle and its model root are both rotated.
+    // Rotate around the local axle so the wheel keeps rolling along its axle.
+    const axes=player.userData.wheelLocalAxes;
+    player.userData.rollingWheels.forEach(w=>{
+      const localAxis=axes?.get(w)||new THREE.Vector3(0,0,axis==="z"?1:0);
+      if(!axes && axis!=="z") localAxis.set(1,0,0);
+      localAxis.normalize();
+      w.rotateOnAxis(localAxis,spin);
+    });
   }
   if(cockpitGroup)cockpitGroup.visible=state.camera===1;
   if(player.userData.loadedModel)player.userData.loadedModel.visible=state.camera!==1;
