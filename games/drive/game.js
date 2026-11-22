@@ -1344,6 +1344,11 @@ function loadCar(carId){
   player.userData.steeringWheelBase=null;
   player.userData.steerHubs=null;
   player.userData.rearWing=null;
+  // Reset model-specific wheel transforms when changing vehicles. A previous
+  // GLB may have left world-axis rotation and an axis map attached to the player.
+  player.userData.wheelSpinWorld=false;
+  player.userData.wheelLocalAxes=null;
+  player.userData.conceptSteerHubs=null;
 
   if(config.builder==="hypercar"){
     const model=makeHypercar(state.paint);
@@ -1442,7 +1447,11 @@ function loadCar(carId){
     player.userData.loadedModel=model;
     player.userData.bodyShell=null;
     player.userData.rollingWheels=rollingWheels;
-    player.userData.wheelSpinAxis=config.spinAxis;
+    // Kenney SUV wheels have their axle along the model's local X axis.
+    // Rotate in local space so the axle follows the vehicle on every heading.
+    player.userData.wheelSpinAxis="x";
+    player.userData.wheelSpinWorld=false;
+    player.userData.wheelLocalAxes=null;
     player.userData.wheelRadius=config.fitLength ? 0.30*fitScale : (config.wheelRadius||.36);
     player.userData.steeringWheel=wheelSteering;
     player.userData.steeringWheelBase=wheelSteering?wheelSteering.rotation.clone():null;
