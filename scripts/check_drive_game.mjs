@@ -40,7 +40,7 @@ check(js.includes("function makeHypercar"), "Sports car is a procedural hypercar
 check(js.includes('builder:"hypercar"'), "Spectral slot uses the in-engine hypercar builder");
 check(js.includes('id:"suv"'), "Kenney SUV remains selectable");
 check(js.includes('localStorage.setItem("driveHorizonCarV2",carId)'), "Vehicle selection persists with a fresh default preference key");
-check(js.includes('axis==="z"?w.rotateZ(spin):w.rotateX(spin)'), "Each model rotates wheels around its own axle axis");
+check(js.includes("w.rotateOnAxis(localAxis,spin)") && js.includes("wheelLocalAxes"), "Each model rotates wheels around its own local axle axis");
 check(js.includes("player.userData.loadedModel.visible=state.camera!==1"), "Imported exterior is hidden in driver view");
 check(js.includes("const eyeX=state.driverSide*.49"), "Driver eye point follows the selected car's seating side");
 check(js.includes("camera.position.copy(desired)"), "Driver camera has no chase smoothing lag");
