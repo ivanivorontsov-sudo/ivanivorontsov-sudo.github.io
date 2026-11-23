@@ -218,6 +218,7 @@ class TestAEFHv6FinalArchitecture(unittest.TestCase):
             6.0 * yQ**3 - 3.0 * yu**3 - 3.0 * yd**3 + 2.0 * yL**3 - ye**3,
             0.0, places=14
         )
+        self.assertEqual(2 - 1 - 1, 0)  # SU(3)^3: два Q_L-триплета минус u_R^c,d_R^c.
         self.assertEqual((3 + 1) % 2, 0)  # Число левых SU(2)-дублетов чётно.
 
         # Факторизация кубической аномалии при y_u=y_Q+delta, y_d=y_Q-delta.
@@ -400,11 +401,14 @@ class TestAEFHv6FinalArchitecture(unittest.TestCase):
         # Спектр D_F и унитарность CKM.
         u_uL, s_u, _ = np.linalg.svd(Yu)
         u_dL, s_d, _ = np.linalg.svd(Yd)
-        _, s_nu, _ = np.linalg.svd(Ynu)
-        _, s_e, _ = np.linalg.svd(Ye)
+        u_nuL, s_nu, _ = np.linalg.svd(Ynu)
+        u_eL, s_e, _ = np.linalg.svd(Ye)
         V_ckm = u_uL.conj().T @ u_dL
+        V_pmns = u_nuL.conj().T @ u_eL
         self.assertLess(np.linalg.norm(V_ckm.conj().T @ V_ckm - I3), 1e-13)
+        self.assertLess(np.linalg.norm(V_pmns.conj().T @ V_pmns - I3), 1e-13)
         self.assertGreater(np.linalg.norm(V_ckm - I3), 0.1)
+        self.assertGreater(np.linalg.norm(V_pmns - I3), 0.1)
 
         pos_masses = np.concatenate([np.repeat(s_u, 3), np.repeat(s_d, 3), s_nu, s_e])*norm_phi
         expected_eigs = np.sort(np.concatenate([-pos_masses, pos_masses]))
