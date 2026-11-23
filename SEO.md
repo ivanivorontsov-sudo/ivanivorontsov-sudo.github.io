@@ -5,6 +5,7 @@
 ## Что настроено
 
 - Уникальные title и meta description для основных страниц.
+- Исследовательская страница `/aefh/`: self-canonical, Article/ScholarlyArticle JSON-LD, Open Graph, Twitter Card, семантическая разметка, мобильная вёрстка и запись в корневом sitemap.
 - Самоссылочные canonical URL для индексируемых страниц.
 - Open Graph и Twitter Card для предпросмотров ссылок.
 - Schema.org JSON-LD: WebSite, CollectionPage, ItemList, WebApplication, VideoGame, WebPage и хлебные крошки там, где это уместно.
