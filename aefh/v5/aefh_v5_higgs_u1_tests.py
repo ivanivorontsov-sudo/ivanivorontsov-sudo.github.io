@@ -284,7 +284,7 @@ class TestAEFHv5HiggsAndU1(unittest.TestCase):
         self.assertTrue(5.85 < math.log2(rem_u1[0] / rem_u1[1]) < 6.15)
         self.assertTrue(5.92 < math.log2(rem_u1[1] / rem_u1[2]) < 6.08)
 
-        # --- Часть 2: полное неабелево U(2) = U(1) x SU(2) поле ---
+        # --- Часть 2: полное неабелево U(2); на уровне алгебры Ли u(2)=u(1)⊕su(2) ---
         I2 = np.eye(2, dtype=complex)
         T1 = 0.5 * np.array([[0, 1], [1, 0]], dtype=complex)
         T2 = 0.5 * np.array([[0, -1j], [1j, 0]], dtype=complex)
