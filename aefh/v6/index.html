@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>AEFH v6.0 — потенциал Хиггса, аномалии и киральный сектор</title>
+<meta name="description" content="AEFH v6.0: энтропийный потенциал и фазовый переход Хиггса, сокращение калибровочных аномалий, конечный киральный оператор Дирака и квартичный член из функционала Iα.">
+<meta name="author" content="Иван Воронцов">
+<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large">
+<link rel="canonical" href="https://ivanivorontsov-sudo.github.io/aefh/v6/">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Исследовательские материалы Ивана Воронцова">
+<meta property="og:title" content="AEFH v6.0 — потенциал Хиггса, аномалии и киральный сектор">
+<meta property="og:description" content="Три новых математических блока AEFH: энтропийный потенциал, аномалии Стандартной модели и конечный киральный оператор Юкавы.">
+<meta property="og:url" content="https://ivanivorontsov-sudo.github.io/aefh/v6/">
+<meta property="article:published_time" content="2026-11-24">
+<meta property="article:modified_time" content="2026-11-24">
+<meta property="article:section" content="Математическая физика">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AEFH v6.0 — потенциал Хиггса, аномалии и киральный сектор">
+<meta name="twitter:description" content="Исследовательская рукопись о потенциале Хиггса, сокращении аномалий и конечном фермионном операторе.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<script type="application/ld+json">
+{
+ "@context":"https://schema.org","@type":"ScholarlyArticle",
+ "@id":"https://ivanivorontsov-sudo.github.io/aefh/v6/#article",
+ "mainEntityOfPage":{"@type":"WebPage","@id":"https://ivanivorontsov-sudo.github.io/aefh/v6/"},
+ "headline":"AEFH v6.0: индуцированный потенциал Хиггса, сокращение аномалий и конечный киральный сектор",
+ "description":"Исследовательская рукопись о строгой выпуклости энтропийного потенциала, решениях уравнений отмены аномалий и асимптотике функционала относительной энтропии для спектрального состояния конечного оператора Юкавы.",
+ "author":{"@type":"Person","name":"Иван Воронцов","url":"https://ivanivorontsov-sudo.github.io/","sameAs":"https://github.com/ivanivorontsov-sudo"},
+ "datePublished":"2026-11-24","dateModified":"2026-11-24","inLanguage":"ru-RU",
+ "isAccessibleForFree":true,"genre":"Исследовательская рукопись / preprint",
+ "keywords":["AEFH","энтропийный потенциал Хиггса","калибровочные аномалии","гиперзаряды","конечный оператор Дирака","CKM","PMNS","аффинность Петца"]
+}
+</script>
+<style>
+:root{color-scheme:light dark;--bg:#f5f7fb;--surface:#fff;--surface2:#edf2f8;--text:#172033;--muted:#526078;--line:#dbe2ec;--accent:#2458a6;--accentSoft:#e7efff;--warn:#8a5510;--shadow:0 14px 40px rgba(20,35,60,.07)}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1420;--surface:#141f2e;--surface2:#1b2a3d;--text:#edf3fc;--muted:#aab8ca;--line:#2c3b50;--accent:#9fc0ff;--accentSoft:#1c3153;--warn:#f1c17a;--shadow:0 14px 40px rgba(0,0,0,.2)}}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:20px}body{margin:0;background:var(--bg);color:var(--text);font:17px/1.72 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+a{color:var(--accent);text-underline-offset:3px}.top{border-bottom:1px solid var(--line);background:var(--surface)}.top-inner,.layout,.footer-inner{width:min(1180px,calc(100% - 40px));margin:auto}
+.top-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{font-weight:750;text-decoration:none;color:var(--text)}.top-links{display:flex;gap:18px;flex-wrap:wrap}.top-links a{font-size:.92rem;text-decoration:none}
+.crumbs{padding:14px 0;color:var(--muted);font-size:.88rem}.crumbs a{color:var(--muted)}.hero{padding:24px 0 20px}.eyebrow{color:var(--accent);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.76rem}
+h1{font-size:clamp(2rem,4vw,3.3rem);line-height:1.12;letter-spacing:-.035em;margin:.55rem 0}.subtitle{font-size:1.12rem;color:var(--muted);max-width:940px;margin:.5rem 0 1rem}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.pill{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:.8rem;background:var(--surface);color:var(--muted)}.status{border-color:#b58b48;color:var(--warn)}
+.notice{border:1px solid var(--line);border-left:4px solid var(--accent);background:var(--surface);border-radius:12px;padding:14px 17px;margin:16px 0;box-shadow:var(--shadow)}.notice.warn{border-left-color:#b7791f}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:34px;align-items:start;padding:14px 0 60px}main{min-width:0}section{margin:0 0 38px;scroll-margin-top:20px}
+h2{font-size:1.6rem;line-height:1.25;margin:0 0 14px}h3{font-size:1.18rem;margin:24px 0 8px}p{margin:.65rem 0}.lead{font-size:1.08rem}
+.formula{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:15px 18px;margin:12px 0;overflow-x:auto;font:500 .97rem/1.85 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:normal}.formula .line{display:block}.small,.muted{color:var(--muted)}.small{font-size:.9rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0;box-shadow:var(--shadow)}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.callout{border-left:4px solid var(--accent);background:var(--accentSoft);padding:12px 15px;border-radius:8px;margin:14px 0}.callout.warn{border-left-color:#b7791f}.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:.93rem;margin:12px 0}th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}th{background:var(--surface2)}
+aside{position:sticky;top:20px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;font-size:.9rem}aside strong{display:block;margin-bottom:8px}aside ol{padding-left:21px;margin:0}aside li{margin:5px 0}aside a{text-decoration:none}
+.version-nav{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 18px}.version-nav a{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:8px 12px;text-decoration:none}
+.footer{border-top:1px solid var(--line);background:var(--surface);padding:20px 0 28px}.footer p{font-size:.9rem;color:var(--muted)}.backtop{display:inline-block;margin-top:8px}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--surface2);padding:1px 4px;border-radius:4px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}aside{position:static;order:-1}.grid2{grid-template-columns:1fr}}
+@media(max-width:560px){body{font-size:16px}.top-inner,.layout,.footer-inner{width:min(100% - 24px,1180px)}.top-inner{padding:10px 0;align-items:flex-start;flex-direction:column}.hero{padding-top:18px}.formula{font-size:.84rem;padding:11px}.card{padding:15px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-inner">
+<a class="brand" href="/">Иван Воронцов · исследования</a>
+<nav class="top-links" aria-label="Основная навигация">
+<a href="/">Главная</a><a href="/aefh/">Архив AEFH</a><a href="/aefh/v5/">v5.0</a><a href="aefh_v6_final_tests.py">Python-тесты</a>
+</nav></div></header>
+<div class="top-inner crumbs"><a href="/">Главная</a> / <a href="/aefh/">AEFH</a> / <span aria-current="page">v6.0</span></div>
+<div class="top-inner hero">
+<div class="eyebrow">Математическая физика · исследовательская рукопись</div>
+<h1>AEFH v6.0: индуцированный потенциал Хиггса, сокращение аномалий и киральный сектор</h1>
+<p class="subtitle">Три новых математических блока над прежним функционалом: выпуклый энтропийный потенциал, условия отмены аномалий и конечный киральный оператор Юкавы с асимптотикой спектрального Gibbs-состояния.</p>
+<div class="meta-row"><span class="pill">Версия 6.0</span><span class="pill">24 ноября 2026</span><span class="pill">Русский язык</span><span class="pill status">Рукопись · независимое рецензирование не завершено</span></div>
+<div class="notice warn"><strong>Граница заявлений.</strong> Это исследовательская математическая конструкция, не завершённая физическая теория. Ниже различаются точные матричные утверждения, условные выводы при явно названных нормировках и физические входы. Приложенный скрипт — конечномерная численная проверка примеров, а не доказательство общих теорем.</div>
+<div class="version-nav"><a href="/aefh/v5/">Предыдущая версия v5.0</a><a href="aefh_v6_final_tests.py">Скачать исходник тестов</a><a href="#limits">Ограничения и открытые вопросы</a></div>
+</div>
+<div class="layout">
+<main id="content">
+<section id="abstract">
+<h2>Аннотация и общий функционал</h2>
+<p class="lead">Рассматривается то же семейство функционалов относительной энтропии и аффинности Петца:</p>
+<div class="formula"><span class="line">I<sub>α</sub>(ρ,σ) = S(ρ‖σ) + α(1 − F<sub>1/2</sub>(ρ,σ)), &nbsp; α ≥ 0,</span><span class="line">F<sub>1/2</sub>(ρ,σ) = τ(ρ<sup>1/2</sup>σ<sup>1/2</sup>), &nbsp; τ(1)=1.</span></div>
+<p>В v6.0 к потенциалу из двух неотрицательных энтропийных функционалов добавляются: (i) алгебраические уравнения локального сокращения аномалий в одном поколении, (ii) сумма решёточных действий по выбранному хиральному мультиплету, (iii) конечный внутренний оператор Юкавы (D_F(phi)). Последний строится из матриц Юкавы, которые остаются входными параметрами.</p>
+</section>
+
+<section id="theorem-11">
+<h2>Теорема 11. Энтропийный потенциал и непрерывный переход второго рода</h2>
+<h3>Определение потенциала</h3>
+<p>Пусть (N\ge2), (D=N+1), (mu_0,mu_1>0), (mu_0+mu_1/D=1), а зонд</p>
+<div class="formula">Σ(ψ) = μ<sub>0</sub>I<sub>D</sub> + μ<sub>1</sub>|ψ⟩⟨ψ|, &nbsp; ‖ψ‖=1, &nbsp; ψ=(φ,χ)<sup>T</sup>.</div>
+<p>В качестве U(N)-инвариантного опорного вакуума возьмём</p>
+<div class="formula">Σ<sub>vac</sub> = aI<sub>N</sub> ⊕ b, &nbsp; b=D−Na, &nbsp; 0&lt;a&lt;1.</div>
+<p>Последнее условие обеспечивает (b>a>0) и положительность коэффициента (eta_alpha). Пусть (mathcal E) — сохраняющее след пинчинг-ожидание на (M_N(\mathbb C)\oplus\mathbb C), которое удаляет когерентность между зарядовым блоком и вакуумной компонентой. Положим</p>
+<div class="formula">V(ψ) = β<sub>vac</sub>I<sub>α</sub>(Σ(ψ),Σ<sub>vac</sub>) + β<sub>ent</sub>S(𝓔(Σ(ψ))‖I<sub>D</sub>), &nbsp; β<sub>vac</sub>,β<sub>ent</sub>&gt;0.</div>
+<p>Оба слагаемых неотрицательны: второе равно (I_0) для пинчированного состояния и трейс-вакуума. Добавление константы к (V) не влияет на минимум.</p>
+
+<h3>Сведение к одному инварианту</h3>
+<p>Для (x=‖φ‖^2=\sin^2θ\in[0,1]) определим</p>
+<div class="formula">
+<span class="line">λ<sub>1</sub>(x)=μ<sub>0</sub>+μ<sub>1</sub>x, &nbsp; λ<sub>2</sub>(x)=μ<sub>0</sub>+μ<sub>1</sub>(1−x),</span>
+<span class="line">η<sub>α</sub>=ln(b/a)+(α/μ<sub>1</sub>)(√(μ<sub>0</sub>+μ<sub>1</sub>)−√μ<sub>0</sub>)(√b−√a),</span>
+<span class="line">r=β<sub>vac</sub>η<sub>α</sub>/β<sub>ent</sub>, &nbsp; ρ<sub>max</sub>=ln(1+μ<sub>1</sub>/μ<sub>0</sub>).</span>
+</div>
+<p>С точностью до независимой от (x) константы</p>
+<div class="formula">V(x) = [β<sub>vac</sub>μ<sub>1</sub>η<sub>α</sub>x + β<sub>ent</sub>{λ<sub>1</sub>lnλ<sub>1</sub>+λ<sub>2</sub>lnλ<sub>2</sub>−μ<sub>0</sub>lnμ<sub>0</sub>−(μ<sub>0</sub>+μ<sub>1</sub>)ln(μ<sub>0</sub>+μ<sub>1</sub>)}]/D.</div>
+<p>Отсюда</p>
+<div class="formula">
+<span class="line">V′(x)=(β<sub>ent</sub>μ<sub>1</sub>/D)[r+ln(λ<sub>1</sub>/λ<sub>2</sub>)],</span>
+<span class="line">V″(x)=(β<sub>ent</sub>μ<sub>1</sub><sup>2</sup>/D)(1/λ<sub>1</sub>+1/λ<sub>2</sub>) &gt; 0.</span>
+</div>
+<p>Таким образом, потенциал строго выпуклый по (x).</p>
+
+<h3>Минимум и критическое поведение</h3>
+<div class="grid2">
+<div class="card"><strong>Симметричная фаза</strong><p>При (r\ge ρ_{max}) минимум (x_0=0), то есть (φ=0); выбранное направление не выделено.</p><div class="formula">V′(0)=(β<sub>ent</sub>μ<sub>1</sub>/D)(r−ρ<sub>max</sub>) ≥ 0.</div></div>
+<div class="card"><strong>Нарушенная фаза</strong><p>При (0&lt;r&lt;ρ_{max}) минимум лежит при (0&lt;x_0&lt;1/2):</p><div class="formula">x<sub>0</sub> = [μ<sub>1</sub>−μ<sub>0</sub>(e<sup>r</sup>−1)]/[μ<sub>1</sub>(e<sup>r</sup>+1)].</div></div>
+</div>
+<p>На критической границе (r=ρ_{max}) коэффициент при (x) обращается в ноль, а положительный член (x^2=‖φ‖^4) остаётся. При переходе через границу (x_0\to0^+) непрерывно; амплитуда (‖φ_0‖=\sqrt{x_0}) ведёт себя как квадратный корень от отклонения управляющего параметра. В этом смысле переход второго рода следует из указанного потенциала.</p>
+<p>В нарушенной фазе</p>
+<div class="formula">V<sub>θθ</sub>(θ<sub>0</sub>) = 16β<sub>ent</sub>μ<sub>1</sub><sup>2</sup>x<sub>0</sub>(1−x<sub>0</sub>)cosh<sup>2</sup>(r/2)/[D(2μ<sub>0</sub>+μ<sub>1</sub>)] &gt; 0.</div>
+<p>У орбиты (U(N)/U(N-1)\cong S^{2N-1}) потенциал постоянен, поэтому гессиан имеет (2N-1) нулевых угловых направлений и одну положительную радиальную кривизну.</p>
+<div class="callout warn"><strong>Кривизна — ещё не физическая масса.</strong> (V_{θθ}>0) строго устанавливает положительную радиальную кривизну. Чтобы назвать её (m_H^2), необходимо задать нормировку кинетического члена и канонически нормировать радиальное поле. Если кинетический член равен (Λ_α(∂θ)^2), то при соглашении (\mathcal L_{kin}=\frac12(∂h)^2) получаем условно (m_H^2=V_{θθ}/(2Λ_α)). Сам потенциал не задаёт абсолютный масштаб 246 ГэВ.</div>
+<p>Из (x_0=\sin^2θ_0) и формулы Теоремы 10 следует (ρ_{cust}=1/(1−x_0)\to1^+) вблизи критической точки. Это математическое следствие выбранной модели, но не самостоятельная подгонка всех электрослабых наблюдаемых.</p>
+</section>
+
+<section id="theorem-12">
+<h2>Теорема 12. Сокращение аномалий и древесное значение угла Вайнберга</h2>
+<h3>Локальные условия</h3>
+<p>Для одного поколения с представлениями (Q_L,u_R,d_R,L_L,e_R) обозначим гиперзаряды (y_Q,y_u,y_d,y_L,y_e). Сокращение (SU(3)^2U(1)), (SU(2)^2U(1)), смешанной гравитационной и (U(1)^3) аномалий даёт</p>
+<div class="formula">
+<span class="line">2y<sub>Q</sub>−y<sub>u</sub>−y<sub>d</sub>=0,</span>
+<span class="line">3y<sub>Q</sub>+y<sub>L</sub>=0,</span>
+<span class="line">6y<sub>Q</sub>−3y<sub>u</sub>−3y<sub>d</sub>+2y<sub>L</sub>−y<sub>e</sub>=0,</span>
+<span class="line">6y<sub>Q</sub><sup>3</sup>−3y<sub>u</sub><sup>3</sup>−3y<sub>d</sub><sup>3</sup>+2y<sub>L</sub><sup>3</sup>−y<sub>e</sub><sup>3</sup>=0.</span>
+</div>
+<p>При (y_Q\ne0), после выбора знака и перестановки (u_R\leftrightarrow d_R), решение имеет вид</p>
+<div class="formula">y<sub>u</sub>=4y<sub>Q</sub>, &nbsp; y<sub>d</sub>=−2y<sub>Q</sub>, &nbsp; y<sub>L</sub>=−3y<sub>Q</sub>, &nbsp; y<sub>e</sub>=−6y<sub>Q</sub>.</div>
+<p>Общий масштаб гиперзарядов остаётся свободным. Стандартная нормировка (y_Q=1/6), эквивалентная выбору (y_H=1/2) при разрешённых Yukawa-связях, даёт ( (1/6,2/3,−1/3,−1/2,−1) ). Нейтральный (ν_R) не меняет условия аномалий.</p>
+<p>Глобальная аномалия Виттена для (SU(2)_L) отсутствует, поскольку имеется (3+1=4) левых дублета на поколение (а (4N_g) — чётно для любого целого (N_g)). Это отдельная проверка, не одно из четырёх локальных уравнений выше.</p>
+
+<h3>Глобальная форма калибровочной группы</h3>
+<div class="callout warn"><strong>Важная поправка к записи группы.</strong> При дробных стандартных гиперзарядах глобально корректная стандартная форма — ((SU(3)_c\times SU(2)_L\times U(1)_Y)/\mathbb Z_6), с согласованной идентификацией центров. На уровне алгебры Ли можно работать с (su(3)\oplus su(2)\oplus u(1)), но простое прямое произведение с наивным (2π)-периодическим действием (e^{iθY}) не реализует эти дробные заряды как однозначные характеры U(1). В тесте используется целочисленный заряд (q=6Y) и генератор центральной идентификации.</div>
+
+<h3>Сумма по фермионным представлениям</h3>
+<p>Пусть для каждой хиральной компоненты (r\in\{Q_L,u_R,d_R,L_L,e_R,[ν_R]\}) задана плакеточная голономия (W_r), а функционал суммируется с весом размерности (d_r). Если дополнительно принять <strong>универсальность одного и того же коэффициента жёсткости (κ_0)</strong> для всех представлений и одно поколение стандартных зарядов, то</p>
+<div class="formula">S<sub>□</sub><sup>SM</sup> = (κ<sub>0</sub>N<sub>g</sub>a<sup>4</sup>/2)[2Σ<sub>A</sub>(G<sub>μν</sub><sup>A</sup>)<sup>2</sup> + 2Σ<sub>a</sub>(W<sub>μν</sub><sup>a</sup>)<sup>2</sup> + (10/3)(B<sub>μν</sub>)<sup>2}] + O(a<sup>6</sup>).</div>
+<p>Сравнение с (\frac1{4g_3^2}G^2+\frac1{4g_2^2}W^2+\frac1{4g_Y^2}B^2) даёт</p>
+<div class="formula">g<sub>3</sub><sup>−2</sup> : g<sub>2</sub><sup>−2</sup> : g<sub>Y</sub><sup>−2</sup> = 1 : 1 : 5/3, &nbsp; sin<sup>2</sup>θ<sub>W</sub><sup>(0)</sup> = g<sub>Y</sub><sup>2</sup>/(g<sub>2</sub><sup>2</sup>+g<sub>Y</sub><sup>2</sup>) = 3/8.</div>
+<p>Локальная погрешность одной плакетки имеет порядок (O(a^6)); после суммирования по четырёхмерной решётке типичная глобальная ошибка — (O(a^2)).</p>
+<div class="callout warn"><strong>Что именно здесь условно.</strong> Коэффициенты групповых индексов (2,2,10/3) следуют из следов по заданным представлениям. Равенство одного (κ_0) во всех неприводимых секторах — дополнительный принцип универсальности нормировки пробных действий: он не следует из одних уравнений аномалий и должен быть выведен из конструкции общего зонда или объявлен отдельным постулатом. Значение (3/8) — древесное/высокомасштабное отношение при этом условии, а не низкоэнергетическое значение около масштаба (M_Z).</div>
+</section>
+
+<section id="theorem-13">
+<h2>Теорема 13. Конечный киральный оператор Юкавы и квартичный член</h2>
+<h3>Внутреннее пространство и оператор</h3>
+<p>Предполагается одно стерильное правое нейтрино (ν_R) на поколение. Тогда для (N_g) поколений (dim\mathcal H_F=16N_g), (mathcal H_F=\mathcal H_L\oplus\mathcal H_R), где (\mathcal H_L=Q_L\oplus L_L), (\mathcal H_R=u_R\oplus d_R\oplusν_R\oplus e_R). Градация (γ_F=I_L\oplus(-I_R)). Для трёх поколений пространство имеет размерность 48.</p>
+<p>Пусть (φ\in\mathbb C^2), (\tilde φ=iσ_2φ^*), (y_H=1/2), а (Y_u,Y_d,Y_ν,Y_e\in M_{N_g}(\mathbb C)) — входные матрицы Юкавы. В порядке блоков (Q_L,L_L) и (u_R,d_R,ν_R,e_R) зададим (M(φ):\mathcal H_L\to\mathcal H_R):</p>
+<div class="formula">
+<span class="line">M(φ) =</span>
+<span class="line">[  \tildeφ† ⊗ I<sub>3</sub> ⊗ Y<sub>u</sub>†      0 ]</span>
+<span class="line">[  φ† ⊗ I<sub>3</sub> ⊗ Y<sub>d</sub>†          0 ]</span>
+<span class="line">[  0                         \tildeφ† ⊗ Y<sub>ν</sub>† ]</span>
+<span class="line">[  0                         φ† ⊗ Y<sub>e</sub>†     ],</span>
+</div>
+<div class="formula">D<sub>F</sub>(φ) = [0  M(φ)† ; M(φ)  0].</div>
+<p>Это эрмитов конечномерный внутренний оператор, антикоммутирующий с (γ_F). При глобальной группе ((SU(3)\times SU(2)\times U(1))/\mathbb Z_6) удобно параметризовать U(1) координатой (e^{iθ}), действующей с целыми зарядами (q=6Y): (φ\mapsto e^{3iθ}g_2φ). Тогда фазы по блокам (Q_L,L_L,u_R,d_R,ν_R,e_R) равны соответственно (e^{iθ},e^{-3iθ},e^{4iθ},e^{-2iθ},1,e^{-6iθ}). Центральный элемент ((e^{2πi/3}I_3,-I_2,e^{iπ/3})) действует тождественно.</p>
+<p>При этих соглашениях выполняется конечномерная ковариантность (U_gD_F(φ)U_g^†=D_F(g\cdot φ)), а также (\{D_F,γ_F\}=0). Это конечный внутренний блок Юкавы; полный спектральный тройной объект с представленной алгеброй, вещественной структурой, условием первого порядка и пространственным оператором Дирака здесь ещё не построен.</p>
+
+<h3>Сингулярный спектр и смешивание</h3>
+<p>Так как (φ) и (\tilde φ) ортогональны и имеют одинаковую норму, ненулевые собственные значения (D_F(φ)) имеют вид</p>
+<div class="formula">λ(D<sub>F</sub>) = ±‖φ‖σ<sub>i</sub>(Y<sub>f</sub>), &nbsp; f∈{u,d,ν,e},</div>
+<p>с дополнительной кратностью 3 по цвету для кварков. Разложения (Y_f=U_{f_L}Σ_fU_{f_R}^†) задают матрицы смешивания (V_{CKM}=U_{u_L}^†U_{d_L}) и (U_{PMNS}=U_{ν_L}^†U_{e_L}). Сами (Y_f) и их численные значения остаются входными данными. Если (φ) безразмерно нормирован как в CP<sup>N</sup>-параметризации, физический масштаб масс требует отдельного множителя (M_*) (обычно связи с (v/\sqrt2)); формула (σ_i(Y_f)\sin θ_0) задаёт спектр в выбранных единицах.</p>
+
+<h3>Квартичный член из спектрального Gibbs-состояния</h3>
+<p>Пусть (A=D_F(φ)^2), (ε=Λ^{-2}\to0^+), (Z(ε)=τ_F(e^{-εA})) и</p>
+<div class="formula">ρ<sub>D</sub>(φ;Λ)=e<sup>−A/Λ²</sup>/τ<sub>F</sub>(e<sup>−A/Λ²</sup>).</div>
+<p>Для центральных моментов (κ_2(A)=τ_F((A−τ_F(A)I)^2)), (κ_3(A)=τ_F((A−τ_F(A)I)^3)) разложение имеет вид</p>
+<div class="formula">
+I<sub>α</sub>(ρ<sub>D</sub>,I<sub>F</sub>) =
+(4+α)κ<sub>2</sub>(A)/(8Λ<sup>4</sup>)
+−(16+3α)κ<sub>3</sub>(A)/(48Λ<sup>6</sup>)
++O(Λ<sup>−8</sup>).
+</div>
+<p>Поскольку спектр (A) равен (‖φ‖^2) умножить на спектр (\mathcal Y^2), где</p>
+<div class="formula">𝒴² = diag(I<sub>3</sub>⊗Y<sub>u</sub>†Y<sub>u</sub>, I<sub>3</sub>⊗Y<sub>d</sub>†Y<sub>d</sub>, Y<sub>ν</sub>†Y<sub>ν</sub>, Y<sub>e</sub>†Y<sub>e</sub>) ⊗ I<sub>2</sub>,</div>
+<p>получаем</p>
+<div class="formula">
+I<sub>α</sub>(ρ<sub>D</sub>,I<sub>F</sub>) =
+λ<sub>H</sub>‖φ‖<sup>4</sup>
+−(16+3α)κ<sub>3</sub>(𝒴²)‖φ‖<sup>6</sup>/(48Λ<sup>6</sup>)
++O(‖φ‖<sup>8</sup>/Λ<sup>8</sup>),<br>
+λ<sub>H</sub>=(4+α)Var<sub>τF</sub>(𝒴²)/(8Λ<sup>4</sup>) ≥ 0.
+</div>
+<p>Строго (λ_H&gt;0) тогда и только тогда, когда (\mathcal Y^2) не является скалярным оператором, то есть его спектр не постоянен. Невырожденность матриц Юкавы по отдельности не гарантирует это автоматически, если весь объединённый спектр случайно вырожден в одно значение.</p>
+<div class="callout warn"><strong>Физическая интерпретация.</strong> Это положительный квартичный член эффективного функционала в малом-(Λ^{-2}) разложении. Чтобы отождествить его с полной перенормированной константой Хиггса Стандартной модели, нужны заданные кинетическая нормировка, масштаб отсечения, полная спектральная тройка, контрчлены и квантовое эффективное действие. Третий центральный момент даёт следующий член порядка (Λ^{-6}); это не самостоятельное доказательство полного потенциала.</div>
+</section>
+
+<section id="master">
+<h2>Мастер-карта AEFH v1.0–v6.0</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Блок</th><th>Математически получено в заявленной модели</th><th>Входы и открытые задачи</th></tr></thead>
+<tbody>
+<tr><td>Алгебра горизонта · Т. 1–3</td><td>Фазовые пороги функционала, конечномерные спектральные оценки и заявленная классификация DPI в оговорённых классах.</td><td>Фактор II₁ и его физическая реализация требуют отдельной конструкции; общий переход от алгебры к геометрии не закрыт.</td></tr>
+<tr><td>DPI · Т. 4</td><td>Монотонность при α≥0 и контрпримеры для α&lt;0 в оговорённых классах каналов.</td><td>Отождествление реальных причинных сжатий с заданными τ-каналами — физический постулат.</td></tr>
+<tr><td>Гравитация · Т. 5</td><td>Условный энтропийный вывод уравнений Эйнштейна и Бьянки-согласованного сектора.</td><td>Энтропийный постулат, неконформная поправка и космологическая интерпретация задаются отдельно.</td></tr>
+<tr><td>Краевые и калибровочные секторы · Т. 6–8</td><td>Центральное расщепление, формула краевых вкладов и Haar-индуцированное adjoint-действие Вильсона.</td><td>Связь центральных проекторов с потоками; сильная связь не доказывает конфайнмент.</td></tr>
+<tr><td>Фундаментальный сектор и Higgs-кинематика · Т. 9–10</td><td>Фундаментально-присоединённое действие, центр-чувствительность, U(1), CP<sup>N</sup>-кинематика и квадратичная массовая форма.</td><td>CP<sup>N</sup>-переменная — динамическая степень свободы; спектр масс требует канонической нормировки и квантового анализа.</td></tr>
+<tr><td>Потенциал · Т. 11</td><td>Строгая выпуклость по x, точный минимум, непрерывное нарушение U(N)→U(N−1), положительная радиальная кривизна.</td><td>Каноническая масса, абсолютный масштаб и физический потенциал требуют кинетической нормировки и дополнительных данных.</td></tr>
+<tr><td>Аномалии · Т. 12</td><td>Решение четырёх локальных уравнений при yQ≠0; чётность числа SU(2)-дублетов; групповые индексы заданного мультиплета.</td><td>Глобальная форма группы — Z₆-квотент; нормировка yQ; универсальный κ₀ по всем представлениям — дополнительное предположение.</td></tr>
+<tr><td>Киральный внутренний блок · Т. 13</td><td>Конечный D_F, градация, ковариантность, сингулярные массы, CKM/PMNS-структура; асимптотика Iα и неотрицательный квартетный коэффициент.</td><td>Yukawa-матрицы заданы; пространственный Dirac operator, реальная структура, фермионная мера, аномальные фазы и квантовое эффективное действие не построены.</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="verification">
+<h2>Верификационный стенд</h2>
+<p>Прилагается <code>aefh_v6_final_tests.py</code>, использующий NumPy и стандартную библиотеку. Он содержит четыре численных теста для Теорем 11–13:</p>
+<ol>
+<li>Сопоставление матричного потенциала с аналитической формулой, U(N)-инвариантность, симметричная и нарушенная фазы, численная радиальная кривизна и плоскость орбиты.</li>
+<li>Подстановка стандартных гиперзарядов в четыре локальных аномальных условия, факторизация кубического уравнения, проверка групповых индексов и древесного отношения 3/8.</li>
+<li>Эрмитовость 48×48 оператора, антикоммутация с градацией, калибровочная ковариантность, спектр масс и унитарность CKM.</li>
+<li>Gibbs-разложение Iα, положительность дисперсии Юкавы и порядки остатка после вычитания второго и третьего кумулянтов.</li>
+</ol>
+<div class="card"><strong>Файлы</strong><p><a href="aefh_v6_final_tests.py">Исходный Python-стенд</a> · <a href="https://github.com/ivanivorontsov-sudo/ivanivorontsov-sudo.github.io/blob/main/.github/workflows/aefh-v6.yml">CI workflow</a></p></div>
+<p class="small muted">Численные тесты проверяют выбранные примеры и допуски. Они не являются доказательством для всех представлений, всех матриц Юкавы или полного квантового поля. Результат CI следует считать успешным только после фактического зелёного запуска GitHub Actions.</p>
+</section>
+
+<section id="limits">
+<h2>Что осталось за пределами v6.0</h2>
+<div class="card">
+<ul>
+<li>Полная спектральная тройка Конна требует задания представленной алгебры, вещественной структуры (J_F), условия первого порядка и оператора Дирака на пространстве-времени. В v6 дан только конечный внутренний блок (D_F(φ)).</li>
+<li>Фермионная кинетика, интегрирование по киральным фермионам, фаза детерминанта и независимая проверка всех локальных и глобальных аномалий в полном квантовом функциональном интеграле остаются открытыми.</li>
+<li>Матрицы Юкавы, число поколений, глобальная форма калибровочной группы и единый коэффициент (κ_0) — входные данные. Модель не предсказывает их значения.</li>
+<li>Ренормгрупповой бег к низким энергиям, абсолютные масштабы масс, радиационные поправки и совпадение с измерениями не выведены из этих конечномерных тождеств.</li>
+<li>Квартичный коэффициент в малом-(Λ^{-2}) разложении положителен при ненулевой дисперсии спектра (\mathcal Y^2), но не заменяет полный квантовый потенциал Хиггса.</li>
+</ul></div>
+<p>Итак, v6.0 закрывает несколько точно сформулированных алгебраических этажей внутри выбранной конструкции. Назвать её завершённой «теорией почти всего» можно как дружескую шутку; как физическую классификацию — пока рано.</p>
+</section>
+</main>
+<aside aria-label="Содержание страницы"><strong>Содержание</strong><ol>
+<li><a href="#abstract">Аннотация</a></li><li><a href="#theorem-11">Теорема 11</a></li><li><a href="#theorem-12">Теорема 12</a></li><li><a href="#theorem-13">Теорема 13</a></li><li><a href="#master">Мастер-карта</a></li><li><a href="#verification">Тесты</a></li><li><a href="#limits">Ограничения</a></li>
+</ol></aside>
+</div>
+<footer class="footer"><div class="footer-inner">
+<p><strong>AEFH v6.0</strong> · Исследовательская рукопись Ивана Воронцова · Версия страницы от 24 ноября 2026 года.</p>
+<p>Разработка и подготовка материалов велись при помощи ИИ-инструментов. Это не означает независимой научной сертификации текста, доказательств или программных тестов.</p>
+<a class="backtop" href="#content">К началу страницы ↑</a> · <a href="/aefh/v5/">AEFH v5.0</a> · <a href="/aefh/">Архив AEFH</a> · <a href="/">Главная</a> · <a href="https://github.com/ivanivorontsov-sudo/ivanivorontsov-sudo.github.io" target="_blank" rel="noopener noreferrer">Исходники на GitHub</a>
+</div></footer>
+</body></html>
