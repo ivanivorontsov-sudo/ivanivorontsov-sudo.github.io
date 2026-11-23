@@ -1,0 +1,30 @@
+name: AEFH v6.0 final numerical tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "aefh/v6/**"
+      - ".github/workflows/aefh-v6.yml"
+  pull_request:
+    paths:
+      - "aefh/v6/**"
+      - ".github/workflows/aefh-v6.yml"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install NumPy
+        run: python -m pip install --upgrade numpy
+      - name: Run numerical tests
+        run: python aefh/v6/aefh_v6_final_tests.py -v
+      - name: Run with optimizations enabled
+        run: python -O aefh/v6/aefh_v6_final_tests.py -v
