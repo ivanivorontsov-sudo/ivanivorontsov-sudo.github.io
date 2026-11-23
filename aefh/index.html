@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>AEFH v3.1.1 — энтропия Петца, DPI и фактор II₁</title>
+  <meta name="description" content="AEFH v3.1.1: исследовательская программа об энтропии Петца, относительной энтропии Араки, DPI для факторов II₁ и условном выводе уравнений Эйнштейна.">
+  <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large">
+  <link rel="canonical" href="https://ivanivorontsov-sudo.github.io/aefh/">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:site_name" content="Исследовательские материалы Ивана Воронцова">
+  <meta property="og:title" content="AEFH v3.1.1 — энтропия Петца, DPI и фактор II₁">
+  <meta property="og:description" content="Математическое ядро AEFH: фазовые пороги функционала, принцип монотонности и условный геометрический предел.">
+  <meta property="og:url" content="https://ivanivorontsov-sudo.github.io/aefh/">
+  <meta property="article:published_time" content="2026-11-24">
+  <meta property="article:modified_time" content="2026-11-24">
+  <meta property="article:section" content="Математическая физика">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="AEFH v3.1.1 — энтропия Петца, DPI и фактор II₁">
+  <meta name="twitter:description" content="Исследовательская рукопись о квантовой аффинности Петца, факторах II₁ и энтропийном подходе к гравитации.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "@id": "https://ivanivorontsov-sudo.github.io/aefh/#article",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://ivanivorontsov-sudo.github.io/aefh/"
+    },
+    "headline": "Алгебраико-энтропийная гравитация конечного горизонта (AEFH v3.1.1)",
+    "alternativeHeadline": "Фазовая диаграмма устойчивости вакуума, принцип причинной монотонности и геометрическое равновесие",
+    "description": "Исследовательская рукопись о функционалах относительной энтропии и квантовой аффинности Петца, неравенстве обработки данных для факторов фон Неймана типа II₁ и условном энтропийном выводе уравнений Эйнштейна.",
+    "abstract": "В работе исследуется семейство Iα(ρ,σ)=S(ρ‖σ)+α(1−F₁/₂(ρ,σ)), где F₁/₂ — квантовая аффинность Петца. Основной результат классифицирует знак α, совместимый с неравенством обработки данных для всех нормальных вполне положительных сохраняющих след каналов в факторах II₁ и конечномерных матричных алгебрах.",
+    "author": {
+      "@type": "Person",
+      "name": "Иван Воронцов",
+      "url": "https://ivanivorontsov-sudo.github.io/",
+      "sameAs": "https://github.com/ivanivorontsov-sudo"
+    },
+    "datePublished": "2026-11-24",
+    "dateModified": "2026-11-24",
+    "inLanguage": "ru-RU",
+    "isAccessibleForFree": true,
+    "genre": "Исследовательская рукопись / preprint",
+    "keywords": [
+      "алгебраико-энтропийная гравитация",
+      "относительная энтропия Араки",
+      "квантовая аффинность Петца",
+      "неравенство обработки данных",
+      "фактор фон Неймана типа II₁",
+      "метрика Боголюбова — Кубо — Мори",
+      "энтропийное равновесие",
+      "уравнения Эйнштейна"
+    ],
+    "citation": [
+      "https://arxiv.org/abs/2206.10780",
+      "https://arxiv.org/abs/1505.04753",
+      "https://arxiv.org/abs/1102.0440",
+      "https://doi.org/10.1103/PhysRevD.111.066001",
+      "https://doi.org/10.1016/j.physletb.2026.141014"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Главная","item":"https://ivanivorontsov-sudo.github.io/"},
+      {"@type":"ListItem","position":2,"name":"AEFH v3.1.1","item":"https://ivanivorontsov-sudo.github.io/aefh/"}
+    ]
+  }
+  </script>
+  <style>
+    :root{color-scheme:light dark;--bg:#f5f7fb;--surface:#fff;--surface-2:#edf2f8;--text:#172033;--muted:#526078;--line:#dbe2ec;--accent:#2458a6;--accent-soft:#e7efff;--good:#176b48;--warn:#8a5510;--shadow:0 14px 40px rgba(20,35,60,.07)}
+    @media(prefers-color-scheme:dark){:root{--bg:#0d1420;--surface:#141f2e;--surface-2:#1b2a3d;--text:#edf3fc;--muted:#aab8ca;--line:#2c3b50;--accent:#9fc0ff;--accent-soft:#1c3153;--good:#75d2a7;--warn:#f1c17a;--shadow:0 14px 40px rgba(0,0,0,.2)}}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:22px}
+    body{margin:0;background:var(--bg);color:var(--text);font:17px/1.72 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+    a{color:var(--accent);text-underline-offset:3px}
+    a:hover{text-decoration-thickness:2px}
+    .top{border-bottom:1px solid var(--line);background:var(--surface)}
+    .top-inner,.layout,.footer-inner{width:min(1180px,calc(100% - 36px));margin:0 auto}
+    .top-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+    .brand{font-weight:800;letter-spacing:.02em;color:var(--text);text-decoration:none}
+    .top-links{display:flex;gap:18px;flex-wrap:wrap;font-size:.92rem}
+    .crumbs{font-size:.88rem;color:var(--muted);padding:18px 0 0}
+    .crumbs a{color:var(--muted)}
+    .hero{padding:34px 0 28px}
+    .eyebrow{display:inline-flex;gap:8px;align-items:center;color:var(--accent);font-size:.82rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    h1{font-size:clamp(2.05rem,5.2vw,4.15rem);line-height:1.08;letter-spacing:-.045em;max-width:970px;margin:14px 0}
+    .subtitle{font-size:clamp(1.06rem,2vw,1.35rem);line-height:1.5;color:var(--muted);max-width:900px;margin:0}
+    .meta-row{display:flex;gap:9px 18px;flex-wrap:wrap;margin:22px 0;color:var(--muted);font-size:.9rem}
+    .pill{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:4px 10px;background:var(--surface);font-size:.8rem;font-weight:700}
+    .pill.status{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 35%,var(--line))}
+    .notice{padding:15px 18px;border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:12px;background:var(--surface);color:var(--muted);font-size:.95rem}
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:34px;align-items:start;padding-bottom:58px}
+    main{min-width:0}
+    aside{position:sticky;top:18px;padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--surface);font-size:.9rem}
+    aside strong{display:block;margin-bottom:8px}
+    aside ol{margin:0;padding-left:20px}
+    aside li{margin:5px 0}
+    section{margin:28px 0 38px;scroll-margin-top:16px}
+    h2{font-size:clamp(1.45rem,3vw,2rem);line-height:1.25;letter-spacing:-.025em;margin:0 0 14px}
+    h3{font-size:1.12rem;line-height:1.35;margin:24px 0 8px}
+    p{margin:10px 0}
+    .lead{font-size:1.08rem}
+    .card{padding:22px;border:1px solid var(--line);border-radius:16px;background:var(--surface);box-shadow:var(--shadow)}
+    .theorem{border-top:4px solid var(--accent)}
+    .formula{display:block;overflow-x:auto;padding:13px 16px;margin:14px 0;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);font: .96rem/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+    .formula.inline{display:inline;padding:2px 6px;margin:0;font-size:.92em;white-space:normal}
+    .muted{color:var(--muted)}
+    .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .mini{padding:18px;border:1px solid var(--line);border-radius:13px;background:var(--surface)}
+    .mini h3{margin:0 0 8px}
+    .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+    table{width:100%;border-collapse:collapse;min-width:660px;font-size:.94rem}
+    caption{text-align:left;padding:12px 14px;font-weight:750}
+    th,td{padding:11px 13px;border-top:1px solid var(--line);text-align:left;vertical-align:top}
+    th{background:var(--surface-2);font-size:.86rem}
+    details{margin:12px 0;padding:13px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+    summary{cursor:pointer;font-weight:750}
+    details[open] summary{margin-bottom:10px}
+    .checkline{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+    .check{color:var(--good);font-weight:850}
+    .tag-list{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+    .tag-list span{padding:4px 9px;border-radius:7px;background:var(--surface-2);color:var(--muted);font-size:.82rem}
+    .reference-list li{margin:10px 0}
+    .small{font-size:.9rem}
+    .footer{border-top:1px solid var(--line);background:var(--surface);color:var(--muted)}
+    .footer-inner{padding:24px 0 34px;font-size:.9rem}
+    .backtop{display:inline-block;margin-top:12px}
+    @media(max-width:850px){.layout{grid-template-columns:1fr}.layout aside{position:static;order:-1}.grid2{grid-template-columns:1fr}}
+    @media(max-width:560px){body{font-size:16px}.top-inner,.layout,.footer-inner{width:min(100% - 24px,1180px)}.top-inner{padding:10px 0;align-items:flex-start;flex-direction:column}.hero{padding-top:25px}.card{padding:17px}.formula{font-size:.85rem;padding:11px}}
+  </style>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <a class="brand" href="/">Иван Воронцов · исследования</a>
+    <nav class="top-links" aria-label="Основная навигация">
+      <a href="/">Главная</a>
+      <a href="#theorem-4">Главная теорема</a>
+      <a href="#limits">Границы программы</a>
+    </nav>
+  </div>
+</header>
+<div class="top-inner crumbs" aria-label="Хлебные крошки">
+  <a href="/">Главная</a> / <span aria-current="page">AEFH v3.1.1</span>
+</div>
+
+<div class="top-inner hero">
+  <div class="eyebrow">Математическая физика · исследовательская рукопись</div>
+  <h1>Алгебраико-энтропийная гравитация конечного горизонта (AEFH)</h1>
+  <p class="subtitle">Фазовая диаграмма устойчивости вакуума, принцип причинной монотонности и условное геометрическое равновесие.</p>
+  <div class="meta-row">
+    <span class="pill">Версия 3.1.1</span>
+    <span class="pill">24 ноября 2026</span>
+    <span class="pill">Русский язык</span>
+    <span class="pill status">Исследовательская рукопись · не прошла внешнее рецензирование</span>
+  </div>
+  <div class="notice">
+    <strong>Статус и границы.</strong> Это авторская исследовательская программа и математическая рукопись, а не публикация в рецензируемом журнале и не установленная физическая теория. Теоремы 1–4 относятся к явно заданным алгебраическим предпосылкам. Геометрическая Теорема 5 условна: её энтропийный постулат и форма неконформной поправки заданы отдельно и не выводятся из Теорем 1–4. Для ключевых утверждений требуется независимая экспертная проверка.
+  </div>
+</div>
+
+<div class="layout">
+<main id="content">
+  <section id="abstract">
+    <h2>Аннотация</h2>
+    <p class="lead">Рассматривается семейство безразмерных функционалов, объединяющих относительную энтропию и квантовую аффинность Петца:</p>
+    <div class="formula">I<sub>α</sub>(ρ, σ) = S(ρ ‖ σ) + α(1 − F<sub>1/2</sub>(ρ, σ))
+J̃<sub>γ</sub>(ρ, σ) = I<sub>−γ</sub>(ρ, σ)
+F<sub>1/2</sub>(ρ, σ) = τ(ρ<sup>1/2</sup>σ<sup>1/2</sup>)</div>
+    <p>Главный результат раздела 3 — классификация знака параметра: функционал I<sub>α</sub> удовлетворяет неравенству обработки данных для всех нормальных вполне положительных сохраняющих след каналов в рассматриваемых классах алгебр тогда и только тогда, когда α ≥ 0. Для отрицательного α нарушение существует при любой величине |α| &gt; 0, в том числе для произвольной пары конечномерных матричных алгебр M<sub>N</sub> → M<sub>K</sub> при N,K ≥ 2 и для пары факторов типа II<sub>1</sub>.</p>
+    <p>Здесь F<sub>1/2</sub> — аффинность Петца (квантовая аффинность Хеллингера), а не fidelity Ульмана. Все состояния нормированы относительно следа τ(1)=1.</p>
+    <div class="tag-list" aria-label="Ключевые темы">
+      <span>фактор фон Неймана II₁</span><span>энтропия Араки</span><span>аффинность Петца</span><span>DPI</span><span>метрика BKM</span><span>энтропийная гравитация</span>
+    </div>
+  </section>
+
+  <section id="definitions">
+    <h2>Определения и нормировка</h2>
+    <p>Пусть M — фактор фон Неймана типа II<sub>1</sub> или матричная алгебра M<sub>N</sub>(ℂ), снабжённая точным нормальным нормированным следом τ(1)=1. Состояниями называются положительные операторы ρ,σ с τ(ρ)=τ(σ)=1. Для матриц это означает τ(X)=Tr(X)/N и Tr(ρ)=N.</p>
+    <div class="formula">S(ρ ‖ σ) = τ(ρ(ln ρ − ln σ))
+F<sub>1/2</sub>(ρ,σ) = τ(ρ<sup>1/2</sup>σ<sup>1/2</sup>)</div>
+    <p>Для строго положительных состояний эти выражения задаются обычным функциональным исчислением. Для граничных состояний относительная энтропия понимается в смысле продолжения Араки, с учётом области определения относительного модульного оператора.</p>
+  </section>
+
+  <section id="theorem-4">
+    <div class="card theorem">
+      <div class="eyebrow">Центральный результат · Теорема 4</div>
+      <h2>Принцип монотонности и однозначность знака α ≥ 0</h2>
+      <p><strong>Формулировка.</strong> Пусть M,N — произвольная пара факторов типа II<sub>1</sub> либо пара матричных алгебр M<sub>N</sub>(ℂ), M<sub>K</sub>(ℂ), где N,K ≥ 2. Для функционала</p>
+      <div class="formula">I<sub>α</sub>(ρ,σ) = S(ρ ‖ σ) + α(1 − F<sub>1/2</sub>(ρ,σ))</div>
+      <p>следующие условия эквивалентны:</p>
+      <ol>
+        <li>Для каждого нормального вполне положительного сохраняющего нормированный след канала Φ:M→N и всех обратимых состояний ρ,σ выполняется
+          <div class="formula">I<sub>α</sub>(Φ(ρ),Φ(σ)) ≤ I<sub>α</sub>(ρ,σ).</div>
+        </li>
+        <li><strong>α ≥ 0.</strong></li>
+      </ol>
+      <p class="muted small">Монотонность здесь означает «не возрастает»; строгого уменьшения для каждого канала не требуется. Для каналов между разными алгебрами у каждой стороны используется собственный нормированный след.</p>
+    </div>
+
+    <div class="grid2">
+      <article class="mini">
+        <h3>Почему α ≥ 0 достаточно</h3>
+        <p>Относительная энтропия Араки не возрастает при нормальных вполне положительных сохраняющих след отображениях. Аффинность Петца F<sub>1/2</sub> не убывает при таких каналах. Поэтому при α ≥ 0 обе части I<sub>α</sub> согласованы с DPI.</p>
+        <div class="formula">S(Φρ ‖ Φσ) ≤ S(ρ ‖ σ)
+F<sub>1/2</sub>(Φρ,Φσ) ≥ F<sub>1/2</sub>(ρ,σ)</div>
+      </article>
+      <article class="mini">
+        <h3>Почему α &lt; 0 невозможно</h3>
+        <p>Положим γ=−α&gt;0. Для любого γ можно выбрать положительные обратимые состояния и сохраняющий след канал, после которого J̃<sub>γ</sub> строго возрастает. Контрпример построен как в матричных алгебрах, так и в факторах II<sub>1</sub>.</p>
+        <div class="formula">J̃<sub>γ</sub>(Φρ,Φσ) &gt; J̃<sub>γ</sub>(ρ,σ)</div>
+      </article>
+    </div>
+
+    <details>
+      <summary>Конечномерная конструкция M<sub>N</sub> → M<sub>K</sub> для всех N,K ≥ 2</summary>
+      <p>Задаётся сохраняющий след вполне положительный канал Θ, переводящий диагональ входной матрицы в диагональную матрицу размера K:</p>
+      <div class="formula">Θ(X) = (K/N) diag(X₁₁, q, …, q),
+q = (X₂₂ + … + X<sub>NN</sub>)/(K−1).</div>
+      <p>Обозначим D=Θ(I<sub>N</sub>)=diag(a₁,a₂,…,a₂), где a₁=K/N и a₂=K(N−1)/(N(K−1)). Затем введём деполяризующее отображение с фиксированной точкой D:</p>
+      <div class="formula">Ψ<sub>t</sub>(Y) = (1−t)Y + t τ<sub>K</sub>(Y)D,
+Φ<sub>t</sub> = Ψ<sub>t</sub> ∘ Θ.</div>
+      <p>Оно сохраняет нормированный след и удовлетворяет Φ<sub>t</sub>(I<sub>N</sub>)=D. На состояниях ρ(x)=diag(x,(N−x)/(N−1),…) действие канала сводит расчёт к скалярной функции</p>
+      <div class="formula">g<sub>N</sub>(x) =
+x ln x + (N−x) ln((N−x)/(N−1))
+− γ[N − √x − √((N−1)(N−x))].</div>
+      <p>Её производная удовлетворяет lim<sub>x→0+</sub> √x g′<sub>N</sub>(x)=γ/2&gt;0. Следовательно, при достаточно малом x канал сдвигает параметр в область возрастания функционала. Это даёт нарушение DPI при любом γ&gt;0 для каждой пары N,K≥2.</p>
+    </details>
+
+    <details>
+      <summary>Перенос контрпримера на произвольную пару факторов II<sub>1</sub></summary>
+      <p>В каждом факторе выбирается разложение единицы на три ортогональных проектора следа 1/3: e₁+e₂+e₃=1 в M и f₁+f₂+f₃=1 в N. Между ними строится нормальный сохраняющий след канал</p>
+      <div class="formula">Θ(X) = 3 Σᵢ τ<sub>M</sub>(eᵢ X eᵢ) fᵢ.</div>
+      <p>В выходном факторе частичная изометрия u с u*u=f₁ и uu*=f₂ задаёт самосопряжённую обменную инволюцию S₁₂=u+u*+f₃. Канал Ψ(Y)=(Y+S₁₂YS₁₂)/2 меняет местами первые два блока. Композиция Φ=Ψ∘Θ воспроизводит положительное приращение J̃<sub>γ</sub> для любого γ&gt;0.</p>
+    </details>
+  </section>
+
+  <section id="lemmas">
+    <h2>Технические леммы для фактора типа II₁</h2>
+    <article class="card">
+      <h3>Лемма 4.1. Спектральная регуляризация</h3>
+      <p>Пусть A,B≥0, τ(A)=τ(B)=1 и A≤CB. Для A<sub>ε</sub>=(1−ε)A+ε1 и B<sub>ε</sub>=(1−ε)B+ε1 при ε→0+ выполняются</p>
+      <div class="formula">τ(A<sub>ε</sub><sup>p</sup>B<sub>ε</sub><sup>1−p</sup>) → τ(A<sup>p</sup>B<sup>1−p</sup>),  0&lt;p&lt;1,
+S(A<sub>ε</sub> ‖ B<sub>ε</sub>) → S<sub>Araki</sub>(A ‖ B).</div>
+      <p>Введём спектральную меру dν<sub>A</sub>(t)=τ(A E<sub>B</sub>(dt)). Из A≤CB следует dν<sub>A</sub>(t)≤Ct dν<sub>τ</sub>(t). Поэтому логарифмическая особенность при t=0 интегрируема, а переход к пределу в τ(A ln B<sub>ε</sub>) обосновывается теоремой о мажорируемой сходимости.</p>
+      <p>Стандартный относительный модульный оператор на носителе A записывается как</p>
+      <div class="formula">Δ<sub>B,A</sub> = L<sub>B</sub> R<sub>A⁻¹</sub>,
+S<sub>Araki</sub>(A ‖ B) = −⟨A<sup>1/2</sup>, log Δ<sub>B,A</sub> A<sup>1/2</sup>⟩
+= ⟨A<sup>1/2</sup>, (log R<sub>A</sub> − log L<sub>B</sub>) A<sup>1/2</sup>⟩.</div>
+      <p class="muted small">При необратимом A или B логарифмы и обратный оператор понимаются через соответствующие носители и квадратичные формы; доминирование A≤CB обеспечивает нужную интегрируемость.</p>
+    </article>
+    <article class="card">
+      <h3>Лемма 4.2. Проекторы и обменная инволюция</h3>
+      <p>В факторе II<sub>1</sub> диапазон нормированного следа на проекторах равен [0,1]. Два проектора эквивалентны по Мюррею — фон Нейману тогда и только тогда, когда их следы совпадают.</p>
+      <p>В частности, существуют ортогональные e₁,e₂,e₃ с суммой 1 и τ(eᵢ)=1/3. Для частичной изометрии u с u*u=e₁ и uu*=e₂ оператор</p>
+      <div class="formula">S₁₂ = u + u* + e₃</div>
+      <p>является самосопряжённой унитарной инволюцией: S₁₂*=S₁₂ и S₁₂²=1. Он переставляет e₁ и e₂ и оставляет e₃ неподвижным.</p>
+    </article>
+  </section>
+
+  <section id="phase">
+    <h2>Фазовая диаграмма: локальная устойчивость, глобальная граница и DPI</h2>
+    <p>Для J̃<sub>γ</sub>=S−γ(1−F<sub>1/2</sub>) в трёх задачах возникают разные масштабы порога. Локальный порог гессиана равен 4, универсальный глобальный порог — 2, а при фиксированном конечномерном трейс-вакууме появляется размерностная граница γ<sub>N</sub>.</p>
+    <div class="table-wrap">
+      <table>
+        <caption>Фазовая диаграмма функционала J̃<sub>γ</sub></caption>
+        <thead><tr><th>Параметр</th><th>Локальный гессиан</th><th>Глобальная неотрицательность</th><th>DPI</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">γ ≤ 0 (α ≥ 0)</th><td>Положителен</td><td>Да</td><td>Да</td></tr>
+          <tr><th scope="row">0 &lt; γ ≤ 2</th><td>Положителен</td><td>Да</td><td>Нет</td></tr>
+          <tr><th scope="row">2 &lt; γ &lt; 4</th><td>Положителен</td><td>Нет в II₁; в M<sub>N</sub> при фиксированном I<sub>N</sub> — тогда и только тогда, когда γ&gt;γ<sub>N</sub></td><td>Нет</td></tr>
+          <tr><th scope="row">γ = 4</th><td>Вырожден по коммутирующим направлениям</td><td>Нет; есть отрицательные направления четвёртого порядка</td><td>Нет</td></tr>
+          <tr><th scope="row">γ &gt; 4</th><td>Есть строго отрицательные направления; достаточно некоммутирующие могут оставаться положительными</td><td>Нет</td><td>Нет</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted">Для строки 2&lt;γ&lt;4 асимптотическая форма критерия при больших N: N ≳ 1/[2(γ−2)]. Точное конечномерное условие — γ&gt;γ<sub>N</sub>; асимптотика не заменяет точный порог.</p>
+  </section>
+
+  <section id="theorems-1-3">
+    <h2>Теоремы 1–3: два порога устойчивости и конечномерная граница</h2>
+    <article class="mini">
+      <h3>Теорема 1. Локальный порог γ<sub>loc</sub>=4</h3>
+      <p>Вторая вариация относительной энтропии задаётся ядром Боголюбова — Кубо — Мори, а вторая вариация 1−F<sub>1/2</sub> — ядром Петца/Хеллингера:</p>
+      <div class="formula">K<sub>BKM</sub>(a,b) = (ln a − ln b)/(a−b)
+K<sub>H</sub>(a,b) = 1/(√a+√b)²
+K<sub>BKM</sub>/K<sub>H</sub> = 2(r+1)ln(r)/(r−1),  r=√(a/b).</div>
+      <p>Отношение ядер не меньше 4 и равно 4 при a=b. Поэтому при γ&lt;4 гессиан положителен на ненулевых допустимых возмущениях. При γ=4 он вырождается по коммутирующим направлениям. При γ&gt;4 существуют строго отрицательные направления — в частности, среди коммутирующих возмущений; это не означает отрицательности формы на всех направлениях.</p>
+      <p>В критической точке при σ=I₂ и ρ<sub>t</sub>=diag(1+t,1−t):</p>
+      <div class="formula">J̃₄(ρ<sub>t</sub>, I₂) = −(7/96)t⁴ − (187/3840)t⁶ + O(t⁸).</div>
+    </article>
+    <article class="mini">
+      <h3>Теорема 2. Универсальный глобальный порог γ<sub>glob</sub>=2</h3>
+      <p>Для нормированных состояний выполняется цепочка</p>
+      <div class="formula">S(ρ ‖ σ) ≥ −2 ln F<sub>1/2</sub>(ρ,σ)
+≥ 2(1−F<sub>1/2</sub>(ρ,σ)).</div>
+      <p>Следовательно, J̃<sub>γ</sub>≥0 для γ≤2. Константа остра: в факторе II₁ при фиксированном σ=1 и в M₂ при свободном выборе σ отношение S/(1−F<sub>1/2</sub>) может сколь угодно близко подходить к 2.</p>
+    </article>
+    <article class="mini">
+      <h3>Теорема 3. Точный порог γ<sub>N</sub> при σ=I<sub>N</sub></h3>
+      <div class="formula">γ<sub>N</sub> =
+ln(N/(N−1)) / (1−√((N−1)/N))
+= 2 + 1/(2N) + O(N⁻²).</div>
+      <p>На замкнутом спектральном симплексе инфимум достигается на грани (0,N/(N−1),…,N/(N−1)). Для строго положительных состояний неравенство строго, но тот же инфимум достигается в пределе при приближении к этой грани.</p>
+    </article>
+  </section>
+
+  <section id="theorem-5">
+    <div class="eyebrow">Условная геометрическая часть</div>
+    <h2>Теорема 5. Вывод уравнений Эйнштейна при энтропийном постулате</h2>
+    <div class="notice">Это условная геометрическая теорема. Предположение о стационарности обобщённой энтропии при фиксированном объёме, а также заданная форма неконформной поправки δX являются физическими предпосылками. Они не выводятся из Теорем 1–4 и не должны читаться как следствие одной лишь алгебраической классификации DPI.</div>
+    <p>Для малого геодезического шара B радиуса ℓ на пространственноподобном срезе с K<sub>ij</sub>(p)=0 предполагается стационарность</p>
+    <div class="formula">S<sub>gen</sub>(B) = A(∂B)/(4G) + S<sub>EE</sub>(B),
+δS<sub>gen</sub> = 0 при фиксированном объёме,
+δS<sub>EE</sub> = δ⟨K<sub>B</sub>⟩ с заданной поправкой δX.</div>
+    <p>Разложение геометрии малого шара приводит к дефициту площади</p>
+    <div class="formula">δA|<sub>V</sub> =
+−Ω<sub>d−1</sub> ℓ<sup>d+1</sup>(R−2λ)/[2d(d+2)]
++ O(ℓ<sup>d+3</sup>).</div>
+    <p>При указанном энтропийном постулате и соответствующем модулярном гамильтониане получается скалярное соотношение для любого единичного времениподобного u<sup>μ</sup>; его выполнение для всех таких u<sup>μ</sup> даёт тензорное уравнение</p>
+    <div class="formula">G<sub>μν</sub> + Λ<sub>eff</sub>g<sub>μν</sub>
+= 8πG ⟨T<sub>μν</sub>⟩,
+Λ<sub>eff</sub> = λ − 8πG δX.</div>
+    <p class="muted small">Данный вывод условен относительно перечисленных входных постулатов и полуклассического длинноволнового приближения ℓ<sub>P</sub>≪ℓ≪L<sub>curv</sub>.</p>
+  </section>
+
+  <section id="corollary">
+    <h2>Следствие 5.1. Динамический сектор и скалярная реализация</h2>
+    <p>Минимальной согласованной реализацией динамического сектора в рассматриваемой космологической модели выступает каноническое скалярное поле φ с потенциалом V(φ). Это не утверждение об уникальности: возможны и другие ковариантные динамические секторы.</p>
+    <div class="formula">T<sup>(φ)</sup><sub>μν</sub> =
+∇<sub>μ</sub>φ ∇<sub>ν</sub>φ
+− g<sub>μν</sub>[(∇φ)²/2 + V(φ)]</div>
+    <p>В расширяющейся плоской FLRW-модели при 8πG=1:</p>
+    <div class="formula">Ḣ = −(ρ<sub>m</sub> + φ̇²)/2
+ρ̇<sub>m</sub> = −3Hρ<sub>m</sub>
+φ̈ + 3Hφ̇ + V′(φ) = 0
+3H² = ρ<sub>m</sub> + ρ<sub>φ</sub></div>
+    <p>Из уравнения Клейна — Гордона следует ρ̇<sub>φ</sub>=−3Hφ̇²≤0 при H≥0. Для положительной плотности ρ<sub>φ</sub> уравнение состояния удовлетворяет</p>
+    <div class="formula">w<sub>φ</sub> ≥ −1;
+w<sub>φ</sub> &gt; −1 при φ̇ ≠ 0;
+w<sub>φ</sub> = −1 при φ̇ = 0.</div>
+  </section>
+
+  <section id="verification">
+    <h2>Верификационный стенд и границы численных тестов</h2>
+    <p>К рукописи приложен единый файл <code>aefh_paper_tests.py</code> с восемью методами unittest. В предоставленном протоколе запуска зафиксировано:</p>
+    <div class="card">
+      <div class="checkline"><span class="check">✓</span><strong>Ran 8 tests in 0.202s — OK</strong></div>
+      <p class="muted small">Команда запуска с включённой оптимизацией Python:</p>
+      <div class="formula">python3 -O aefh_paper_tests.py</div>
+    </div>
+    <p>Стенд содержит численные проверки гессианов и критического разложения, глобального энтропийного неравенства, конечномерного порога γ<sub>N</sub>, операторных неравенств Петца в матричной модели, нескольких классов каналов DPI, контрпримеров для положительного γ, разложения геометрии малых шаров и интегрирования FLRW-системы методом RK4.</p>
+    <p><strong>Правильная интерпретация результата:</strong> прохождение тестов подтверждает согласованность реализованных конечномерных численных сценариев и регрессионных проверок. Оно само по себе не доказывает утверждения для всех факторов II₁, не заменяет доказательство операторных лемм и не является независимым рецензированием физической части. Перенос на факторы II₁ в рукописи обосновывается отдельными аналитическими конструкциями.</p>
+  </section>
+
+  <section id="limits">
+    <h2>Что утверждается математически, а что остаётся физической программой</h2>
+    <div class="grid2">
+      <article class="mini">
+        <h3>Математическое ядро рукописи</h3>
+        <ul>
+          <li>локальная оценка гессиана и порог 4;</li>
+          <li>глобальная энтропийная граница 2;</li>
+          <li>точный конечномерный порог γ<sub>N</sub>;</li>
+          <li>классификация знака α для DPI в указанных классах каналов;</li>
+          <li>спектральная регуляризация и конструкция проекторов II₁;</li>
+          <li>геометрическая формула при явно заданных предпосылках Теоремы 5.</li>
+        </ul>
+      </article>
+      <article class="mini">
+        <h3>Открытые физические вопросы</h3>
+        <ul>
+          <li>обоснование моделирования реальных сжатий горизонтов именно τ-каналами;</li>
+          <li>построение непертурбативного отображения сети алгебр II₁ в локальную лоренцеву геометрию;</li>
+          <li>вывод калибровочных полей и группы SU(3)×SU(2)×U(1) из склейки пересекающихся горизонтов;</li>
+          <li>независимое сопоставление космологических следствий с наблюдениями.</li>
+        </ul>
+      </article>
+    </div>
+    <p>В частности, из математического требования DPI для всех τ-каналов не следует автоматически, что всякое физическое уменьшение причинного горизонта обязано описываться таким каналом. Этот мост является отдельным физическим постулатом программы AEFH.</p>
+  </section>
+
+  <section id="falsification">
+    <h2>Проверяемые следствия и возможная фальсификация</h2>
+    <ol>
+      <li><strong>Космология.</strong> Сценарий динамического тёмного сектора сопоставляется с ограничениями на параметры уравнения состояния тёмной энергии; наблюдаемое поведение, несовместимое с выбранным потенциалом и динамикой поля, исключит соответствующую реализацию, но не автоматически всю алгебраическую часть AEFH.</li>
+      <li><strong>Гравитационная запутанность.</strong> Эксперименты по гравитационно-индуцированной запутанности могут ограничивать класс физических моделей, в которых гравитационный сектор способен передавать квантовую информацию.</li>
+      <li><strong>Лоренц-инвариантность.</strong> Отсутствие линейных поправок к дисперсии фотонов ограничивает модели с соответствующим нарушением симметрии; сама AEFH не вводит такую поправку как обязательное предсказание.</li>
+    </ol>
+  </section>
+
+  <section id="references">
+    <h2>Литература и исходные контексты</h2>
+    <ol class="reference-list">
+      <li>V. Chandrasekaran, R. Longo, G. Penington, E. Witten, <em>An Algebra of Observables for de Sitter Space</em>, JHEP 02 (2023) 082. <a href="https://arxiv.org/abs/2206.10780" target="_blank" rel="noopener noreferrer">arXiv:2206.10780</a>.</li>
+      <li>T. Jacobson, <em>Entanglement Equilibrium and the Einstein Equation</em>, Phys. Rev. Lett. 116, 201101 (2016). <a href="https://arxiv.org/abs/1505.04753" target="_blank" rel="noopener noreferrer">arXiv:1505.04753</a>.</li>
+      <li>H. Casini, M. Huerta, R. C. Myers, <em>Towards a derivation of holographic entanglement entropy</em>, JHEP 05 (2011) 036. <a href="https://arxiv.org/abs/1102.0440" target="_blank" rel="noopener noreferrer">arXiv:1102.0440</a>.</li>
+      <li>D. Petz, <em>Quasi-entropies for finite quantum systems</em>, Rep. Math. Phys. 23 (1986), 57–65; <em>Monotone metrics on matrix spaces</em>, Linear Algebra Appl. 244 (1996), 81–96.</li>
+      <li>R. V. Kadison, J. R. Ringrose, <em>Fundamentals of the Theory of Operator Algebras</em>, Vol. II, AMS (1997); M. Takesaki, <em>Theory of Operator Algebras I</em>, Springer (2002).</li>
+      <li>R. M. Wald, <em>General Relativity</em>, University of Chicago Press (1984).</li>
+      <li>G. Bianconi, <em>Gravity from entropy</em>, Phys. Rev. D 111, 066001 (2025). <a href="https://doi.org/10.1103/PhysRevD.111.066001" target="_blank" rel="noopener noreferrer">DOI: 10.1103/PhysRevD.111.066001</a>.</li>
+      <li>G. Bianconi, <em>Λ-Gravity from entropy</em>, Phys. Lett. B 882, 141014 (2026). <a href="https://doi.org/10.1016/j.physletb.2026.141014" target="_blank" rel="noopener noreferrer">DOI: 10.1016/j.physletb.2026.141014</a>.</li>
+    </ol>
+    <p class="small muted">Указанные работы дают научный контекст и математические инструменты; они не являются независимым подтверждением всех утверждений AEFH.</p>
+  </section>
+</main>
+
+<aside aria-label="Содержание страницы">
+  <strong>Содержание</strong>
+  <ol>
+    <li><a href="#abstract">Аннотация</a></li>
+    <li><a href="#definitions">Определения</a></li>
+    <li><a href="#theorem-4">Теорема 4 — DPI</a></li>
+    <li><a href="#lemmas">Леммы 4.1 и 4.2</a></li>
+    <li><a href="#phase">Фазовая диаграмма</a></li>
+    <li><a href="#theorems-1-3">Теоремы 1–3</a></li>
+    <li><a href="#theorem-5">Теорема 5</a></li>
+    <li><a href="#corollary">Следствие 5.1</a></li>
+    <li><a href="#verification">Тестовый стенд</a></li>
+    <li><a href="#limits">Границы программы</a></li>
+    <li><a href="#references">Литература</a></li>
+  </ol>
+</aside>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p><strong>AEFH v3.1.1</strong> · Исследовательская рукопись Ивана Воронцова · Версия страницы от 24 ноября 2026 года.</p>
+    <p>Разработка и подготовка материалов велись при помощи ИИ-инструментов. Это не означает независимой научной сертификации текста, доказательств или программных тестов.</p>
+    <a class="backtop" href="#content">К началу страницы ↑</a> · <a href="/">Главная страница</a> · <a href="https://github.com/ivanivorontsov-sudo/ivanivorontsov-sudo.github.io" target="_blank" rel="noopener noreferrer">Исходники сайта на GitHub</a>
+  </div>
+</footer>
+</body>
+</html>
