@@ -301,7 +301,8 @@ def main() -> int:
             parser.feed(path.read_text(encoding="utf-8"))
             robots = ",".join(parser.metas.get("robots", [])).lower()
             canonical = parser.canonicals[0].strip() if parser.canonicals else expected_canonical(path)
-            if "noindex" not in robots:
+            quarantined_converter = "tools-audit/workshop/converters/" in path.as_posix()
+            if "noindex" not in robots and not quarantined_converter:
                 indexable.add(expected_canonical(path))
             elif path.name != "404.html":
                 noindex.add(canonical)
