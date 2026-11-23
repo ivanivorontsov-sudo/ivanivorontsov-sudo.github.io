@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>AEFH v5.0 — фундаментальные заряды, U(1) и индуцированный механизм Хиггса</title>
+  <meta name="description" content="AEFH v5.0: точное индуцированное фундаментально-присоединённое действие Вильсона, компактный U(1)-Максвелл, чувствительность к центру Z_N и реберная CP^N-кинетика Хиггса.">
+  <meta name="author" content="Иван Воронцов">
+  <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large">
+  <link rel="canonical" href="https://ivanivorontsov-sudo.github.io/aefh/v5/">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:site_name" content="Исследовательские материалы Ивана Воронцова">
+  <meta property="og:title" content="AEFH v5.0 — фундаментальные заряды, U(1) и механизм Хиггса">
+  <meta property="og:description" content="Точные конечномерные тождества для фундаментально-присоединённого действия Вильсона и CP^N-реберной динамики, индуцированных одним функционалом I_alpha.">
+  <meta property="og:url" content="https://ivanivorontsov-sudo.github.io/aefh/v5/">
+  <meta property="article:published_time" content="2026-11-24">
+  <meta property="article:modified_time" content="2026-11-24">
+  <meta property="article:section" content="Математическая физика">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="AEFH v5.0 — фундаментальные заряды, U(1) и механизм Хиггса">
+  <meta name="twitter:description" content="Исследовательская рукопись: фундаментальный и присоединённый секторы, компактный U(1), CP^N-кинетика и квадратичный спектр Хиггса.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"ScholarlyArticle",
+    "@id":"https://ivanivorontsov-sudo.github.io/aefh/v5/#article",
+    "mainEntityOfPage":{"@type":"WebPage","@id":"https://ivanivorontsov-sudo.github.io/aefh/v5/"},
+    "headline":"Алгебраико-энтропийная гравитация конечного горизонта (AEFH v5.0): фундаментальные заряды, электромагнетизм U(1) и индуцированный механизм Хиггса",
+    "description":"Исследовательская рукопись о точном Haar-усреднённом фундаментально-присоединённом действии Вильсона и реберном CP^N-действии, получаемых из функционала относительной энтропии и аффинности Петца.",
+    "author":{"@type":"Person","name":"Иван Воронцов","url":"https://ivanivorontsov-sudo.github.io/","sameAs":"https://github.com/ivanivorontsov-sudo"},
+    "datePublished":"2026-11-24",
+    "dateModified":"2026-11-24",
+    "inLanguage":"ru-RU",
+    "isAccessibleForFree":true,
+    "genre":"Исследовательская рукопись / preprint",
+    "keywords":["AEFH","фундаментальное действие Вильсона","присоединённое действие Вильсона","U(1)-Максвелл","центр Z_N","CP^N","метрика Фубини — Штуди","механизм Хиггса","аффинность Петца"]
+  }
+  </script>
+  <style>
+    :root{color-scheme:light dark;--bg:#f5f7fb;--surface:#fff;--surface2:#edf2f8;--text:#172033;--muted:#526078;--line:#dbe2ec;--accent:#2458a6;--accentSoft:#e7efff;--warn:#8a5510;--shadow:0 14px 40px rgba(20,35,60,.07)}
+    @media(prefers-color-scheme:dark){:root{--bg:#0d1420;--surface:#141f2e;--surface2:#1b2a3d;--text:#edf3fc;--muted:#aab8ca;--line:#2c3b50;--accent:#9fc0ff;--accentSoft:#1c3153;--warn:#f1c17a;--shadow:0 14px 40px rgba(0,0,0,.2)}}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:20px}body{margin:0;background:var(--bg);color:var(--text);font:17px/1.72 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+    a{color:var(--accent);text-underline-offset:3px}a:hover{text-decoration-thickness:2px}.top{border-bottom:1px solid var(--line);background:var(--surface)}
+    .top-inner,.layout,.footer-inner{width:min(1180px,calc(100% - 40px));margin:auto}.top-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{font-weight:750;text-decoration:none;color:var(--text)}.top-links{display:flex;gap:18px;flex-wrap:wrap}.top-links a{font-size:.92rem;text-decoration:none}
+    .crumbs{padding:14px 0;color:var(--muted);font-size:.88rem}.crumbs a{color:var(--muted)}.hero{padding:24px 0 20px}.eyebrow{color:var(--accent);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.76rem}
+    h1{font-size:clamp(2rem,4vw,3.3rem);line-height:1.12;letter-spacing:-.035em;margin:.55rem 0}.subtitle{font-size:1.12rem;color:var(--muted);max-width:900px;margin:.5rem 0 1rem}
+    .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.pill{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:.8rem;background:var(--surface);color:var(--muted)}
+    .status{border-color:#b58b48;color:var(--warn)}.notice{border:1px solid var(--line);border-left:4px solid var(--accent);background:var(--surface);border-radius:12px;padding:14px 17px;margin:16px 0;box-shadow:var(--shadow)}
+    .notice.warn{border-left-color:#b7791f}.layout{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:34px;align-items:start;padding:14px 0 60px}
+    main{min-width:0}section{margin:0 0 38px;scroll-margin-top:20px}h2{font-size:1.6rem;line-height:1.25;margin:0 0 14px}h3{font-size:1.18rem;margin:24px 0 8px}p{margin:.65rem 0}.lead{font-size:1.08rem}
+    .formula{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:15px 18px;margin:12px 0;overflow-x:auto;font:500 .99rem/1.8 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:normal}
+    .formula.center{text-align:center}.formula .line{display:block}.muted,.small{color:var(--muted)}.small{font-size:.9rem}.tag-list{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.tag-list span{background:var(--surface2);border-radius:999px;padding:4px 10px;font-size:.82rem}
+    .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0;box-shadow:var(--shadow)}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .callout{border-left:4px solid var(--accent);background:var(--accentSoft);padding:12px 15px;border-radius:8px;margin:14px 0}.callout.warn{border-left-color:#b7791f}.table-wrap{overflow-x:auto}
+    table{border-collapse:collapse;width:100%;font-size:.94rem;margin:12px 0}th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}th{background:var(--surface2)}
+    aside{position:sticky;top:20px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;font-size:.9rem}aside strong{display:block;margin-bottom:8px}aside ol{padding-left:21px;margin:0}aside li{margin:5px 0}aside a{text-decoration:none}
+    .version-nav{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 18px}.version-nav a{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:8px 12px;text-decoration:none}
+    .footer{border-top:1px solid var(--line);background:var(--surface);padding:20px 0 28px}.footer p{font-size:.9rem;color:var(--muted)}.backtop{display:inline-block;margin-top:8px}
+    code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--surface2);padding:1px 4px;border-radius:4px}
+    @media(max-width:850px){.layout{grid-template-columns:1fr}aside{position:static;order:-1}.grid2{grid-template-columns:1fr}}
+    @media(max-width:560px){body{font-size:16px}.top-inner,.layout,.footer-inner{width:min(100% - 24px,1180px)}.top-inner{padding:10px 0;align-items:flex-start;flex-direction:column}.hero{padding-top:18px}.formula{font-size:.85rem;padding:11px}.card{padding:15px}}
+  </style>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <a class="brand" href="/">Иван Воронцов · исследования</a>
+    <nav class="top-links" aria-label="Основная навигация">
+      <a href="/">Главная</a>
+      <a href="/aefh/">AEFH · версии</a>
+      <a href="#limits">Ограничения модели</a>
+      <a href="aefh_v5_higgs_u1_tests.py">Python-тесты</a>
+    </nav>
+  </div>
+</header>
+<div class="top-inner crumbs"><a href="/">Главная</a> / <a href="/aefh/">AEFH</a> / <span aria-current="page">v5.0</span></div>
+
+<div class="top-inner hero">
+  <div class="eyebrow">Математическая физика · исследовательская рукопись</div>
+  <h1>AEFH v5.0: фундаментальные заряды, электромагнетизм U(1) и индуцированный механизм Хиггса</h1>
+  <p class="subtitle">От одного функционала относительной энтропии и аффинности Петца — к фундаментальному и присоединённому секторам Вильсона, компактному U(1) и реберной CP<sup>N</sup>-кинетике.</p>
+  <div class="meta-row">
+    <span class="pill">Версия 5.0</span>
+    <span class="pill">24 ноября 2026</span>
+    <span class="pill">Русский язык</span>
+    <span class="pill status">Исследовательская рукопись · внешнее рецензирование не завершено</span>
+  </div>
+  <div class="notice warn">
+    <strong>Статус и границы.</strong> Это авторская математическая конструкция, а не установленная физическая теория и не статья, прошедшая независимое рецензирование. Ниже отделены точные конечномерные тождества, их условные непрерывные пределы и физические интерпретации. Наличие численного теста не заменяет общего доказательства и само по себе не подтверждает соответствие Стандартной модели.
+  </div>
+  <div class="version-nav">
+    <a href="/aefh/">Архив v3.1.1 и история проекта</a>
+    <a href="#v401">Редакционные уточнения v4.0.1</a>
+    <a href="aefh_v5_higgs_u1_tests.py">Открыть тестовый скрипт</a>
+  </div>
+</div>
+
+<div class="layout">
+<main id="content">
+  <section id="abstract">
+    <h2>Аннотация</h2>
+    <p class="lead">Версия 5.0 расширяет Haar-усреднённую конструкцию AEFH с присоединённого сектора до смешанного фундаментально-присоединённого действия Вильсона. Расширенный зонд на пространстве <strong>ℂ<sup>N</sup> ⊕ ℂ</strong> содержит когерентность между фундаментальным блоком и опорным вакуумным сектором. Эта когерентность делает действие чувствительным к центральным фазам и при N = 1 даёт компактное U(1)-действие. Пространственно-зависимый зонд ранга 1 задаёт реберное действие, пропорциональное метрике Фубини — Штуди на CP<sup>N</sup>.</p>
+    <div class="formula">
+      <span class="line">I<sub>α</sub>(ρ,σ) = S(ρ ‖ σ) + α(1 − F<sub>1/2</sub>(ρ,σ)), &nbsp; α ≥ 0</span>
+      <span class="line">F<sub>1/2</sub>(ρ,σ) = τ(ρ<sup>1/2</sup>σ<sup>1/2</sup>)</span>
+    </div>
+    <p>Здесь F<sub>1/2</sub> — аффинность Петца (квантовая аффинность Хеллингера), а не fidelity Ульмана. Следы нормированы: τ<sub>n</sub>(X) = Tr(X)/n. Теоремы 9 и 10 ниже формулируются как точные утверждения о конечномерных матрицах, Haar-усреднении и гладких полях в заданной решёточной постановке.</p>
+    <div class="tag-list"><span>относительная энтропия</span><span>фундаментальный сектор</span><span>центр Z<sub>N</sub></span><span>U(1)-Максвелл</span><span>CP<sup>N</sup></span><span>метрика Фубини — Штуди</span><span>механизм Хиггса</span></div>
+  </section>
+
+  <section id="roadmap">
+    <h2>Линия развития AEFH</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Версии</th><th>Содержание</th><th>Статус формулировки</th></tr></thead>
+      <tbody>
+        <tr><td>v1–v3.1.1 · Теоремы 1–5</td><td>Функционалы I<sub>α</sub> и J̃<sub>γ</sub>, фазовые пороги, DPI для указанных классов алгебр, условный энтропийный вывод гравитационных уравнений.</td><td>Теоремы об алгебраической модели; Теорема 5 условна по физическим постулатам.</td></tr>
+        <tr><td>v4.0.1 · Теоремы 6–8</td><td>Расщепление по центру, энтропия краевых секторов и индуцированное присоединённое действие Вильсона.</td><td>Точные тождества в заданной факторизационной и решёточной конструкции.</td></tr>
+        <tr><td>v5.0 · Теоремы 9–10</td><td>Фундаментально-присоединённое действие, чувствительность к центру, компактный U(1) и CP<sup>N</sup>-реберная кинетика с квадратичным массовым сектором.</td><td>Точные матричные тождества и условный гладкий предел; физическая полнота не заявляется.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="v401">
+    <h2>Уточнения, перенесённые из v4.0.1</h2>
+    <div class="card">
+      <p><strong>Теорема 6.</strong> Центральные вероятности p<sub>q</sub> описывают распределение по центральным секторам. Их отождествление с физическими граничными потоками требует отдельного физического постулата, связывающего центральные проекторы с операторами потока.</p>
+      <p><strong>Теорема 7.</strong> Величина S<sub>dim</sub> = Σ<sub>q</sub>p<sub>q</sub> ln d<sub>q</sub> называется <em>вкладом размерности неабелевых представлений</em>, а не топологическим инвариантом. Точное условие: S<sub>dim</sub> &gt; 0 тогда и только тогда, когда существует q с p<sub>q</sub> &gt; 0 и d<sub>q</sub> &gt; 1. Для U(1) этот вклад размерности равен нулю, но шенноновская часть H(p) = −Σ<sub>q</sub>p<sub>q</sub>ln p<sub>q</sub> может быть положительной.</p>
+      <p><strong>Теорема 8.</strong> Остаток O(a<sup>6</sup>) относится к одной центрированной плакетке; после суммирования по четырёхмерной решётке глобальная погрешность обычно имеет порядок O(a<sup>2</sup>). Результат называется индуцированным присоединённым действием Вильсона. Предел σ<sub>0</sub> → I переводит коэффициент жёсткости к нулю и формально соответствует сильной связи; это не доказательство конфайнмента.</p>
+    </div>
+  </section>
+
+  <section id="definitions">
+    <h2>Общие определения Теоремы 9</h2>
+    <p>Пусть N ≥ 1, D = N + 1 и H<sub>aug</sub> = ℂ<sup>N</sup><sub>fund</sub> ⊕ ℂ<sub>vac</sub>. На M<sub>D</sub>(ℂ) используется нормированный след τ<sub>D</sub>(X) = Tr(X)/D. Пусть Σ<sub>0</sub> &gt; 0 и τ<sub>D</sub>(Σ<sub>0</sub>) = 1.</p>
+    <div class="formula">
+      <span class="line">Σ<sub>0</sub> = [ A  v ; v†  c ], &nbsp; log Σ<sub>0</sub> = [ L  w ; w†  ℓ ],</span>
+      <span class="line">Σ<sub>0</sub><sup>1/2</sup> = [ B  u ; u†  d ].</span>
+      <span class="line">A,L,B ∈ M<sub>N</sub>(ℂ), &nbsp; v,w,u ∈ ℂ<sup>N</sup>, &nbsp; c,d &gt; 0, &nbsp; ℓ ∈ ℝ.</span>
+    </div>
+    <p>Для W,V ∈ U(N) положим W̃ = W ⊕ 1 и Ṽ = V ⊕ 1. Определим Haar-усреднённое действие</p>
+    <div class="formula">S<sub>α,Σ₀</sub><sup>fund</sup>(W) = ∫<sub>U(N)</sub> dV I<sub>α</sub>( W̃ Ṽ Σ₀ Ṽ† W̃† , Ṽ Σ₀ Ṽ† ).</div>
+  </section>
+
+  <section id="theorem-9">
+    <h2>Теорема 9. Индуцированное фундаментально-присоединённое действие Вильсона</h2>
+    <h3>Точное Haar-усреднение</h3>
+    <p>Для N ≥ 2 введём нормированный характер присоединённого представления</p>
+    <div class="formula">τ<sub>adj</sub>(W) = ( |Tr W|<sup>2</sup> − 1 ) / (N<sup>2</sup> − 1).</div>
+    <p>Тогда для любого W ∈ U(N)</p>
+    <div class="formula center">
+      S<sub>α,Σ₀</sub><sup>fund</sup>(W) = κ<sub>fund</sub>(1 − Re τ<sub>N</sub>(W)) + κ<sub>adj</sub>(1 − τ<sub>adj</sub>(W)).
+    </div>
+    <p>Для N = 1 присоединённое слагаемое отсутствует. Коэффициенты равны</p>
+    <div class="formula">
+      <span class="line">κ<sub>fund</sub> = 2/(N+1) · ( Re(v†w) + α‖u‖<sup>2</sup> ),</span>
+      <span class="line">κ<sub>adj</sub> = 1/(N+1) · [ Tr(AL) − Tr(A)Tr(L)/N</span>
+      <span class="line indent">+ α( Tr(B<sup>2</sup>) − (Tr B)<sup>2</sup>/N ) ].</span>
+    </div>
+    <p>Все величины в скобках вещественны при указанных положительных матрицах. При α ≥ 0 выполняется</p>
+    <div class="formula">κ<sub>fund</sub> = ½ I<sub>α</sub>(ZΣ<sub>0</sub>Z, Σ<sub>0</sub>) ≥ 0, &nbsp; Z = I<sub>N</sub> ⊕ (−1),</div>
+    <p>причём κ<sub>fund</sub> &gt; 0 тогда и только тогда, когда v ≠ 0. Коэффициент κ<sub>adj</sub> по отдельности может быть отрицательным для некоторых зондов; физически значимая квадратичная жёсткость полного действия рассматривается ниже.</p>
+
+    <h3>Унитарный 2-дизайн</h3>
+    <p>Подынтегральное выражение после сведения к сопряжению U = V†WV имеет полиномиальную степень не выше (2,2) по элементам V и их комплексно-сопряжённым. Поэтому Haar-среднее воспроизводится точно любым точным унитарным 2-дизайном в U(N). Для N = 2 используется 24-элементная проективная группа Клиффорда одного кубита.</p>
+
+    <h3>Компактный U(1) и центр Z<sub>N</sub></h3>
+    <div class="grid2">
+      <div class="card">
+        <strong>Абелев случай N = 1</strong>
+        <div class="formula">W = e<sup>iθ</sup>, &nbsp; S(W) = κ<sub>fund</sub>(1 − cos θ).</div>
+        <p class="small">Это точное компактное плакеточное действие Вильсона для U(1); его гладкий слабополевой предел квадратичен по электромагнитной кривизне.</p>
+      </div>
+      <div class="card">
+        <strong>Центральный элемент N ≥ 2</strong>
+        <div class="formula">S(zI<sub>N</sub>) = κ<sub>fund</sub>(1 − cos(2πk/N)) &gt; 0</div>
+        <p class="small">Для z = exp(2πik/N), k = 1,…,N−1, и v ≠ 0 действие чувствительно к центру. Присоединённый член сам по себе остаётся слепым к Z<sub>N</sub>.</p>
+      </div>
+    </div>
+
+    <h3>Непрерывный предел и положительность SU(N)-жёсткости</h3>
+    <p>Пусть A<sub>μ</sub> = a<sub>μ</sub>I<sub>N</sub> + Â<sub>μ</sub> — гладкое эрмитово U(N)-поле, Tr Â<sub>μ</sub> = 0, а F<sub>μν</sub> = f<sub>μν</sub>I<sub>N</sub> + F̂<sub>μν</sub>. Для центрированной плакетки с гладкими связностями</p>
+    <div class="formula">
+      <span class="line">1 − Re τ<sub>N</sub>(W<sub>μν</sub>) = a<sup>4</sup> f<sub>μν</sub><sup>2</sup>/2</span>
+      <span class="line indent">+ a<sup>4</sup> Tr(F̂<sub>μν</sub><sup>2</sup>)/(2N) + O(a<sup>6</sup>),</span>
+      <span class="line">1 − τ<sub>adj</sub>(W<sub>μν</sub>) = [N/(N<sup>2</sup>−1)] a<sup>4</sup> Tr(F̂<sub>μν</sub><sup>2</sup>) + O(a<sup>6</sup>).</span>
+    </div>
+    <p>Поэтому локальное действие одной плакетки имеет вид</p>
+    <div class="formula">
+      S<sub>□</sub> = a<sup>4</sup>{ κ<sub>fund</sub> f<sub>μν</sub><sup>2</sup>/2
+      + C<sub>SU(N)</sub> Tr(F̂<sub>μν</sub><sup>2</sup>) } + O(a<sup>6</sup>),
+      <br>C<sub>SU(N)</sub> = κ<sub>fund</sub>/(2N) + Nκ<sub>adj</sub>/(N<sup>2</sup>−1).
+    </div>
+    <p>Остаток O(a<sup>6</sup>) здесь локален: он относится к одной плакетке. При суммировании по O(a<sup>−4</sup>) плакеткам в четырёх измерениях глобальная ошибка дискретизации имеет типичный порядок O(a<sup>2</sup>).</p>
+    <p>Если Tr(X<sup>2</sup>) = 1 для ненулевого эрмитова бесследового X, то C<sub>SU(N)</sub> — коэффициент ε<sup>2</sup> в S(e<sup>iεX</sup>). Из положительности гессиана I<sub>α</sub> при α ≥ 0 следует C<sub>SU(N)</sub> &gt; 0 для любого зонда, не инвариантного относительно вложенного действия U(N). Это остаётся верным даже когда κ<sub>adj</sub> &lt; 0: отрицательный вклад отдельного разложения не равен отрицательной полной жёсткости.</p>
+    <div class="callout warn"><strong>Глобальная группа.</strong> На уровне алгебр Ли u(N) = u(1) ⊕ su(N), но глобально U(N) ≅ (U(1) × SU(N))/Z<sub>N</sub>, а не прямое произведение без факторизации.</div>
+  </section>
+
+  <section id="rank-one">
+    <h2>Когерентный зонд ранга 1</h2>
+    <p>Пусть</p>
+    <div class="formula">Σ<sub>0</sub> = μ<sub>0</sub>I<sub>N+1</sub> + μ<sub>1</sub>|ψ<sub>0</sub>⟩⟨ψ<sub>0</sub>|, &nbsp; |ψ<sub>0</sub>⟩ = (sin θ<sub>0</sub> e<sub>N</sub>, cos θ<sub>0</sub>)<sup>T</sup>,</div>
+    <p>где μ<sub>0</sub>, μ<sub>1</sub> &gt; 0, μ<sub>0</sub> + μ<sub>1</sub>/(N+1) = 1 и 0 &lt; θ<sub>0</sub> &lt; π/2. Обозначим</p>
+    <div class="formula">Λ<sub>α</sub> = 1/(N+1)[ μ<sub>1</sub> ln(1 + μ<sub>1</sub>/μ<sub>0</sub>) + α(√(μ<sub>0</sub>+μ<sub>1</sub>) − √μ<sub>0</sub>)<sup>2</sup> ] &gt; 0.</div>
+    <p>Прямая подстановка в формулы коэффициентов даёт</p>
+    <div class="formula">
+      <span class="line">κ<sub>fund</sub> = 2Λ<sub>α</sub> sin<sup>2</sup>θ<sub>0</sub> cos<sup>2</sup>θ<sub>0</sub>,</span>
+      <span class="line">κ<sub>adj</sub> = [(N−1)/N] Λ<sub>α</sub> sin<sup>4</sup>θ<sub>0</sub> &nbsp; (N ≥ 2).</span>
+    </div>
+    <p>Оба коэффициента строго положительны при 0 &lt; θ<sub>0</sub> &lt; π/2. В частности, для N = 2 имеем κ<sub>adj</sub> = Λ<sub>α</sub>sin<sup>4</sup>θ<sub>0</sub>/2; для N = 3 — 2Λ<sub>α</sub>sin<sup>4</sup>θ<sub>0</sub>/3.</p>
+  </section>
+
+  <section id="theorem-10">
+    <h2>Теорема 10. Индуцированное CP<sup>N</sup>-реберное действие и механизм Хиггса</h2>
+    <h3>Когерентный зонд как поле состояний</h3>
+    <p>Пусть ψ(x) = (φ(x), χ(x))<sup>T</sup> ∈ ℂ<sup>N</sup> ⊕ ℂ — гладкий единичный вектор, определённый с точностью до локальной фазы. Зададим</p>
+    <div class="formula">Σ(ψ(x)) = μ<sub>0</sub>I<sub>N+1</sub> + μ<sub>1</sub>|ψ(x)⟩⟨ψ(x)|.</div>
+    <p>При g̃(x) = g(x) ⊕ 1, g(x) ∈ U(N), имеем φ(x) ↦ g(x)φ(x), χ(x) ↦ χ(x). Таким образом, когерентность между заряженным блоком и опорным вакуумным направлением преобразуется как фундаментальный мультиплет. В математической модели ψ(x) является CP<sup>N</sup>-значной коллективной переменной; её пространственная динамика — дополнительная степень свободы модели, хотя функционал I<sub>α</sub> и матричная параметризация зонда остаются прежними.</p>
+
+    <h3>Точное реберное тождество Фубини — Штуди</h3>
+    <p>Для соседних узлов x<sub>±</sub> = x<sub>0</sub> ± aμ̂/2 и Ũ<sub>μ</sub> = U<sub>μ</sub> ⊕ 1 определим</p>
+    <div class="formula">L<sub>link</sub>(x<sub>0</sub>,μ;a) = I<sub>α</sub>( Ũ<sub>μ</sub>Σ(ψ<sub>+</sub>)Ũ<sub>μ</sub><sup>†</sup>, Σ(ψ<sub>−</sub>) ).</div>
+    <p>Для любых единичных ψ<sub>1</sub>, ψ<sub>2</sub> точное равенство имеет вид</p>
+    <div class="formula">I<sub>α</sub>(Σ(ψ<sub>2</sub>),Σ(ψ<sub>1</sub>)) = Λ<sub>α</sub>(1 − |⟨ψ<sub>1</sub>|ψ<sub>2</sub>⟩|<sup>2</sup>).</div>
+    <p>Следовательно, для ребра</p>
+    <div class="formula">L<sub>link</sub> = Λ<sub>α</sub>(1 − |⟨ψ<sub>−</sub>|Ũ<sub>μ</sub>|ψ<sub>+</sub>⟩|<sup>2</sup>).</div>
+    <p>Это выражение точно инвариантно относительно локальных U(N)-преобразований на концах ребра и локальных фаз ψ(x) ↦ e<sup>iϕ(x)</sup>ψ(x). При обращении ориентации ребра оно не меняется.</p>
+
+    <h3>Гладкий предел</h3>
+    <p>Для гладких полей и D̃<sub>μ</sub>ψ = (D<sub>μ</sub>φ, ∂<sub>μ</sub>χ)<sup>T</sup>, D<sub>μ</sub>φ = (∂<sub>μ</sub> + iA<sub>μ</sub>)φ, получается</p>
+    <div class="formula">L<sub>link</sub> = a<sup>2</sup>Λ<sub>α</sub>[‖D̃<sub>μ</sub>ψ‖<sup>2</sup> − |⟨ψ,D̃<sub>μ</sub>ψ⟩|<sup>2</sup>] + O(a<sup>4</sup>).</div>
+    <p>В квадратных скобках находится метрика Фубини — Штуди на CP<sup>N</sup>, сопряжённая с калибровочной связностью. Для решёточного функционала Σ<sub>x,μ</sub>a<sup>2</sup>L<sub>link</sub> глобальная ошибка в гладком четырёхмерном пределе имеет порядок O(a<sup>2</sup>).</p>
+
+    <h3>Массовая форма и остаточная группа</h3>
+    <p>В однородном фоне ψ<sub>0</sub> = (sin θ<sub>0</sub>e<sub>N</sub>, cos θ<sub>0</sub>)<sup>T</sup> квадратичная форма по эрмитовой U(N)-связности A<sub>μ</sub> равна</p>
+    <div class="formula">L<sub>mass</sub> = Λ<sub>α</sub>sin<sup>2</sup>θ<sub>0</sub>[ Σ<sub>j=1</sub><sup>N−1</sup>|(A<sub>μ</sub>)<sub>jN</sub>|<sup>2</sup> + cos<sup>2</sup>θ<sub>0</sub>(A<sub>μ</sub>)<sub>NN</sub><sup>2</sup> ].</div>
+    <p>Стабилизатор выбранного направления изоморфен U(N−1). В квадратичном спектре остаются (N−1)<sup>2</sup> нулевых мод и 2N−1 положительных мод. Это утверждение о гессиане в однородном фоне; оно не означает, что полная квантовая теория или её спектр уже построены.</p>
+
+    <h3>Электрослабый случай N = 2</h3>
+    <p>Положим A<sub>μ</sub> = ½(B<sub>μ</sub>I<sub>2</sub> + W<sub>μ</sub><sup>a</sup>σ<sub>a</sub>), W<sub>μ</sub><sup>a</sup> = g Ŵ<sub>μ</sub><sup>a</sup>, B<sub>μ</sub> = g′ B̂<sub>μ</sub>, с нормировками</p>
+    <div class="formula">1/g′<sup>2</sup> = κ<sub>fund</sub>/4, &nbsp; 1/g<sup>2</sup> = κ<sub>fund</sub>/4 + 2κ<sub>adj</sub>/3.</div>
+    <p>Нулевая собственная мода квадратичного гессиана направлена вдоль</p>
+    <div class="formula">Â<sub>μ</sub><sup>em</sup> = (g′Ŵ<sub>μ</sub><sup>3</sup> + gB̂<sub>μ</sub>)/√(g<sup>2</sup>+g′<sup>2</sup>), &nbsp; Q = diag(1,0).</div>
+    <p>Она строго безмассовая на уровне указанного квадратичного действия: m<sub>γ</sub><sup>2</sup> = 0. Ортогональная комбинация</p>
+    <div class="formula">Ẑ<sub>μ</sub> = (gŴ<sub>μ</sub><sup>3</sup> − g′B̂<sub>μ</sub>)/√(g<sup>2</sup>+g′<sup>2</sup>)</div>
+    <p>и два заряженных направления имеют положительные квадратичные массы</p>
+    <div class="formula">
+      m<sub>W</sub><sup>2</sup> = (Λ<sub>α</sub>/2)g<sup>2</sup>sin<sup>2</sup>θ<sub>0</sub>,<br>
+      m<sub>Z</sub><sup>2</sup> = (Λ<sub>α</sub>/2)(g<sup>2</sup>+g′<sup>2</sup>)sin<sup>2</sup>θ<sub>0</sub>cos<sup>2</sup>θ<sub>0</sub>.
+    </div>
+    <p>Для определённого стандартным образом кастодиального отношения</p>
+    <div class="formula">ρ<sub>cust</sub> = m<sub>W</sub><sup>2</sup> / (m<sub>Z</sub><sup>2</sup> cos<sup>2</sup>θ<sub>W</sub>) = 1/cos<sup>2</sup>θ<sub>0</sub>.</div>
+
+    <div class="callout warn">
+      <strong>Исправление алгебры угла Вайнберга.</strong> Из указанных коэффициентов для N = 2 следуют κ<sub>fund</sub> = 2Λ<sub>α</sub>sin<sup>2</sup>θ<sub>0</sub>cos<sup>2</sup>θ<sub>0</sub> и κ<sub>adj</sub> = ½Λ<sub>α</sub>sin<sup>4</sup>θ<sub>0</sub>. Поэтому
+      <div class="formula">tan<sup>2</sup>θ<sub>W</sub> = g′<sup>2</sup>/g<sup>2</sup> = 1 + (2/3)tan<sup>2</sup>θ<sub>0</sub>,</div>
+      а не 1 + (2/3)cot<sup>2</sup>θ<sub>0</sub>. Следовательно, sin<sup>2</sup>θ<sub>W</sub> &gt; 1/2. Например, при θ<sub>0</sub> = 0.42 получается sin<sup>2</sup>θ<sub>W</sub> ≈ 0.5312. Это свойство минимальной модели, а не совпадение с наблюдаемым значением Стандартной модели.
+    </div>
+  </section>
+
+  <section id="proof-notes">
+    <h2>Технические замечания к доказательствам</h2>
+    <ul>
+      <li><strong>Чётность центрированной плакетки.</strong> При принятом порядке множителей переход a ↦ −a циклически переставляет множители плакетки. Поэтому Tr W(−a) = Tr W(a) по цикличности следа. В общем случае не следует заменять эту аргументацию утверждением о сопряжении W(−a) и W(a) одним и тем же произведением U<sub>1</sub>U<sub>2</sub>: такое тождество не следует из одних только четырёх произвольных унитарных множителей.</li>
+      <li><strong>Физический смысл фундаментального члена.</strong> Ненулевая когерентность v превращает блоковое сопряжение в чувствительный к центру пробный функционал. Это даёт фундаментальный характер в эффективном действии, но само по себе не строит динамический спектр фермионной материи и не доказывает наличие всех физических носителей фундаментального заряда.</li>
+      <li><strong>Массы.</strong> Значения m<sub>W</sub>, m<sub>Z</sub> — коэффициенты квадратичной формы (деревянный гессиан) около выбранного однородного фона. Полная квантовая масса как положение полюса пропагатора требует квантовой динамики, фиксации калибровки и анализа поправок.</li>
+    </ul>
+  </section>
+
+  <section id="verification">
+    <h2>Верификационный стенд</h2>
+    <p>К рукописи приложен Python-скрипт <code>aefh_v5_higgs_u1_tests.py</code> (NumPy и стандартная библиотека). В нём заявлены четыре группы проверок:</p>
+    <ol>
+      <li>Точное сравнение Haar-усреднения с 24-элементным 2-дизайном для общего положительного зонда U(2), тест U(1), центральных элементов Z<sub>2</sub>/Z<sub>3</sub>, экзотического зонда с κ<sub>adj</sub> &lt; 0 при положительной полной SU(2)-жёсткости, а также Haar Monte Carlo для U(3).</li>
+      <li>Порядок локального остатка O(a<sup>6</sup>) для центрированных U(1)- и U(2)-плакеток, чётность и локальная калибровочная инвариантность.</li>
+      <li>Точное CP<sup>N</sup>-тождество Фубини — Штуди, локальная калибровочная и фазовая инвариантность ребра и остаток O(a<sup>4</sup>) в локальном реберном действии.</li>
+      <li>Численный гессиан массовой формы для U(2) и U(3), включая нулевую фотонную моду, число массовых/безмассовых мод и кастодиальное соотношение.</li>
+    </ol>
+    <div class="card">
+      <strong>Исходный файл тестов</strong>
+      <p>Скрипт доступен отдельно и не загружается браузером на этой странице.</p>
+      <a href="aefh_v5_higgs_u1_tests.py">Открыть aefh_v5_higgs_u1_tests.py</a>
+    </div>
+    <p class="small muted">Наличие исходного скрипта не означает, что тесты выполнены в CI или что численные проверки доказывают утверждения для всех N, всех гладких связностей или всех положительных зондов. Результаты запуска указываются отдельно только после фактического выполнения.</p>
+  </section>
+
+  <section id="limits">
+    <h2>Что эта версия пока не доказывает</h2>
+    <div class="card">
+      <ul>
+        <li><strong>Не выводит полный сектор Стандартной модели.</strong> В конструкции заданы калибровочная группа U(N), решёточные связи и выбранное семейство пробных состояний. В частности, SU(3)×SU(2)×U(1), набор представлений материи и их гиперзаряды из одного этого вывода не возникают автоматически.</li>
+        <li><strong>Не содержит фермионного сектора.</strong> Киральность, спектральная тройка Конна, оператор Дирака, матрицы Юкавы и сокращение калибровочных аномалий остаются отдельной задачей.</li>
+        <li><strong>Не выводит потенциал Хиггса.</strong> Угол θ<sub>0</sub> и однородный фон заданы. Реберное действие даёт CP<sup>N</sup>-кинетику и квадратичную массовую форму, но само по себе не выбирает вакуумное значение и не доказывает мексиканский потенциал или наблюдаемую массу радиального скаляра.</li>
+        <li><strong>Поле CP<sup>N</sup> введено как динамическая переменная.</strong> Оно параметризует семейство состояний одного и того же матричного зонда, но математически остаётся новым полевым сектором/коллективной модой. Поэтому точнее говорить «тот же функционал I<sub>α</sub> применён к расширенному семейству состояний», а не «динамических переменных не добавлено».</li>
+        <li><strong>Сильная связь не равна доказанному конфайнменту.</strong> Для вывода конфайнмента потребуются мера интегрирования по связностям, оценка петли Вильсона/натяжения струны и анализ фазовой структуры.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="v6">
+    <h2>Следующий открытый этаж: v6.0</h2>
+    <p>Естественное продолжение — фермионный и киральный сектор: конечная спектральная тройка (A,H<sub>F</sub>,D<sub>F</sub>), структура левых и правых мод, допустимые представления, матрицы Юкавы и условия сокращения аномалий. До получения этих конструкций это программа дальнейшей работы, а не результат v5.0.</p>
+  </section>
+</main>
+
+<aside aria-label="Содержание страницы">
+  <strong>Содержание</strong>
+  <ol>
+    <li><a href="#abstract">Аннотация</a></li>
+    <li><a href="#roadmap">Линия версий</a></li>
+    <li><a href="#v401">Уточнения v4.0.1</a></li>
+    <li><a href="#theorem-9">Теорема 9</a></li>
+    <li><a href="#rank-one">Зонд ранга 1</a></li>
+    <li><a href="#theorem-10">Теорема 10</a></li>
+    <li><a href="#proof-notes">Технические замечания</a></li>
+    <li><a href="#verification">Тестовый стенд</a></li>
+    <li><a href="#limits">Ограничения</a></li>
+    <li><a href="#v6">План v6.0</a></li>
+  </ol>
+</aside>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p><strong>AEFH v5.0</strong> · Исследовательская рукопись Ивана Воронцова · Версия страницы от 24 ноября 2026 года.</p>
+    <p>Разработка и подготовка материалов велись при помощи ИИ-инструментов. Это не означает независимой научной сертификации текста, доказательств или программных тестов.</p>
+    <a class="backtop" href="#content">К началу страницы ↑</a> · <a href="/aefh/">Архив AEFH</a> · <a href="/">Главная страница</a> · <a href="https://github.com/ivanivorontsov-sudo/ivanivorontsov-sudo.github.io" target="_blank" rel="noopener noreferrer">Исходники сайта на GitHub</a>
+  </div>
+</footer>
+</body>
+</html>
