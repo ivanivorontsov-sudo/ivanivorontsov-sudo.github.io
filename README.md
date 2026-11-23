@@ -20,6 +20,8 @@ GitHub Pages: https://ivanivorontsov-sudo.github.io/
 
 ## Другие страницы
 
+- [AEFH v3.1.1 — математическая исследовательская работа](https://ivanivorontsov-sudo.github.io/aefh/): энтропия Петца, DPI для факторов II₁ и условный геометрический предел.
+
 - [Визитка и портфолио](https://ivanivorontsov-sudo.github.io/vizitka/).
 - [Ежедневная мастерская](https://ivanivorontsov-sudo.github.io/daily-tools/).
 - [PDF Мастер](https://ivanivorontsov-sudo.github.io/pdf-master/).
