@@ -6,6 +6,7 @@ from datetime import date
 from html.parser import HTMLParser
 from pathlib import Path
 import subprocess
+import difflib
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -108,6 +109,8 @@ def main() -> int:
         current = SITEMAP.read_text(encoding="utf-8") if SITEMAP.is_file() else ""
         if current != generated:
             print("sitemap.xml is stale. Run: python3 scripts/generate_sitemap.py")
+            diff = list(difflib.unified_diff(current.splitlines(), generated.splitlines(), fromfile="sitemap.xml (committed)", tofile="sitemap.xml (generated)", lineterm=""))
+            print("\\n".join(diff[:180]))
             return 1
         print("Sitemap is up to date.")
         return 0
