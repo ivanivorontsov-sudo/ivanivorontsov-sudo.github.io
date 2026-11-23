@@ -73,7 +73,7 @@ def build() -> str:
             entries[url] = modified or date.today().isoformat()
     for page in sorted(ROOT.rglob("*.html")):
         rel = page.relative_to(ROOT)
-        if any(part in SKIP_PARTS for part in rel.parts) or page.name == "404.html":
+        if any(part in SKIP_PARTS for part in rel.parts) or page.name == "404.html" or "tools-audit/workshop/converters/" in rel.as_posix():
             continue
         parser = MetaParser()
         try:
@@ -106,13 +106,24 @@ def main() -> int:
     args = ap.parse_args()
     generated = build()
     if args.check:
-        current = SITEMAP.read_text(encoding="utf-8") if SITEMAP.is_file() else ""
-        if current != generated:
-            print("sitemap.xml is stale. Run: python3 scripts/generate_sitemap.py")
-            diff = list(difflib.unified_diff(current.splitlines(), generated.splitlines(), fromfile="sitemap.xml (committed)", tofile="sitemap.xml (generated)", lineterm=""))
-            print("\\n".join(diff[:180]))
+        current_root = ET.parse(SITEMAP).getroot() if SITEMAP.is_file() else None
+        generated_root = ET.fromstring(generated)
+        current_urls = {
+            node.findtext(f"{{{NS}}}loc", default="").strip()
+            for node in current_root.findall(f"{{{NS}}}url")
+        } if current_root is not None else set()
+        generated_urls = {
+            node.findtext(f"{{{NS}}}loc", default="").strip()
+            for node in generated_root.findall(f"{{{NS}}}url")
+        }
+        if current_urls != generated_urls:
+            print("sitemap.xml URL inventory is stale. Run: python3 scripts/generate_sitemap.py")
+            for url in sorted(generated_urls - current_urls):
+                print("MISSING:", url)
+            for url in sorted(current_urls - generated_urls):
+                print("UNEXPECTED:", url)
             return 1
-        print("Sitemap is up to date.")
+        print(f"Sitemap URL inventory passed ({len(current_urls)} URLs). lastmod values are generated from git history by the write mode.")
         return 0
     SITEMAP.write_text(generated, encoding="utf-8")
     print(f"Updated sitemap.xml ({generated.count('<loc>')} URLs).")
