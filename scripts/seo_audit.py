@@ -240,7 +240,7 @@ def check_page(path: Path, seen_canonicals: dict[str, Path]) -> None:
             error(f"{rel}: broken local link '{link}' -> {target.relative_to(ROOT)}")
 
 
-def check_sitemap(indexable: set[str]) -> None:
+def check_sitemap(indexable: set[str], noindex: set[str]) -> None:
     if not SITEMAP.is_file():
         error("sitemap.xml is missing")
         return
@@ -265,6 +265,8 @@ def check_sitemap(indexable: set[str]) -> None:
     if len(locs) != len(set(locs)):
         error("sitemap.xml: duplicate <loc> entries")
     listed = set(locs)
+    for url in sorted(noindex & listed):
+        error(f"sitemap.xml: noindex page must not be listed: {url}")
 
     for url in listed:
         parts = urlsplit(url)
@@ -291,19 +293,23 @@ def main() -> int:
         error("No HTML files found")
     seen: dict[str, Path] = {}
     indexable: set[str] = set()
+    noindex: set[str] = set()
     for path in html_files:
         check_page(path, seen)
         if path.name != "404.html":
             parser = PageParser()
             parser.feed(path.read_text(encoding="utf-8"))
             robots = ",".join(parser.metas.get("robots", [])).lower()
+            canonical = parser.canonicals[0].strip() if parser.canonicals else expected_canonical(path)
             if "noindex" not in robots:
                 indexable.add(expected_canonical(path))
+            elif path.name != "404.html":
+                noindex.add(canonical)
 
     if not ROBOTS.is_file() or "sitemap.xml" not in ROBOTS.read_text(encoding="utf-8"):
         error("robots.txt must advertise sitemap.xml")
 
-    check_sitemap(indexable)
+    check_sitemap(indexable, noindex)
 
     print(f"Checked {len(html_files)} HTML pages.")
     if WARNINGS:

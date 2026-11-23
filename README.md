@@ -13,6 +13,11 @@ GitHub Pages: https://ivanivorontsov-sudo.github.io/
 - **Поиск по инструментам:** [умный поиск](https://ivanivorontsov-sudo.github.io/tools-audit/search.html).
 - **Справочник 100 программ и сервисов:** [сравнение тарифов и приватности](https://ivanivorontsov-sudo.github.io/tools-audit/).
 
+## Отдельные страницы проектов
+
+- [Флагманские проекты: требования, документация и загрузки](https://ivanivorontsov-sudo.github.io/projects/).
+- [Как устроена браузерная мастерская](https://ivanivorontsov-sudo.github.io/articles/local-browser-workshop/).
+
 ## Другие страницы
 
 - [Визитка и портфолио](https://ivanivorontsov-sudo.github.io/vizitka/).

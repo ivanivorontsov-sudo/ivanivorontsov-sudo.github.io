@@ -37,6 +37,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -45,6 +47,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Verify generated sitemap
+        run: python scripts/generate_sitemap.py --check
       - name: Validate SEO, metadata, links and sitemap
         run: python scripts/seo_audit.py
       - name: Verify the 1000-tool workshop inventory
@@ -75,3 +79,10 @@ jobs:
           done
           curl -fsS http://127.0.0.1:8765/ >/dev/null
           node scripts/browser_smoke.mjs
+
+      - name: Notify IndexNow participants about changed indexable URLs
+        if: github.event_name == 'push' && success()
+        env:
+          GITHUB_EVENT_BEFORE: ${{ github.event.before }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: python scripts/notify_indexnow.py
