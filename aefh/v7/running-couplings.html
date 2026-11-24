@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
+<title>RG-симулятор AEFH — бег констант Стандартной модели</title>
+<style>
+:root{color-scheme:light dark;--bg:#f5f7fb;--fg:#182335;--mut:#58677d;--card:#fff;--line:#dce3ed;--accent:#245fc7;--soft:#eaf1ff}
+@media(prefers-color-scheme:dark){:root{--bg:#101722;--fg:#e8edf6;--mut:#a8b5c8;--card:#182333;--line:#2c3a4f;--accent:#8db5ff;--soft:#1d3151}}
+*{box-sizing:border-box}body{margin:0;padding:16px;background:var(--bg);color:var(--fg);font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}.wrap{max-width:1050px;margin:auto}.lead{color:var(--mut);margin-top:0}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:0 0 14px}.controls{display:grid;grid-template-columns:1fr 1fr;gap:16px}.control label{display:flex;justify-content:space-between;gap:10px;font-weight:700;margin-bottom:8px}.control output{font-variant-numeric:tabular-nums;color:var(--accent)}input[type=range]{width:100%;accent-color:var(--accent)}select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font:inherit}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.metric{background:var(--soft);border-radius:12px;padding:12px;min-width:0}.metric span{display:block;color:var(--mut);font-size:.78rem}.metric strong{font-size:1.25rem;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.chartbox{height:360px}canvas{width:100%;height:100%;display:block}.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.85rem;color:var(--mut);margin-top:8px}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}.note{color:var(--mut);font-size:.86rem}.warning{border-left:4px solid #c58b21;padding:10px 12px;background:var(--soft);border-radius:8px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}td,th{text-align:right;padding:8px;border-bottom:1px solid var(--line)}td:first-child,th:first-child{text-align:left}
+@media(max-width:700px){.controls{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}.chartbox{height:300px}body{padding:10px}}
+</style>
+</head>
+<body><div class="wrap">
+<h1>Бег констант связи</h1>
+<p class="lead">Однопетлевой ориентир для Стандартной модели с GUT-нормированной U(1). Меняйте энергию и сравнивайте обратные константы.</p>
+<div class="card controls">
+<div class="control"><label for="mode">Модель потока</label><select id="mode"><option value="sm">Стандартная модель</option><option value="mssm">Игрушечный MSSM-порог на 1 ТэВ</option></select><p class="note" id="modeNote">Один набор β-функций Стандартной модели на всём диапазоне.</p></div>
+<div class="control"><label for="scale">Точка проверки log₁₀(μ / ГэВ) <output id="scaleOut">13.00</output></label><input id="scale" type="range" min="2" max="19" step=".01" value="13"></div>
+<div class="control"><label for="delta">Учебный сдвиг к α₃⁻¹ в выбранной точке <output id="deltaOut">0.0</output></label><input id="delta" type="range" min="0" max="10" step=".1" value="0"></div>
+<div class="control"><label>Параметры</label><p class="note">MZ = 91,188 ГэВ · α⁻¹(MZ) ≈ (59,02; 29,58; 8,47)</p><p class="note">βSM = (4,1; −19/6; −7), βMSSM = (6,6; 1; −3)</p></div>
+</div>
+<div class="card metrics">
+<div class="metric"><span>α₁⁻¹(μ)</span><strong id="a1">—</strong></div>
+<div class="metric"><span>α₂⁻¹(μ)</span><strong id="a2">—</strong></div>
+<div class="metric"><span>α₃⁻¹(μ)</span><strong id="a3">—</strong></div>
+<div class="metric"><span>sin² θW</span><strong id="sin">—</strong></div>
+<div class="metric"><span>Зазор α₂⁻¹ − α₃⁻¹</span><strong id="gap">—</strong></div>
+<div class="metric"><span>Зазор после Δ₃</span><strong id="gapShift">—</strong></div>
+<div class="metric"><span>log₁₀ μ</span><strong id="log">—</strong></div>
+<div class="metric"><span>α₁⁻¹ − α₂⁻¹</span><strong id="gap12">—</strong></div>
+</div>
+<div class="card">
+<h2>График обратных констант</h2>
+<div class="chartbox"><canvas id="chart" aria-label="График обратных констант связи в зависимости от энергии"></canvas></div>
+<div class="legend"><span><i class="dot" style="background:#2873d5"></i>α₁⁻¹</span><span><i class="dot" style="background:#299b70"></i>α₂⁻¹</span><span><i class="dot" style="background:#d17b32"></i>α₃⁻¹</span><span>Вертикальная линия — выбранная точка проверки</span></div>
+</div>
+<div class="card">
+<h2>Числа в выбранной точке</h2>
+<div class="table-wrap"><table><thead><tr><th>Величина</th><th>Значение</th></tr></thead><tbody>
+<tr><td>Энергетический масштаб μ</td><td id="mu">—</td></tr>
+<tr><td>SM: β₁, β₂, β₃</td><td>4,1; −3,1667; −7</td></tr>
+<tr><td>Обратные константы до учебного сдвига</td><td id="vals">—</td></tr>
+<tr><td>Сдвиг Δ₃</td><td id="dval">0,0</td></tr>
+<tr><td>После добавления Δ₃ к α₃⁻¹</td><td id="valsShift">—</td></tr>
+</tbody></table></div>
+</div>
+<div class="card warning"><strong>Важно о Δ₃:</strong> ползунок не меняет β-функции и не моделирует вычисленный порог AEFH. Это только условная добавка к α₃⁻¹ в выбранной точке сравнения. Чтобы назвать её следствием κadj, нужно отдельно вывести matching-условие из действия. Переключение MSSM также задаёт модельный порог на 1 ТэВ, а не реальное экспериментальное открытие суперсимметрии.</div>
+<p class="note">Ограничения: однопетлевая аппроксимация, фиксированные опорные значения при MZ, без полного набора двухпетлевых поправок, порогов частиц и схемной неопределённости. Симулятор иллюстрирует бег, а не доказывает объединение трёх взаимодействий.</p>
+</div>
+<script>
+(function(){
+"use strict";
+const MZ=91.188, LOGMZ=Math.log10(MZ), C=Math.LN10/(2*Math.PI);
+const A0=[59.02,29.58,8.47], BSM=[4.1,-19/6,-7], BMSSM=[6.6,1,-3], LOGMNEW=3;
+const el=id=>document.getElementById(id);
+const fmt=(n,d=3)=>Number.isFinite(n)?n.toFixed(d):"—";
+function flow(logMu,mode){
+  let out=[];
+  if(mode==="sm"||logMu<=LOGMNEW){
+    const t=(logMu-LOGMZ)*C;
+    out=A0.map((a,i)=>a-BSM[i]*t);
+  }else{
+    const tl=(LOGMNEW-LOGMZ)*C, th=(logMu-LOGMNEW)*C;
+    out=A0.map((a,i)=>a-BSM[i]*tl-BMSSM[i]*th);
+  }
+  return out;
+}
+function sin2(a1,a2){const den=(5/3)*a1+a2;return den>0?a2/den:NaN}
+function render(){
+  const mode=el("mode").value, logMu=Number(el("scale").value), delta=Number(el("delta").value);
+  const a=flow(logMu,mode), gap=a[1]-a[2], after=a[1]-(a[2]+delta), s=sin2(a[0],a[1]);
+  el("scaleOut").textContent=fmt(logMu,2);el("deltaOut").textContent=fmt(delta,1);
+  el("modeNote").textContent=mode==="sm"?"Один набор β-функций Стандартной модели на всём диапазоне.":"Непрерывное matching: SM до 1 ТэВ, MSSM выше 1 ТэВ. Это демонстрационный сценарий.";
+  el("a1").textContent=fmt(a[0],3);el("a2").textContent=fmt(a[1],3);el("a3").textContent=fmt(a[2],3);
+  el("sin").textContent=fmt(s,5);el("gap").textContent=fmt(gap,3);el("gapShift").textContent=fmt(after,3);
+  el("log").textContent=fmt(logMu,2);el("gap12").textContent=fmt(a[0]-a[1],3);
+  el("mu").textContent=fmt(Math.pow(10,logMu),3)+" ГэВ";
+  el("vals").textContent=a.map(x=>fmt(x,4)).join(" ; ");
+  el("dval").textContent=fmt(delta,1);el("valsShift").textContent=fmt(a[0],4)+" ; "+fmt(a[1],4)+" ; "+fmt(a[2]+delta,4);
+  draw(mode,logMu);
+}
+function draw(mode,mark){
+  const canvas=el("chart"), rect=canvas.getBoundingClientRect(), dpr=Math.max(1,window.devicePixelRatio||1);
+  const w=Math.max(300,rect.width),h=Math.max(220,rect.height);
+  canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);
+  const ctx=canvas.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+  const pad={l:48,r:14,t:16,b:34}, pw=w-pad.l-pad.r, ph=h-pad.t-pad.b;
+  const xmin=2,xmax=19,ymin=0,ymax=90;
+  const X=x=>pad.l+(x-xmin)/(xmax-xmin)*pw, Y=y=>pad.t+(ymax-y)/ (ymax-ymin)*ph;
+  const dark=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const grid=dark?"#344258":"#dce3ed", text=dark?"#a8b5c8":"#58677d";
+  ctx.font="11px system-ui";ctx.strokeStyle=grid;ctx.fillStyle=text;ctx.lineWidth=1;
+  for(let y=0;y<=90;y+=15){ctx.beginPath();ctx.moveTo(pad.l,Y(y));ctx.lineTo(w-pad.r,Y(y));ctx.stroke();ctx.fillText(String(y),8,Y(y)+4)}
+  for(let x=2;x<=19;x+=2){ctx.beginPath();ctx.moveTo(X(x),pad.t);ctx.lineTo(X(x),h-pad.b);ctx.stroke();ctx.fillText(String(x),X(x)-4,h-10)}
+  const colors=["#2873d5","#299b70","#d17b32"];
+  for(let k=0;k<3;k++){
+    ctx.beginPath();ctx.strokeStyle=colors[k];ctx.lineWidth=2.4;
+    for(let i=0;i<=240;i++){
+      const x=xmin+(xmax-xmin)*i/240, y=flow(x,mode)[k];
+      if(i===0)ctx.moveTo(X(x),Y(y));else ctx.lineTo(X(x),Y(y));
+    }ctx.stroke();
+  }
+  ctx.setLineDash([5,5]);ctx.strokeStyle=dark?"#e1e8f2":"#536278";ctx.beginPath();ctx.moveTo(X(mark),pad.t);ctx.lineTo(X(mark),h-pad.b);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle=text;ctx.fillText("log₁₀ μ (ГэВ)",w/2-35,h-2);
+}
+["mode","scale","delta"].forEach(id=>el(id).addEventListener("input",render));
+window.addEventListener("resize",render);
+render();
+})();
+</script>
+</body></html>
