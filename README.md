@@ -24,7 +24,8 @@ GitHub Pages: https://ivanivorontsov-sudo.github.io/
 
 ## Другие страницы
 
-- [AEFH v7.3 — текущая исследовательская редакция](https://ivanivorontsov-sudo.github.io/aefh/v7.3/): математическое ядро, локальный и глобальный пороги, конечномерная граница, DPI, резольвентные тождества, численный мастер-стенд и явно обозначенные ограничения физических конструкций. Англоязычный обзор: https://ivanivorontsov-sudo.github.io/en/research/aefh-v7-3/.
+- [AEFH v7.4 — текущая исследовательская редакция](https://ivanivorontsov-sudo.github.io/aefh/v7.4/): расширенные доказательные приложения A.4 и A.5, локальный и глобальный пороги, конечномерная граница, DPI, резольвентные тождества и 21 численная проверка в двух режимах. Англоязычный обзор: https://ivanivorontsov-sudo.github.io/en/research/aefh-v7-4/.
+- [AEFH v7.3 — архивная редакция](https://ivanivorontsov-sudo.github.io/aefh/v7.3/); English overview: https://ivanivorontsov-sudo.github.io/en/research/aefh-v7-3/.
 - [English project website](https://ivanivorontsov-sudo.github.io/en/) and [English portfolio](https://ivanivorontsov-sudo.github.io/vizitka/en/).
 - [Архив AEFH](https://ivanivorontsov-sudo.github.io/aefh/), [v5.0](https://ivanivorontsov-sudo.github.io/aefh/v5/) и [v6.0](https://ivanivorontsov-sudo.github.io/aefh/v6/) — предыдущие редакции рукописи.
 
