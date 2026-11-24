@@ -292,7 +292,7 @@
           <div class="box-header"><span>Теорема 3 — Точный конечномерный порог $\gamma_N$</span><span class="badge badge-ok">Заявлено доказательство</span></div>
           <p>В $M_N(\mathbb C)$ ($N\ge2$) при фиксированном трейс-вакууме $\sigma=I_N$ положим:
           $$\gamma_N:=\frac{\ln\!\big(N/(N-1)\big)}{1-\sqrt{(N-1)/N}}
-          =2+\frac{1}{2N}+\frac{1}{6N^2}+O(N^{-3}).$$
+          =2+\frac{1}{2N}+\frac{7}{24N^2}+O(N^{-3}).$
           Для любой $\rho\ge0$ с $\tau(\rho)=1$ и $\rho\ne I_N$ заявляется
           $$S(\rho\Vert I_N)\ge\gamma_N\big(1-F_{1/2}(\rho,I_N)\big).$$
           Равенство на замкнутом симплексе достигается при спектре, с точностью до перестановки, равном $(0,N/(N-1),\ldots,N/(N-1))$. На строго положительных матрицах неравенство строгое, а инфимум равен $\gamma_N$.</p>
@@ -408,7 +408,14 @@
           $$1-F_{1/2}(\rho,\sigma)=
           \frac1\pi\int_0^\infty t^{1/2}\operatorname{Tr}\!\Big(\sigma^{1/2}(\sigma+t)^{-1}(\rho-\sigma)(\rho+t)^{-1}(\rho-\sigma)(\sigma+t)^{-1}\Big)\,dt.$$
           </p>
-          <p>В рукописи подынтегральные выражения трактуются как неотрицательные. Для полной строгой версии необходимо отдельно контролировать области определения произведений резольвент, следовую идеальность и предельный переход при снятии спектральных отсечек.</p>
+          <p><strong>Проверка неотрицательности подынтегральных следов.</strong> Положим $X:=\rho-\sigma=X^*$, $R_t:=(\sigma+t)^{-1}$ и $Q_t:=(\rho+t)^{-1}$. Для первого интеграла при $A_t:=XR_t$ имеем
+          $\operatorname{Tr}\!\big(R_tXQ_tXR_t\big)=\operatorname{Tr}(A_t^*Q_tA_t)\ge0,$
+          поскольку $Q_t\ge0$. Для второго положим $C_t:=R_t\sigma^{1/2}R_t\ge0$. По цикличности следа
+          $\operatorname{Tr}\!\big(\sigma^{1/2}R_tXQ_tXR_t\big)
+          =\operatorname{Tr}\!\big(C_tXQ_tX\big)
+          =\operatorname{Tr}\!\big(C_t^{1/2}XQ_tXC_t^{1/2}\big)\ge0.$
+          Последнее неравенство следует из $XQ_tX\ge0$.</p>
+          <p>Эти факторизации обосновывают неотрицательность на регуляризованных выражениях, когда произведения определены и следы конечны. Для полной строгой версии необходимо отдельно контролировать области определения произведений резольвент, следовую идеальность и предельный переход при снятии спектральных отсечек.</p>
         </div>
 
         <div class="math-box">
@@ -923,9 +930,19 @@
         document.getElementById("rg-gap12").textContent = gap12.toFixed(2);
         document.getElementById("rg-gap32").textContent = gap32.toFixed(2);
         const status = document.getElementById("rg-status");
-        if (gap12 < 0.7 && gap32 < 0.7) { status.textContent = "Тройное совпадение в сценарии"; status.className = "v stat-ok"; }
-        else if (gap12 < 0.7) { status.textContent = "α₃ остаётся отдельно"; status.className = "v stat-warn"; }
-        else { status.textContent = "Не точка 3/8"; status.className = "v stat-bad"; }
+        if (dAdj > 0) {
+          status.textContent = "ПОРОГ НЕ ВЫВЕДЕН (Δ>0)";
+          status.className = "v stat-bad";
+        } else if (gap12 < 0.7 && gap32 < 0.7) {
+          status.textContent = "Тройное схождение!";
+          status.className = "v stat-ok";
+        } else if (gap12 < 0.7) {
+          status.textContent = "α₃ стоит в стороне";
+          status.className = "v stat-warn";
+        } else {
+          status.textContent = "Вне точки 3/8";
+          status.className = "v stat-bad";
+        }
       };
       rgScale.addEventListener("input", drawRG);
       rgAdj.addEventListener("input", drawRG);
