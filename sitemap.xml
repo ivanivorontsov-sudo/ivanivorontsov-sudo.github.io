@@ -246,7 +246,7 @@
   </url>
   <url>
     <loc>https://ivanivorontsov-sudo.github.io/vizitka/</loc>
-    <lastmod>2026-11-09</lastmod>
+    <lastmod>2026-11-24</lastmod>
   </url>
   <url>
     <loc>https://ivanivorontsov-sudo.github.io/aefh/</loc>
@@ -272,4 +272,7 @@
     <loc>https://ivanivorontsov-sudo.github.io/aefh/v7/running-couplings.html</loc>
     <lastmod>2026-11-24</lastmod>
   </url>
+  <url><loc>https://ivanivorontsov-sudo.github.io/en/</loc><lastmod>2026-11-24</lastmod></url>
+  <url><loc>https://ivanivorontsov-sudo.github.io/vizitka/en/</loc><lastmod>2026-11-24</lastmod></url>
+  <url><loc>https://ivanivorontsov-sudo.github.io/en/research/aefh-v7-3/</loc><lastmod>2026-11-24</lastmod></url>
 </urlset>
