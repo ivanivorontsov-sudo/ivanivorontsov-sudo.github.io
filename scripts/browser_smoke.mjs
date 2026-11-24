@@ -325,8 +325,7 @@ for (const width of [320, 360, 390, 430]) {
   for (const relative of mobilePages) {
     try {
       await page.goto(BASE + "/" + relative, { waitUntil: "domcontentloaded", timeout: 20000 });
-      await page.evaluate(() => document.fonts.ready);
-      await page.waitForTimeout(250);
+      await page.waitForTimeout(120);
       const overflow = await page.evaluate(() => {
         const viewport = document.documentElement.clientWidth;
         const offenders = [...document.querySelectorAll("body *")].filter(el => !el.closest("svg")).map(el => {
