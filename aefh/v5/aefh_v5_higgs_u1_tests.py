@@ -500,7 +500,8 @@ class TestAEFHv5HiggsAndU1(unittest.TestCase):
 
         eigvals, eigvecs = np.linalg.eigh(M2_num)
         # 1. Строго безмассовый фотон и проверка его собственного вектора
-        # Аналитическая мода точно нулевая; конечная разность при eps=1e-4 оставляет шум ~1e-7.\n        self.assertLess(abs(eigvals[0]), 1e-6)
+        # Аналитическая мода точно нулевая; конечная разность при eps=1e-4 оставляет шум ~1e-7.
+        self.assertLess(abs(eigvals[0]), 1e-6)
         photon_exact = np.array([0.0, 0.0, g_prime, g_weak]) / math.hypot(g_weak, g_prime)
         self.assertAlmostEqual(abs(float(np.dot(eigvecs[:, 0], photon_exact))), 1.0, places=7)
 
@@ -561,7 +562,8 @@ class TestAEFHv5HiggsAndU1(unittest.TestCase):
                 M2_u3[a, b] = M2_u3[b, a] = val
 
         eigs_u3 = np.linalg.eigvalsh(M2_u3)
-        # Четыре нулевые моды проверяются с численным допуском конечной разности.\n        zero_modes = int(np.sum(np.abs(eigs_u3) < 1e-6))
+        # Четыре нулевые моды проверяются с численным допуском конечной разности.
+        zero_modes = int(np.sum(np.abs(eigs_u3) < 1e-6))
         massive_modes = int(np.sum(eigs_u3 > 1e-3))
         self.assertEqual(zero_modes, 4)     # (3 - 1)^2 = 4 безмассовых бозона U(3)
         self.assertEqual(massive_modes, 5)  # 2*3 - 1 = 5 массивных бозонов
