@@ -160,7 +160,7 @@
         \le(10^n-2)+1=10^n-1.
         \]
       </div>
-      <p>Значит, подходит любое \(x\in(1,2)\), в частности \(x=\sqrt2\).</p>
+      <p>Значит, подходит любое \(x\in(1,2)\); для заявленного интервала можно взять \(M=1\). В частности, подходит \(x=\sqrt2\).</p>
     </div>
 
     <div class="step">
@@ -209,7 +209,7 @@
         \]
       </div>
       <ul>
-        <li><strong>Если \(L=0\),</strong> то все \(v_k=0\), и требуемое неравенство выполняется при любом \(x\in(1,2)\).</li>
+        <li><strong>Если \(L=0\),</strong> то все \(v_k=0\), и требуемое неравенство выполняется при любом \(x\in(1,2)\); снова можно взять \(M=1\).</li>
         <li><strong>Если \(0&lt;L&lt;+\infty\),</strong> выберем \(M\ge1\) так, чтобы \(\delta_M^+&gt; L/2\).</li>
         <li><strong>Если \(L=+\infty\),</strong> выберем \(M\ge1\) так, чтобы \(\delta_M^+\ge2\).</li>
       </ul>
@@ -429,7 +429,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     button.addEventListener("click",()=>{
       const dark=document.documentElement.dataset.theme==="dark";
       document.documentElement.dataset.theme=dark?"light":"dark";
-      button.textContent=dark?"Тема":"Тёмная тема";
+      button.textContent=dark?"Тёмная тема":"Светлая тема";
     });
   }
 });
