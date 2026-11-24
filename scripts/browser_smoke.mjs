@@ -363,6 +363,27 @@ for (const width of [320, 360, 390, 430]) {
           katexCount: document.querySelectorAll(".katex").length,
           katexMathmlCount: document.querySelectorAll(".katex-mathml").length,
           semanticsCount: document.querySelectorAll("semantics").length,
+          widestMathml: [...document.querySelectorAll(".katex-mathml")].map(el => {
+            const rect = el.getBoundingClientRect();
+            const style = getComputedStyle(el);
+            return {
+              left:Math.round(rect.left),right:Math.round(rect.right),width:Math.round(rect.width),
+              position:style.position,overflowX:style.overflowX,clip:style.clip,
+              parentClass:el.parentElement?.className || "",
+              mathText:(el.textContent || "").replace(/\\s+/g," ").slice(0,100)
+            };
+          }).sort((a,b) => b.width-a.width).slice(0,8),
+          widestSemantics: [...document.querySelectorAll("semantics")].map(el => {
+            const rect = el.getBoundingClientRect();
+            const parent = el.closest(".katex-mathml");
+            const pRect = parent?.getBoundingClientRect();
+            return {
+              left:Math.round(rect.left),right:Math.round(rect.right),width:Math.round(rect.width),
+              mathmlWidth:pRect ? Math.round(pRect.width) : null,
+              hasMathmlParent:!!parent,
+              text:(el.textContent || "").replace(/\\s+/g," ").slice(0,100)
+            };
+          }).sort((a,b) => b.width-a.width).slice(0,8),
           firstSemanticsAncestors: (() => {
             let node = document.querySelector("semantics");
             const chain = [];
