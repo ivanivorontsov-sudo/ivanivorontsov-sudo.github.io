@@ -379,13 +379,31 @@ try {
   for (const width of [320, 360, 390, 430]) {
     await page.setViewportSize({ width, height: 844 });
     await page.waitForTimeout(50);
-    const dimensions = await page.evaluate(() => ({
-      viewport: document.documentElement.clientWidth,
-      content: document.documentElement.scrollWidth,
-      topbar: document.querySelector(".topbar")?.getBoundingClientRect(),
-      controls: document.querySelector(".controls")?.getBoundingClientRect()
-    }));
-    if (dimensions.content > dimensions.viewport + 2) fail("AEFH v7: horizontal overflow at " + width + "px (" + dimensions.viewport + " viewport / " + dimensions.content + " content)");
+    const dimensions = await page.evaluate(() => {
+      const viewport = document.documentElement.clientWidth;
+      const offenders = [...document.querySelectorAll("body *")].map(el => {
+        const rect = el.getBoundingClientRect();
+        const style = getComputedStyle(el);
+        return {
+          tag: el.tagName.toLowerCase(), id: el.id || "",
+          className: typeof el.className === "string" ? el.className.slice(0, 80) : "",
+          left: Math.round(rect.left), right: Math.round(rect.right),
+          width: Math.round(rect.width), scrollWidth: el.scrollWidth,
+          clientWidth: el.clientWidth, overflowX: style.overflowX,
+          whiteSpace: style.whiteSpace,
+          html: el.children.length ? "" : el.outerHTML.slice(0, 180)
+        };
+      }).filter(x => x.width > 0 && (x.right > viewport + 2 || x.left < -2))
+        .sort((a, b) => b.right - a.right).slice(0, 12);
+      return {
+        viewport, content: document.documentElement.scrollWidth,
+        bodyScroll: document.body.scrollWidth,
+        topbar: document.querySelector(".topbar")?.getBoundingClientRect().toJSON(),
+        controls: document.querySelector(".controls")?.getBoundingClientRect().toJSON(),
+        offenders
+      };
+    });
+    if (dimensions.content > dimensions.viewport + 2) fail("AEFH v7: horizontal overflow at " + width + "px (" + dimensions.viewport + " viewport / " + dimensions.content + " content); offenders=" + JSON.stringify(dimensions.offenders));
     if (dimensions.topbar && dimensions.controls && dimensions.controls.right > dimensions.viewport + 2) fail("AEFH v7: control buttons exceed viewport at " + width + "px");
   }
   for (const message of pageErrors) fail("AEFH v7: runtime exception: " + message);
