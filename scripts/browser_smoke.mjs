@@ -328,13 +328,53 @@ for (const width of [320, 360, 390, 430]) {
       }));
       if (overflow.scroll > overflow.width + 2) {
         const message = relative + ": horizontal overflow at " + width + "px (" + overflow.width + "px viewport, " + overflow.scroll + "px content)";
-        if (relative === "daily-tools/index.html" || relative === "index.html" || relative === "legal.html") fail(message);
+        if (relative === "daily-tools/index.html" || relative === "index.html" || relative === "legal.html" || relative === "aefh/v7/index.html") fail(message);
         else warnings.push(message);
       }
     } catch (error) {
       fail(relative + ": mobile check at " + width + "px failed: " + error.message);
     }
   }
+}
+
+// AEFH v7.0: verify the interactive manuscript, controls, and responsive header.
+try {
+  pageErrors = [];
+  localAssetErrors = [];
+  await page.setViewportSize({ width: 1365, height: 900 });
+  await page.goto(BASE + "/aefh/v7/", { waitUntil: "domcontentloaded", timeout: 20000 });
+  if (await page.locator("h1").count() !== 1) fail("AEFH v7: expected exactly one H1");
+  if (!(await page.title()).includes("AEFH v7.0")) fail("AEFH v7: unexpected document title");
+  await page.locator("#btn-theme").click();
+  if (await page.locator("html").getAttribute("data-theme") !== "dark") fail("AEFH v7: dark-theme button did not switch theme");
+  await page.locator("#btn-theme").click();
+  await page.locator("#btn-proofs").click();
+  const proofCount = await page.locator("details.proof").count();
+  const openedProofs = await page.locator("details.proof[open]").count();
+  if (!proofCount || openedProofs !== proofCount) fail("AEFH v7: expand-all did not open every proof");
+  await page.locator("#btn-proofs").click();
+  const collapsedProofs = await page.locator("details.proof[open]").count();
+  if (collapsedProofs !== 0) fail("AEFH v7: collapse-all did not close every proof");
+  await page.locator("#gamma-slider").evaluate(el => { el.value = "4"; el.dispatchEvent(new Event("input", { bubbles: true })); });
+  if (!(await page.locator("#st-loc").innerText()).includes("Квартичный")) fail("AEFH v7: phase slider did not update the critical state");
+  await page.locator("#rg-scale").evaluate(el => { el.value = "13"; el.dispatchEvent(new Event("input", { bubbles: true })); });
+  if (!(await page.locator("#rg-canvas").evaluate(el => el.width > 0 && el.height > 0))) fail("AEFH v7: RG canvas was not drawn");
+  for (const width of [320, 360, 390, 430]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.waitForTimeout(50);
+    const dimensions = await page.evaluate(() => ({
+      viewport: document.documentElement.clientWidth,
+      content: document.documentElement.scrollWidth,
+      topbar: document.querySelector(".topbar")?.getBoundingClientRect(),
+      controls: document.querySelector(".controls")?.getBoundingClientRect()
+    }));
+    if (dimensions.content > dimensions.viewport + 2) fail("AEFH v7: horizontal overflow at " + width + "px (" + dimensions.viewport + " viewport / " + dimensions.content + " content)");
+    if (dimensions.topbar && dimensions.controls && dimensions.controls.right > dimensions.viewport + 2) fail("AEFH v7: control buttons exceed viewport at " + width + "px");
+  }
+  for (const message of pageErrors) fail("AEFH v7: runtime exception: " + message);
+  for (const item of [...new Set(localAssetErrors)]) fail("AEFH v7: local resource " + item);
+} catch (error) {
+  fail("AEFH v7 interaction test failed: " + error.message);
 }
 
 // Legal owner details must be rendered once, not duplicated in the page body.
