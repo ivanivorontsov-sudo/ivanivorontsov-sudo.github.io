@@ -461,6 +461,14 @@ class TestAEFHv7MasterSuite(unittest.TestCase):
         self.assertGreater(g_bkm_c - 3.95 * g_h_c, 0.0)
         self.assertLess(g_bkm_c - 4.05 * g_h_c, 0.0)
 
+        # Контроль тождества отношения ядер при r = sqrt(a / b).
+        a, b = 4.0, 1.0
+        r = math.sqrt(a / b)
+        ratio_direct = ((math.log(a) - math.log(b)) / (a - b)) * (math.sqrt(a) + math.sqrt(b)) ** 2
+        ratio_r = 2.0 * (r + 1.0) * math.log(r) / (r - 1.0)
+        self.assertAlmostEqual(ratio_direct, ratio_r, places=14)
+        self.assertAlmostEqual(ratio_r, 6.0 * math.log(2.0), places=14)
+
         I2 = np.eye(2)
         for t in (0.1, 0.03, 0.01):
             rho_t = np.diag([1.0 + t, 1.0 - t])
@@ -507,6 +515,12 @@ class TestAEFHv7MasterSuite(unittest.TestCase):
         for dim, g_val in zip(dims[-3:], gammas[-3:]):
             asymp = 1.0 / (2.0 * dim)
             self.assertLess(abs((g_val - 2.0) - asymp) / asymp, 1e-2)
+
+        # Регрессия квадратичного коэффициента: gamma_N = 2 + 1/(2N) + 7/(24N^2) + O(N^-3).
+        asymptotic_dim = 10_000
+        x = 1.0 / asymptotic_dim
+        quadratic_coefficient = (exact_gamma_n(asymptotic_dim) - 2.0 - x / 2.0) / (x * x)
+        self.assertAlmostEqual(quadratic_coefficient, 7.0 / 24.0, delta=5e-5)
 
         dim_lim = 5
         g_target = exact_gamma_n(dim_lim)
