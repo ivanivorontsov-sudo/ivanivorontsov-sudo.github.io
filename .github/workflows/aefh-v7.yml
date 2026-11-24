@@ -1,4 +1,4 @@
-name: AEFH v7.0 RG numerical checks
+name: AEFH v7.0 master numerical checks
 
 on:
   push:
@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 jobs:
-  rg-tests:
+  master-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -25,7 +25,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Run numerical tests
-        run: python aefh/v7/aefh_v7_rg_tests.py -v
-      - name: Run with optimizations enabled
-        run: python -O aefh/v7/aefh_v7_rg_tests.py -v
+      - name: Install NumPy
+        run: python -m pip install --upgrade numpy
+      - name: Run the existing RG checks
+        run: python3 aefh/v7/aefh_v7_rg_tests.py -v
+      - name: Run the existing RG checks with optimizations
+        run: python3 -O aefh/v7/aefh_v7_rg_tests.py -v
+      - name: Run the 20-test master suite
+        run: python3 aefh/v7/aefh_v7_master_tests.py -v
+      - name: Run the 20-test master suite with optimizations enabled
+        run: python3 -O aefh/v7/aefh_v7_master_tests.py -v
