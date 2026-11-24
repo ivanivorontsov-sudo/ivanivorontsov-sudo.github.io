@@ -1,0 +1,33 @@
+name: AEFH v7.3 master numerical checks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "aefh/v7.3/**"
+      - ".github/workflows/aefh-v7.3.yml"
+  pull_request:
+    paths:
+      - "aefh/v7.3/**"
+      - ".github/workflows/aefh-v7.3.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  master-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install NumPy
+        run: python -m pip install --upgrade numpy
+      - name: Run all 21 tests
+        run: python3 aefh/v7.3/aefh_v7_3_master_tests.py -v
+      - name: Run all 21 tests with optimizations enabled
+        run: python3 -O aefh/v7.3/aefh_v7_3_master_tests.py -v
