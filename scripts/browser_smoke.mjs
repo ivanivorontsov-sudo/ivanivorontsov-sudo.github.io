@@ -325,10 +325,11 @@ for (const width of [320, 360, 390, 430]) {
   for (const relative of mobilePages) {
     try {
       await page.goto(BASE + "/" + relative, { waitUntil: "domcontentloaded", timeout: 20000 });
-      await page.waitForTimeout(60);
+      await page.evaluate(() => document.fonts.ready);
+      await page.waitForTimeout(250);
       const overflow = await page.evaluate(() => {
         const viewport = document.documentElement.clientWidth;
-        const offenders = [...document.querySelectorAll("body *")].map(el => {
+        const offenders = [...document.querySelectorAll("body *")].filter(el => !el.closest("svg")).map(el => {
           const rect = el.getBoundingClientRect();
           const style = getComputedStyle(el);
           return {
@@ -340,15 +341,34 @@ for (const width of [320, 360, 390, 430]) {
             width: Math.round(rect.width),
             scrollWidth: el.scrollWidth,
             clientWidth: el.clientWidth,
-            overflowX: style.overflowX
+            overflowX: style.overflowX,
+            position: style.position
           };
         }).filter(item => item.width > 0 && (item.right > viewport + 2 || item.left < -2))
           .sort((a, b) => b.right - a.right)
-          .slice(0, 8);
-        return { width: viewport, scroll: document.documentElement.scrollWidth, offenders };
+          .slice(0, 10);
+        const selectors = ["html","body","header","nav.bar",".bar-actions",".wrap","main","h1",".lead",".formula",".table-wrap","table",".katex-display"];
+        const geometry = selectors.map(selector => {
+          const el = document.querySelector(selector);
+          if (!el) return {selector,missing:true};
+          const rect = el.getBoundingClientRect();
+          const style = getComputedStyle(el);
+          return {
+            selector,left:Math.round(rect.left),right:Math.round(rect.right),
+            width:Math.round(rect.width),scrollWidth:el.scrollWidth,clientWidth:el.clientWidth,
+            cssWidth:style.width,maxWidth:style.maxWidth,minWidth:style.minWidth,
+            marginLeft:style.marginLeft,transform:style.transform,overflowX:style.overflowX
+          };
+        });
+        return {
+          width: viewport, scroll: document.documentElement.scrollWidth,
+          bodyScroll: document.body.scrollWidth, scrollX: window.scrollX,
+          visualViewport: window.visualViewport ? {width:window.visualViewport.width,scale:window.visualViewport.scale,offsetLeft:window.visualViewport.offsetLeft} : null,
+          geometry,offenders
+        };
       });
       if (overflow.scroll > overflow.width + 2) {
-        const message = relative + ": horizontal overflow at " + width + "px (" + overflow.width + "px viewport, " + overflow.scroll + "px content); offenders=" + JSON.stringify(overflow.offenders);
+        const message = relative + ": horizontal overflow at " + width + "px (" + overflow.width + "px viewport, " + overflow.scroll + "px content); offenders=" + JSON.stringify(overflow.offenders) + "; layout=" + JSON.stringify(overflow.geometry) + "; scrollX=" + overflow.scrollX + "; visualViewport=" + JSON.stringify(overflow.visualViewport);
         if (relative === "daily-tools/index.html" || relative === "index.html" || relative === "legal.html" || relative === "aefh/v7/index.html" || relative === "aefh/v7.4/index.html" || relative === "en/research/aefh-v7-4/index.html") fail(message);
         else warnings.push(message);
       }
@@ -366,7 +386,7 @@ for (const width of [320, 360, 390, 430]) {
         }));
         const navOffenders = navigation.filter(item =>
           item.left < -2 ||
-          item.right > document.documentElement.clientWidth + 2 ||
+          item.right > width + 2 ||
           (item.clientWidth > 0 && item.scrollWidth > item.clientWidth + 2)
         );
         if (navOffenders.length) {
@@ -376,7 +396,7 @@ for (const width of [320, 360, 390, 430]) {
           const rect = node.getBoundingClientRect();
           return { left: Math.round(rect.left), right: Math.round(rect.right), scrollWidth: node.scrollWidth, clientWidth: node.clientWidth };
         });
-        if (heading.left < -2 || heading.right > document.documentElement.clientWidth + 2 || heading.scrollWidth > heading.clientWidth + 2) {
+        if (heading.left < -2 || heading.right > width + 2 || heading.scrollWidth > heading.clientWidth + 2) {
           fail(relative + ": H1 is clipped or overflows at " + width + "px; details=" + JSON.stringify(heading));
         }
       }
