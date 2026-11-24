@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Короткие доказательства — математические задачи и строгие решения</title>
+  <meta name="description" content="Небольшие математические доказательства: иррациональный выбор для ограниченных сумм и точный барьер минимального расстояния двоичных кодов при чётном модуле.">
+  <meta name="author" content="Ivan Vorontsov">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://ivanivorontsov-sudo.github.io/proofs/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Короткие доказательства">
+  <meta property="og:description" content="Две задачи с MathOverflow, полные доказательства, точные условия и границы применимости.">
+  <meta property="og:url" content="https://ivanivorontsov-sudo.github.io/proofs/">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+  <style>
+    :root{--bg:#f7f8fc;--surface:#fff;--surface2:#f0f3f9;--text:#172033;--muted:#5c687c;--border:#dce3ee;--accent:#315fc4;--accent2:#147d70;--warn:#9b5a08;--danger:#a83232;--shadow:0 12px 34px rgba(25,40,75,.08)}
+    [data-theme="dark"]{--bg:#0d121b;--surface:#151d2a;--surface2:#1c2839;--text:#e8edf6;--muted:#a8b4c8;--border:#2c394d;--accent:#8ab4ff;--accent2:#5ee0c5;--warn:#f5c16b;--danger:#ff9999;--shadow:0 12px 34px rgba(0,0,0,.25)}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:86px}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.72 Georgia,"Times New Roman",serif}
+    a{color:var(--accent);text-underline-offset:3px}
+    a:hover{text-decoration-thickness:2px}
+    .top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+    .top-inner{max-width:1120px;margin:auto;padding:12px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .brand{font:800 15px/1.3 system-ui,sans-serif;letter-spacing:-.02em;margin-right:auto;color:var(--text);text-decoration:none}
+    .nav a,.theme{font:650 13px/1.3 system-ui,sans-serif;text-decoration:none;color:var(--text);border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:7px 11px}
+    .theme{cursor:pointer}
+    .page{max-width:1040px;margin:0 auto;padding:30px 18px 70px}
+    .hero{padding:34px clamp(20px,4vw,42px);border:1px solid var(--border);border-radius:22px;background:var(--surface);box-shadow:var(--shadow)}
+    .eyebrow{font:750 11px/1.4 system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2)}
+    h1,h2,h3{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.25;letter-spacing:-.025em}
+    h1{font-size:clamp(2rem,5vw,3.1rem);margin:10px 0}
+    h2{font-size:clamp(1.45rem,3vw,2rem);margin:0 0 14px}
+    h3{font-size:1.1rem;margin:26px 0 9px}
+    .lead{font:17px/1.65 system-ui,sans-serif;color:var(--muted);max-width:760px;margin:0}
+    .stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+    .chip{display:inline-flex;align-items:center;border:1px solid var(--border);background:var(--surface2);padding:6px 10px;border-radius:999px;font:650 12px/1.35 system-ui,sans-serif;color:var(--muted)}
+    .toc{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}
+    .toc a{font:700 13px system-ui,sans-serif;text-decoration:none;border:1px solid var(--border);background:var(--surface);padding:9px 13px;border-radius:10px}
+    .proof{margin-top:18px;padding:clamp(20px,4vw,38px);border:1px solid var(--border);border-radius:22px;background:var(--surface);box-shadow:var(--shadow);min-width:0}
+    .proof-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+    .number{font:800 12px system-ui,sans-serif;color:var(--accent);letter-spacing:.1em;text-transform:uppercase}
+    .status{font:700 11px/1.4 system-ui,sans-serif;border-radius:999px;padding:6px 9px;background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
+    .source{font:14px/1.6 system-ui,sans-serif;color:var(--muted);border:1px solid var(--border);border-radius:12px;background:var(--surface2);padding:12px 14px;margin:16px 0}
+    .source strong{color:var(--text)}
+    .math{overflow-x:auto;max-width:100%;padding:9px 4px;margin:12px 0}
+    .math .katex-display{margin:.55em 0}
+    .math-note{font-size:14px;color:var(--muted)}
+    .callout{border-left:4px solid var(--accent2);background:var(--surface2);padding:13px 16px;border-radius:0 12px 12px 0;margin:17px 0}
+    .warning{border-left-color:var(--warn)}
+    .proof p{margin:10px 0}
+    .proof ol,.proof ul{padding-left:1.45rem}
+    .proof li{margin:8px 0}
+    .step{padding:15px 17px;border:1px solid var(--border);border-radius:13px;margin:14px 0;background:color-mix(in srgb,var(--surface2) 58%,var(--surface))}
+    .step h3{margin:0 0 8px}
+    .result{border:1px solid color-mix(in srgb,var(--accent2) 45%,var(--border));background:color-mix(in srgb,var(--accent2) 8%,var(--surface));border-radius:14px;padding:16px 18px;margin:20px 0}
+    .result strong{color:var(--accent2)}
+    .footnotes{font:13px/1.6 system-ui,sans-serif;color:var(--muted);border-top:1px solid var(--border);margin-top:28px;padding-top:16px}
+    footer{text-align:center;color:var(--muted);font:13px/1.6 system-ui,sans-serif;padding:32px 10px}
+    code{font: .9em ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--surface2);padding:2px 5px;border-radius:5px;overflow-wrap:anywhere}
+    @media(max-width:560px){.top-inner{padding:10px 12px;gap:7px}.brand{flex:1 0 100%}.nav a,.theme{font-size:12px;padding:7px 9px}.page{padding:18px 10px 48px}.hero,.proof{border-radius:16px}.proof-head{display:block}.status{display:inline-block;margin-top:8px}.math{font-size:.94em}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  </style>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <a class="brand" href="/">Иван Воронцов · Математика</a>
+    <nav class="nav" aria-label="Основная навигация">
+      <a href="#proof-1">Доказательство 1</a>
+      <a href="#proof-2">Доказательство 2</a>
+      <a href="/">Главный сайт</a>
+      <a href="/aefh/v7.4/">AEFH</a>
+    </nav>
+    <button class="theme" id="theme" type="button" aria-label="Переключить тему">Тема</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero">
+    <div class="eyebrow">Небольшие доказательства · выпуск 01</div>
+    <h1>Короткие доказательства</h1>
+    <p class="lead">Отдельная полка для математических задач, которым не нужна рукопись на двести страниц. У каждой записи — формулировка, доказательство, точные гипотезы и честно обозначенные границы результата.</p>
+    <div class="stats">
+      <span class="chip">2 задачи MathOverflow</span>
+      <span class="chip">2 подробных разбора</span>
+      <span class="chip">Проверено по источникам: 24.11.2026</span>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Содержание">
+    <a href="#proof-1">01 · Иррационально ограниченные суммы</a>
+    <a href="#proof-2">02 · Чётные модули и двоичные коды</a>
+  </nav>
+
+  <article class="proof" id="proof-1">
+    <div class="proof-head">
+      <div>
+        <div class="number">Доказательство № 01 · вещественный анализ</div>
+        <h2>Иррационально ограниченные суммы</h2>
+      </div>
+      <span class="status">Конструктивное существование интервала</span>
+    </div>
+    <div class="source">
+      <strong>Первоисточник:</strong>
+      <a href="https://mathoverflow.net/questions/515199/irrationally-bounded-sums" target="_blank" rel="noopener noreferrer">MathOverflow, вопрос № 515199</a>.
+      Автор — Dattier; опубликован 13 сентября 2026 года. При проверке 24 ноября на странице отображались 5 голосов и 348 просмотров; опубликованного ответа на открытой странице не было. В комментариях обсуждалось обозначение целой части \(E\) — французское <i>partie entière</i>.
+    </div>
+
+    <h3>Условие</h3>
+    <p>Пусть \((u_k)_{k\in\mathbb N}\) — произвольная последовательность вещественных чисел, для которой \(|u_k|\le1\) при всех \(k\). Требуется установить существование иррационального \(x\in[1,2]\), такого что для каждого \(n\in\mathbb N\)</p>
+    <div class="math">
+      \[
+      \left|\sum_{k=1}^{10^n}u_k-u_{\lfloor x\,10^n\rfloor}\right|
+      \le 10^n-1.
+      \]
+    </div>
+    <p class="math-note">Здесь \( \lfloor y\rfloor \) — целая часть числа \(y\). Если в принятом соглашении \(0\in\mathbb N\), случай \(n=0\) будет отдельно проверен ниже.</p>
+
+    <div class="result">
+      <strong>Теорема.</strong> Утверждение верно. Более того, для каждой допустимой последовательности существует \(M\ge1\), для которого неравенство выполняется одновременно для <em>всех</em> \(x\) из интервала \((1,1+10^{-M})\). Следовательно, подходит не одно иррациональное число, а целый непустой интервал, содержащий несчётно много иррациональных чисел.
+    </div>
+
+    <h3>Доказательство</h3>
+    <p>Для \(n\ge1\) обозначим</p>
+    <div class="math">
+      \[
+      S_n=\sum_{k=1}^{10^n}u_k,\qquad
+      \delta_n^+=\sum_{k=1}^{10^n}(1-u_k)=10^n-S_n,
+      \]
+      \[
+      \delta_n^-=\sum_{k=1}^{10^n}(1+u_k)=10^n+S_n.
+      \]
+    </div>
+    <p>Поскольку \(-1\le u_k\le1\), обе последовательности дефицитов неотрицательны и неубывают. Кроме того,</p>
+    <div class="math">
+      \[
+      \delta_n^++\delta_n^-=2\cdot10^n\ge20.
+      \]
+    </div>
+
+    <div class="step">
+      <h3>Случай 1. Оба дефицита не меньше 2 при каждом \(n\ge1\)</h3>
+      <p>Тогда</p>
+      <div class="math">
+        \[
+        -10^n+2\le S_n\le10^n-2,
+        \qquad |S_n|\le10^n-2.
+        \]
+      </div>
+      <p>Для любого индекса \(m\ge1\) из \(|u_m|\le1\) следует</p>
+      <div class="math">
+        \[
+        |S_n-u_m|\le |S_n|+|u_m|
+        \le(10^n-2)+1=10^n-1.
+        \]
+      </div>
+      <p>Значит, подходит любое \(x\in(1,2)\), в частности \(x=\sqrt2\).</p>
+    </div>
+
+    <div class="step">
+      <h3>Случай 2. Один из дефицитов меньше 2 хотя бы при одном индексе</h3>
+      <p>Заменив при необходимости всю последовательность на \((-u_k)\), можно считать, что для некоторого \(n_0\ge1\)</p>
+      <div class="math">
+        \[
+        \delta_{n_0}^+<2.
+        \]
+      </div>
+      <p>Это допустимо, поскольку исходное выражение меняет только знак внутри модуля. Докажем, что</p>
+      <div class="math">
+        \[
+        \delta_n^->18\qquad\text{для всех }n\ge1.
+        \]
+      </div>
+      <p>Если \(n\le n_0\), монотонность даёт \(\delta_n^+\le\delta_{n_0}^+<2\), поэтому</p>
+      <div class="math">
+        \[
+        \delta_n^-=2\cdot10^n-\delta_n^+>20-2=18.
+        \]
+      </div>
+      <p>Если \(n>n_0\), то \(\delta_n^-\ge\delta_{n_0}^->18\). Следовательно, для любого \(m\ge1\)</p>
+      <div class="math">
+        \[
+        S_n-u_m=\delta_n^- -10^n-u_m
+        >18-10^n-1>-10^n+1.
+        \]
+      </div>
+      <p>Нижняя часть требуемого неравенства обеспечена с большим запасом. Остаётся добиться верхней оценки</p>
+      <div class="math">
+        \[
+        S_n-u_m\le10^n-1.
+        \]
+      </div>
+      <p>Положим \(v_k=1-u_k\in[0,2]\). Тогда \(\delta_n^+=\sum_{k=1}^{10^n}v_k\), и верхняя оценка равносильна</p>
+      <div class="math">
+        \[
+        v_m\le\delta_n^+,\qquad m=\lfloor x\,10^n\rfloor.
+        \]
+      </div>
+      <p>Обозначим полный ряд неотрицательных членов через</p>
+      <div class="math">
+        \[
+        L=\sum_{k=1}^{\infty}v_k\in[0,+\infty].
+        \]
+      </div>
+      <ul>
+        <li><strong>Если \(L=0\),</strong> то все \(v_k=0\), и требуемое неравенство выполняется при любом \(x\in(1,2)\).</li>
+        <li><strong>Если \(0&lt;L&lt;+\infty\),</strong> выберем \(M\ge1\) так, чтобы \(\delta_M^+&gt; L/2\).</li>
+        <li><strong>Если \(L=+\infty\),</strong> выберем \(M\ge1\) так, чтобы \(\delta_M^+\ge2\).</li>
+      </ul>
+      <p>Теперь возьмём произвольное \(x\in(1,1+10^{-M})\) и положим \(m_n=\lfloor x\,10^n\rfloor\).</p>
+      <p><strong>При \(1\le n\le M\)</strong> имеем</p>
+      <div class="math">
+        \[
+        10^n&lt;x\,10^n&lt;10^n+10^{n-M}\le10^n+1,
+        \]
+      </div>
+      <p>поэтому \(m_n=10^n\). Значит, \(v_{m_n}\) — один из неотрицательных членов суммы \(\delta_n^+\), откуда \(v_{m_n}\le\delta_n^+\).</p>
+      <p><strong>При \(n&gt;M\)</strong> из \(x&gt;1\) следует</p>
+      <div class="math">
+        \[
+        m_n=\lfloor x\,10^n\rfloor\ge10^n\ge10^{M+1}>10^M.
+        \]
+      </div>
+      <p>Если \(L&lt;+\infty\), то член \(v_{m_n}\) входит в хвост ряда после \(10^M\), поэтому</p>
+      <div class="math">
+        \[
+        v_{m_n}\le\sum_{k&gt;10^M}v_k
+        =L-\delta_M^+&lt;\frac L2&lt;\delta_M^+\le\delta_n^+.
+        \]
+      </div>
+      <p>Если \(L=+\infty\), то \(v_{m_n}\le2\le\delta_M^+\le\delta_n^+\). Верхняя оценка доказана для всех \(n\).</p>
+    </div>
+
+    <p>Итак, в случае 2 подходит каждый \(x\in(1,1+10^{-M})\). В частности, можно взять явное иррациональное число</p>
+    <div class="math">
+      \[
+      x=1+\frac{\sqrt2}{10^{M+1}}.
+      \]
+    </div>
+    <p>Если \(0\in\mathbb N\), то при \(n=0\) и \(x\in(1,2)\) имеем \(\lfloor x\rfloor=1\), а выражение равно \(|u_1-u_1|=0=10^0-1\). Это завершает доказательство. \(\square\)</p>
+
+    <div class="callout">
+      <strong>Что именно усилено.</strong> Получено не только существование иррационального свидетеля: после выбора \(M\) весь интервал \((1,1+10^{-M})\) состоит из подходящих чисел. Выбор иррациональности становится последним, почти декоративным шагом.
+    </div>
+  </article>
+
+  <article class="proof" id="proof-2">
+    <div class="proof-head">
+      <div>
+        <div class="number">Доказательство № 02 · теория кодирования</div>
+        <h2>Чётные модули и двоичные \([9,4]\)-коды</h2>
+      </div>
+      <span class="status">Точный барьер при оговорённом заполнении</span>
+    </div>
+    <div class="source">
+      <strong>Первоисточник:</strong>
+      <a href="https://mathoverflow.net/questions/518117/minimum-distance-and-griesmer-bound-of-9-4-binary-linear-codes-from-x-t1" target="_blank" rel="noopener noreferrer">MathOverflow, вопрос № 518117</a>.
+      Опубликован 23 ноября 2026 года. При проверке 24 ноября на странице отображались 2 голоса, 39 просмотров и комментарии, но не опубликованный ответ. Численные результаты ниже — эксперименты, приведённые автором исходного вопроса, а не независимый пересчёт в этой публикации.
+    </div>
+
+    <h3>Постановка</h3>
+    <p>Пусть \(m\ge2\), выбрана начальная пара \((x_1,x_2)\in\mathbb Z_m^2\), а последовательность задаётся рекуррентой</p>
+    <div class="math">
+      \[
+      x_{t+1}\equiv x_{t-1}-x_t^2\pmod m.
+      \]
+    </div>
+    <p>Берём канонические целые представители \(x_t\in\{0,\ldots,m-1\}\), определяем \(b_t=x_t\bmod2\in\mathbb F_2\), заполняем матрицу \(P\in\mathbb F_2^{4\times5}\) и строим систематическую порождающую матрицу</p>
+    <div class="math">
+      \[
+      G=[\,I_4\mid P\,].
+      \]
+    </div>
+    <p>Минимальное расстояние кода \(C\) обозначим \(d_{\min}(C)\). По границе Грисмера для бинарного кода длины 9 и размерности 4 имеем \(d_{\min}\le4\): значение \(d=4\) не исключается, поскольку \(4+2+1+1=8\le9\), а \(d=5\) уже невозможно, поскольку \(5+3+2+1=11&gt;9\).</p>
+
+    <div class="result">
+      <strong>Теорема для стандартного заполнения.</strong> Если \(m\) чётно, то:
+      <ul>
+        <li>при \((x_1,x_2)=(0,0)\) имеем \(d_{\min}(C)=1\);</li>
+        <li>при любой ненулевой начальной паре имеем \(d_{\min}(C)=2\).</li>
+      </ul>
+      В частности, чётный модуль при таком заполнении никогда не даёт \(d_{\min}=3\) или \(4\).
+    </div>
+
+    <h3>Шаг 1. Редукция по модулю 2 и период 3</h3>
+    <p>При чётном \(m\) отображение \(\mathbb Z/m\mathbb Z\to\mathbb F_2\), переводящее класс в его чётность, корректно определено: добавление кратного \(m\) не меняет чётность. Поэтому рекуррента переходит в</p>
+    <div class="math">
+      \[
+      b_{t+1}=b_{t-1}-b_t^2=b_{t-1}+b_t,
+      \]
+    </div>
+    <p>так как в \(\mathbb F_2\) выполнены \(b_t^2=b_t\) и \(-1=1\). Отсюда</p>
+    <div class="math">
+      \[
+      b_{t+2}=b_t+b_{t+1}=b_{t-1},
+      \]
+    </div>
+    <p>то есть \(b_{t+3}=b_t\). Последовательность имеет период, делящий 3. При нулевой начальной паре она тождественно нулевая; при ненулевой — это циклический сдвиг одного из слов \(110110\ldots\), \(101101\ldots\) или \(011011\ldots\).</p>
+
+    <div class="step">
+      <h3>Шаг 2. Стандартное построчное и постолбцовое заполнение</h3>
+      <p>Для построчного заполнения положим</p>
+      <div class="math">
+        \[
+        P_{i,j}=b_{5(i-1)+j}.
+        \]
+      </div>
+      <p>Первая и четвёртая строки берут индексы, отличающиеся на 15, а \(15\) делится на 3. Поэтому \(P_{1,*}=P_{4,*}\).</p>
+      <p>Для постолбцового заполнения положим</p>
+      <div class="math">
+        \[
+        P_{i,j}=b_{4(j-1)+i}.
+        \]
+      </div>
+      <p>Индексы в первой и четвёртой строках отличаются на 3, поэтому снова \(P_{1,*}=P_{4,*}\).</p>
+      <p>В обоих случаях сумма первой и четвёртой строк матрицы \(G\) задаёт ненулевое кодовое слово</p>
+      <div class="math">
+        \[
+        (e_1+e_4)\,G=(e_1+e_4\mid P_{1,*}+P_{4,*})
+        =(e_1+e_4\mid0),
+        \]
+        \[
+        \operatorname{wt}((e_1+e_4)G)=2.
+        \]
+      </div>
+      <p>Следовательно, \(d_{\min}(C)\le2\).</p>
+      <p>Если начальная пара ненулевая, каждый ряд \(P\) содержит пять последовательных членов ненулевого цикла периода 3 (для постолбцового заполнения шаг равен \(4\equiv1\pmod3\)). В каждом таком блоке ровно 3 или 4 единицы, поэтому ни одна строка \(P\) не нулевая. Кодовое слово веса 1 в систематическом коде \(G=[I_4\mid P]\) могло бы появиться только из одной строки \(G\) с нулевой паритетной частью; таких строк нет. Значит, \(d_{\min}(C)\ge2\), и потому \(d_{\min}(C)=2\).</p>
+      <p>Если начальная пара нулевая, то все \(b_t=0\), следовательно \(P=0\) и \(G=[I_4\mid0]\). В коде есть слово веса 1, так что \(d_{\min}(C)=1\).</p>
+    </div>
+
+    <div class="result">
+      <strong>Усиление: общий барьер для постоянного шага.</strong> Пусть строки \(P\) набираются по арифметическим прогрессиям одного и того же шага \(\Delta\):
+      \[
+      P_{i,j}=b_{a_i+(j-1)\Delta},
+      \]
+      где начальные индексы \(a_i\) могут быть разными. Тогда для любого чётного \(m\) и любой начальной пары \(d_{\min}(C)\le2\). Это охватывает построчное и постолбцовое заполнения.
+    </div>
+
+    <div class="step">
+      <h3>Шаг 3. Ранговое доказательство усиленного барьера</h3>
+      <p>Если \(3\mid\Delta\), то каждый ряд \(P\) постоянен, поскольку \(b_t\) имеет период 3. Все строки принадлежат линейной оболочке вектора \((1,1,1,1,1)\), поэтому \(\operatorname{rank}(P)\le1\).</p>
+      <p>Если \(3\nmid\Delta\), то любой ряд \(v=(v_1,\ldots,v_5)\) удовлетворяет</p>
+      <div class="math">
+        \[
+        v_j+v_{j+1}+v_{j+2}=0,\qquad j=1,2,3.
+        \]
+      </div>
+      <p>Это три независимых линейных условия на пять координат; пространство их решений имеет размерность 2. Поэтому \(\operatorname{rank}(P)\le2\) и в обоих случаях \(\operatorname{rank}(P)\le2\).</p>
+      <p>Рассмотрим левое ядро</p>
+      <div class="math">
+        \[
+        W=\{u\in\mathbb F_2^4:uP=0\}.
+        \]
+      </div>
+      <p>По теореме о ранге \(\dim W=4-\operatorname{rank}(P)\ge2\). Выберем двумерное подпространство \(W_0\subseteq W\). У него ровно три ненулевых вектора \(u_1,u_2,u_3\), причём \(u_1+u_2+u_3=0\).</p>
+      <p>В каждой координате тройки \((u_{1,i},u_{2,i},u_{3,i})\) число единиц чётно, то есть равно 0 или 2. Следовательно,</p>
+      <div class="math">
+        \[
+        \operatorname{wt}(u_1)+\operatorname{wt}(u_2)+\operatorname{wt}(u_3)
+        \le2\cdot4=8.
+        \]
+      </div>
+      <p>Поэтому хотя бы для одного \(r\in\{1,2,3\}\) выполнено \(\operatorname{wt}(u_r)\le2\). Так как \(u_rP=0\), соответствующее кодовое слово имеет вид</p>
+      <div class="math">
+        \[
+        u_rG=(u_r\mid u_rP)=(u_r\mid0)
+        \]
+      </div>
+      <p>и вес не превосходит 2. Значит, \(d_{\min}(C)\le2\). \(\square\)</p>
+    </div>
+
+    <div class="step">
+      <h3>Шаг 4. Что меняется при нечётном модуле</h3>
+      <p>Для канонических представителей \(x_t\in\{0,\ldots,m-1\}\) существует целое \(q_t\), такое что</p>
+      <div class="math">
+        \[
+        x_{t+1}=x_{t-1}-x_t^2+q_t m.
+        \]
+      </div>
+      <p>После перехода к чётностям получаем</p>
+      <div class="math">
+        \[
+        b_{t+1}=b_{t-1}+b_t+q_t(m\bmod2)
+        \quad\text{в }\mathbb F_2.
+        \]
+      </div>
+      <p>При чётном \(m\) добавка исчезает, и неизбежен период 3. При нечётном \(m\) добавка \(q_t\) может менять чётность следующего члена; проекция по чётности уже не является корректным гомоморфизмом колец \(\mathbb Z/m\mathbb Z\to\mathbb F_2\). Таким образом, периодический ранговый барьер более не следует из той же редукции.</p>
+      <div class="callout warning">
+        <strong>Граница доказанного.</strong> Это объясняет, почему аргумент для чётных модулей перестаёт работать при нечётных. Но само по себе оно <em>не доказывает</em>, что ранг \(P\) действительно становится 3 или 4, и не гарантирует \(d_{\min}=4\) для нечётных модулей. Значения 99/100 простых и 32/100 составных модулей с \(d_{\min}=4\) — результаты вычислительного эксперимента, описанного в исходном вопросе MathOverflow; универсальное утверждение для всех нечётных \(m\) здесь не заявляется.
+      </div>
+    </div>
+
+    <div class="footnotes">
+      <strong>Замечание о гипотезе заполнения.</strong> Точное значение \(d_{\min}=2\) доказано для явно заданных построчного и постолбцового способов заполнения. Усиленный вывод \(d_{\min}\le2\) доказан для любого общего постоянного шага \(\Delta\) вдоль строк. Для произвольной перестановки 20 членов последовательности без такого условия эти утверждения автоматически не следуют.
+    </div>
+  </article>
+
+  <section class="proof">
+    <h2>Как читать этот сборник</h2>
+    <p>Здесь отделены три уровня утверждений: строгие теоремы с указанными гипотезами, вычислительные наблюдения из первоисточников и объяснительные механизмы, которые ещё не доказывают универсальный вывод. Наличие страницы не означает, что решение принято сообществом MathOverflow или прошло независимое рецензирование.</p>
+    <p>Для исправлений и новых доказательств сохраняйте точную формулировку задачи и указывайте, какое именно правило построения объекта используется. В математике одна недосказанная индексация иногда опаснее целого дракона.</p>
+  </section>
+  <footer>Короткие доказательства · отдельный математический сборник<br>© 2026 Ivan Vorontsov</footer>
+</main>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+  const render=()=>{
+    if(typeof renderMathInElement==="function"){
+      renderMathInElement(document.body,{
+        delimiters:[
+          {left:"$$",right:"$$",display:true},
+          {left:"\\[",right:"\\]",display:true},
+          {left:"\\(",right:"\\)",display:false}
+        ],
+        ignoredTags:["script","style","textarea","pre","code"],
+        throwOnError:false
+      });
+    }
+  };
+  render();
+  const button=document.getElementById("theme");
+  if(button){
+    button.addEventListener("click",()=>{
+      const dark=document.documentElement.dataset.theme==="dark";
+      document.documentElement.dataset.theme=dark?"light":"dark";
+      button.textContent=dark?"Тема":"Тёмная тема";
+    });
+  }
+});
+</script>
+</body>
+</html>
