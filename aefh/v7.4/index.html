@@ -205,13 +205,31 @@
       <h2 id="proof-a4">Доказательное приложение A.4 · Необходимость DPI при отрицательном α</h2>
       <section class="panel">
         <h3>Канал между произвольными матричными размерностями</h3>
-        <p>Для \(N,K\ge2\) определим \(\Theta:M_N(\mathbb C)\to M_K(\mathbb C)\) операторами Крауса
+        <p>Для \(N,K\ge2\) определим \(\Theta:M_N(\mathbb C)\to M_K(\mathbb C)\) операторами Крауса:</p>
+        <div class="formula">
+          \[
+            A_0=\sqrt{\frac{K}{N}}\,|1_K\rangle\langle1_N|.
+          \]
+        </div>
+        <div class="formula">
+          \[
+            A_{rj}=\sqrt{\frac{K}{N(K-1)}}\,|r_K\rangle\langle j_N|,
+            \qquad 2\le r\le K,\quad 2\le j\le N.
+          \]
+        </div>
+        <p>Канал задаётся оператор-суммой
         \[
-          A_0=\sqrt{\frac KN}|1_K\rangle\langle1_N|,\qquad
-          A_{rj}=\sqrt{\frac{K}{N(K-1)}}|r_K\rangle\langle j_N|,
-          \quad 2\le r\le K,\ 2\le j\le N.
+          \Theta(X)=\sum_{\ell}A_\ell X A_\ell^\ast,
         \]
-        Тогда \(\Theta(X)=\sum_\ell A_\ell X A_\ell^\ast\), \(\sum_\ell A_\ell^\ast A_\ell=(K/N)I_N\), а нормированные следы сохраняются: \(\tau_K(\Theta(X))=\tau_N(X)\).</p>
+        где \(\ell\) пробегает индекс \(0\) и все пары \((r,j)\) из указанных диапазонов.</p>
+        <p>Сумма операторов Крауса равна
+        \[
+          \sum_{\ell}A_\ell^\ast A_\ell=\frac{K}{N}I_N.
+        \]
+        Поэтому нормированные следы сохраняются:
+        \[
+          \tau_K(\Theta(X))=\tau_N(X).
+        \]
         <p>Образ единицы строго положителен:
         \[
           \sigma_K=\Theta(I_N)=\frac KN\operatorname{diag}
@@ -354,7 +372,8 @@
         if (typeof renderMathInElement === "function") {
           renderMathInElement(document.body, {
             delimiters: [
-              {left:"$$",right:"$$",display:true},
+              {left:"$",right:"$",display:true},
+              {left:"\\[",right:"\\]",display:true},
               {left:"\\(",right:"\\)",display:false},
               {left:"$",right:"$",display:false}
             ],
