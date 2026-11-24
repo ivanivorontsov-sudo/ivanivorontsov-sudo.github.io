@@ -9,11 +9,24 @@
   <meta name="author" content="Ivan Vorontsov">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://ivanivorontsov-sudo.github.io/proofs/">
-  <meta property="og:type" content="website">\n  <meta property="og:site_name" content="Короткие доказательства — Иван Воронцов">
+  <link rel="alternate" hreflang="ru" href="https://ivanivorontsov-sudo.github.io/proofs/">
+  <link rel="alternate" hreflang="en" href="https://ivanivorontsov-sudo.github.io/en/proofs/">
+  <link rel="alternate" hreflang="x-default" href="https://ivanivorontsov-sudo.github.io/proofs/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Короткие доказательства — Иван Воронцов">
   <meta property="og:locale" content="ru_RU">
+  <meta property="og:locale:alternate" content="en_US">
   <meta property="og:title" content="Короткие доказательства">
   <meta property="og:description" content="Две задачи с MathOverflow, полные доказательства, точные условия и границы применимости.">
-  <meta property="og:url" content="https://ivanivorontsov-sudo.github.io/proofs/">\n  <meta property="og:image" content="https://ivanivorontsov-sudo.github.io/og-cover.png">\n  <meta property="og:image:width" content="1200">\n  <meta property="og:image:height" content="630">\n  <meta property="og:image:alt" content="Короткие математические доказательства Ивана Воронцова">\n  <meta name="twitter:card" content="summary_large_image">\n  <meta name="twitter:title" content="Короткие доказательства">\n  <meta name="twitter:description" content="Небольшие математические доказательства: иррациональный выбор для ограниченных сумм и точный барьер расстояния двоичных кодов при чётном модуле.">\n  <meta name="twitter:image" content="https://ivanivorontsov-sudo.github.io/og-cover.png">
+  <meta property="og:url" content="https://ivanivorontsov-sudo.github.io/proofs/">
+  <meta property="og:image" content="https://ivanivorontsov-sudo.github.io/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Короткие математические доказательства Ивана Воронцова">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Короткие доказательства">
+  <meta name="twitter:description" content="Небольшие математические доказательства: иррациональный выбор для ограниченных сумм и точный барьер расстояния двоичных кодов при чётном модуле.">
+  <meta name="twitter:image" content="https://ivanivorontsov-sudo.github.io/og-cover.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
@@ -28,7 +41,8 @@
     .top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
     .top-inner{max-width:1120px;margin:auto;padding:12px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
     .brand{font:800 15px/1.3 system-ui,sans-serif;letter-spacing:-.02em;margin-right:auto;color:var(--text);text-decoration:none}
-    .nav a,.theme{font:650 13px/1.3 system-ui,sans-serif;text-decoration:none;color:var(--text);border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:7px 11px}
+    .nav{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-width:0}
+    .nav a,.theme{font:650 13px/1.3 system-ui,sans-serif;text-decoration:none;color:var(--text);border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:7px 11px;white-space:normal;overflow-wrap:anywhere}
     .theme{cursor:pointer}
     .page{max-width:1040px;margin:0 auto;padding:30px 18px 70px}
     .hero{padding:34px clamp(20px,4vw,42px);border:1px solid var(--border);border-radius:22px;background:var(--surface);box-shadow:var(--shadow)}
@@ -53,7 +67,11 @@
     .math-note{font-size:14px;color:var(--muted)}
     .callout{border-left:4px solid var(--accent2);background:var(--surface2);padding:13px 16px;border-radius:0 12px 12px 0;margin:17px 0}
     .warning{border-left-color:var(--warn)}
-    .proof p{margin:10px 0}
+    .proof p{margin:10px 0;overflow-wrap:anywhere}
+    .proof li{overflow-wrap:anywhere}
+    .proof,.hero{min-width:0}
+    .math{overscroll-behavior-inline:contain}
+    .math .katex{white-space:normal}
     .proof ol,.proof ul{padding-left:1.45rem}
     .proof li{margin:8px 0}
     .step{padding:15px 17px;border:1px solid var(--border);border-radius:13px;margin:14px 0;background:color-mix(in srgb,var(--surface2) 58%,var(--surface))}
@@ -63,10 +81,11 @@
     .footnotes{font:13px/1.6 system-ui,sans-serif;color:var(--muted);border-top:1px solid var(--border);margin-top:28px;padding-top:16px}
     footer{text-align:center;color:var(--muted);font:13px/1.6 system-ui,sans-serif;padding:32px 10px}
     code{font: .9em ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--surface2);padding:2px 5px;border-radius:5px;overflow-wrap:anywhere}
-    @media(max-width:560px){.top-inner{padding:10px 12px;gap:7px}.brand{flex:1 0 100%}.nav a,.theme{font-size:12px;padding:7px 9px}.page{padding:18px 10px 48px}.hero,.proof{border-radius:16px}.proof-head{display:block}.status{display:inline-block;margin-top:8px}.math{font-size:.94em}}
+    @media(max-width:560px){.top-inner{padding:10px 12px;gap:7px}.brand{flex:1 0 100%}.nav{width:100%;gap:6px}.nav a,.theme{font-size:12px;padding:7px 9px;line-height:1.25}.theme{margin-left:auto}.page{padding:18px 10px 48px}.hero,.proof{border-radius:16px}.hero{padding:24px 18px}.proof{padding:20px 16px}.proof-head{display:block}.status{display:inline-block;margin-top:8px}.math{font-size:.94em}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
   </style>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","@id":"https://ivanivorontsov-sudo.github.io/proofs/#collection","name":"Короткие доказательства — математические задачи и строгие решения","url":"https://ivanivorontsov-sudo.github.io/proofs/","description":"Небольшие математические доказательства: иррациональный выбор для ограниченных сумм и точный барьер расстояния двоичных кодов при чётном модуле.","inLanguage":"ru-RU","author":{"@type":"Person","name":"Ivan Vorontsov","url":"https://ivanivorontsov-sudo.github.io/"},"hasPart":[{"@type":"CreativeWork","name":"Иррационально ограниченные суммы","description":"Доказательство существования иррациональных чисел, удовлетворяющих заданным оценкам ограниченных сумм."},{"@type":"CreativeWork","name":"Чётные модули и двоичные [9,4]-коды","description":"Доказательство рангового барьера и верхней границы минимального расстояния для чётных модулей."}]}</script>\n</head>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","@id":"https://ivanivorontsov-sudo.github.io/proofs/#collection","name":"Короткие доказательства — математические задачи и строгие решения","url":"https://ivanivorontsov-sudo.github.io/proofs/","description":"Небольшие математические доказательства: иррациональный выбор для ограниченных сумм и точный барьер расстояния двоичных кодов при чётном модуле.","inLanguage":"ru-RU","author":{"@type":"Person","name":"Ivan Vorontsov","url":"https://ivanivorontsov-sudo.github.io/"},"hasPart":[{"@type":"CreativeWork","name":"Иррационально ограниченные суммы","description":"Доказательство существования иррациональных чисел, удовлетворяющих заданным оценкам ограниченных сумм."},{"@type":"CreativeWork","name":"Чётные модули и двоичные [9,4]-коды","description":"Доказательство рангового барьера и верхней границы минимального расстояния для чётных модулей."}]}</script>
+</head>
 <body>
 <header class="top">
   <div class="top-inner">
@@ -76,6 +95,7 @@
       <a href="#proof-2">Доказательство 2</a>
       <a href="/">Главный сайт</a>
       <a href="/aefh/v7.4/">AEFH</a>
+      <a href="/en/proofs/" lang="en" hreflang="en">English</a>
     </nav>
     <button class="theme" id="theme" type="button" aria-label="Переключить тему">Тема</button>
   </div>
@@ -345,7 +365,8 @@
     <div class="step">
       <h3>Шаг 3. Ранговое доказательство усиленного барьера</h3>
       <p>Если \(3\mid\Delta\), то каждый ряд \(P\) постоянен, поскольку \(b_t\) имеет период 3. Все строки принадлежат линейной оболочке вектора \((1,1,1,1,1)\), поэтому \(\operatorname{rank}(P)\le1\).</p>
-      <p>Если \(3\nmid\Delta\), то любой ряд \(v=(v_1,\ldots,v_5)\) удовлетворяет</p>
+      <p>Если \(3
+mid\Delta\), то любой ряд \(v=(v_1,\ldots,v_5)\) удовлетворяет</p>
       <div class="math">
         \[
         v_j+v_{j+1}+v_{j+2}=0,\qquad j=1,2,3.
@@ -406,7 +427,7 @@
     <p>Здесь отделены три уровня утверждений: строгие теоремы с указанными гипотезами, вычислительные наблюдения из первоисточников и объяснительные механизмы, которые ещё не доказывают универсальный вывод. Наличие страницы не означает, что решение принято сообществом MathOverflow или прошло независимое рецензирование.</p>
     <p>Для исправлений и новых доказательств сохраняйте точную формулировку задачи и указывайте, какое именно правило построения объекта используется. В математике одна недосказанная индексация иногда опаснее целого дракона.</p>
   </section>
-  <footer>Короткие доказательства · отдельный математический сборник<br>© 2026 Ivan Vorontsov</footer>
+  <footer>Короткие доказательства · отдельный математический сборник<br><a href="/en/proofs/" lang="en" hreflang="en">Read the English version</a> · <a href="/">Главный сайт</a><br>© 2026 Ivan Vorontsov</footer>
 </main>
 <script>
 document.addEventListener("DOMContentLoaded",()=>{
