@@ -307,6 +307,8 @@ const mobilePages = [
   "index.html",
   "proofs/index.html",
   "en/proofs/index.html",
+  "aefh/v7.4/index.html",
+  "en/research/aefh-v7-4/index.html",
   "legal.html",
   "privacy.html",
   "tools-audit/workbench.html",
@@ -347,8 +349,36 @@ for (const width of [320, 360, 390, 430]) {
       });
       if (overflow.scroll > overflow.width + 2) {
         const message = relative + ": horizontal overflow at " + width + "px (" + overflow.width + "px viewport, " + overflow.scroll + "px content); offenders=" + JSON.stringify(overflow.offenders);
-        if (relative === "daily-tools/index.html" || relative === "index.html" || relative === "legal.html" || relative === "aefh/v7/index.html") fail(message);
+        if (relative === "daily-tools/index.html" || relative === "index.html" || relative === "legal.html" || relative === "aefh/v7/index.html" || relative === "aefh/v7.4/index.html" || relative === "en/research/aefh-v7-4/index.html") fail(message);
         else warnings.push(message);
+      }
+      if (relative === "aefh/v7.4/index.html" || relative === "en/research/aefh-v7-4/index.html") {
+        const navigation = await page.locator("nav.bar, .bar-actions, .bar-actions > *, .bar nav, .bar nav > *").evaluateAll(nodes => nodes.map(node => {
+          const rect = node.getBoundingClientRect();
+          return {
+            label: (node.textContent || "").trim().slice(0, 80),
+            left: Math.round(rect.left),
+            right: Math.round(rect.right),
+            width: Math.round(rect.width),
+            scrollWidth: node.scrollWidth,
+            clientWidth: node.clientWidth
+          };
+        }));
+        const navOffenders = navigation.filter(item =>
+          item.left < -2 ||
+          item.right > document.documentElement.clientWidth + 2 ||
+          (item.clientWidth > 0 && item.scrollWidth > item.clientWidth + 2)
+        );
+        if (navOffenders.length) {
+          fail(relative + ": mobile navigation clips or overflows at " + width + "px; details=" + JSON.stringify(navOffenders));
+        }
+        const heading = await page.locator("h1").first().evaluate(node => {
+          const rect = node.getBoundingClientRect();
+          return { left: Math.round(rect.left), right: Math.round(rect.right), scrollWidth: node.scrollWidth, clientWidth: node.clientWidth };
+        });
+        if (heading.left < -2 || heading.right > document.documentElement.clientWidth + 2 || heading.scrollWidth > heading.clientWidth + 2) {
+          fail(relative + ": H1 is clipped or overflows at " + width + "px; details=" + JSON.stringify(heading));
+        }
       }
       if (relative === "proofs/index.html" || relative === "en/proofs/index.html") {
         const nav = await page.locator(".top .nav a, .top .theme").evaluateAll(nodes => nodes.map(node => {
