@@ -360,15 +360,37 @@ for (const width of [320, 360, 390, 430]) {
             marginLeft:style.marginLeft,transform:style.transform,overflowX:style.overflowX
           };
         });
+        const mathDiagnostics = {
+          katexCount: document.querySelectorAll(".katex").length,
+          katexMathmlCount: document.querySelectorAll(".katex-mathml").length,
+          semanticsCount: document.querySelectorAll("semantics").length,
+          firstSemanticsAncestors: (() => {
+            let node = document.querySelector("semantics");
+            const chain = [];
+            while (node && chain.length < 8) {
+              const rect = node.getBoundingClientRect();
+              const style = getComputedStyle(node);
+              chain.push({
+                tag:node.tagName.toLowerCase(),
+                className:typeof node.className === "string" ? node.className : "",
+                left:Math.round(rect.left),right:Math.round(rect.right),
+                width:Math.round(rect.width),position:style.position,
+                overflowX:style.overflowX,clip:style.clip,clipPath:style.clipPath
+              });
+              node=node.parentElement;
+            }
+            return chain;
+          })()
+        };
         return {
           width: viewport, scroll: document.documentElement.scrollWidth,
           bodyScroll: document.body.scrollWidth, scrollX: window.scrollX,
           visualViewport: window.visualViewport ? {width:window.visualViewport.width,scale:window.visualViewport.scale,offsetLeft:window.visualViewport.offsetLeft} : null,
-          geometry,offenders
+          geometry,mathDiagnostics,offenders
         };
       });
       if (overflow.scroll > overflow.width + 2) {
-        const message = relative + ": horizontal overflow at " + width + "px (" + overflow.width + "px viewport, " + overflow.scroll + "px content); offenders=" + JSON.stringify(overflow.offenders) + "; layout=" + JSON.stringify(overflow.geometry) + "; scrollX=" + overflow.scrollX + "; visualViewport=" + JSON.stringify(overflow.visualViewport);
+        const message = relative + ": horizontal overflow at " + width + "px (" + overflow.width + "px viewport, " + overflow.scroll + "px content); offenders=" + JSON.stringify(overflow.offenders) + "; layout=" + JSON.stringify(overflow.geometry) + "; math=" + JSON.stringify(overflow.mathDiagnostics) + "; scrollX=" + overflow.scrollX + "; visualViewport=" + JSON.stringify(overflow.visualViewport);
         if (relative === "daily-tools/index.html" || relative === "index.html" || relative === "legal.html" || relative === "aefh/v7/index.html" || relative === "aefh/v7.4/index.html" || relative === "en/research/aefh-v7-4/index.html") fail(message);
         else warnings.push(message);
       }
