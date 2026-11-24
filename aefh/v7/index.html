@@ -1,222 +1,793 @@
-<!doctype html>
-<html lang="ru">
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
-<title>AEFH v7.0 — исследовательская программа и проверка физических границ</title>
-<meta name="description" content="AEFH v7.0: энтропийный функционал, алгебры горизонтов, математические результаты, условное расширение на II∞, космология DESI DR2 и проверка ренормгруппового бега Стандартной модели.">
-<meta name="author" content="Иван Воронцов">
-<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large">
-<link rel="canonical" href="https://ivanivorontsov-sudo.github.io/aefh/v7/">
-<meta property="og:type" content="article">
-<meta property="og:locale" content="ru_RU">
-<meta property="og:site_name" content="Исследовательские материалы Ивана Воронцова">
-<meta property="og:title" content="AEFH v7.0 — исследовательская программа">
-<meta property="og:description" content="Математическое ядро AEFH, новые гипотезы и открытые проверки — с разделением доказанного, условного и предположений.">
-<meta property="og:url" content="https://ivanivorontsov-sudo.github.io/aefh/v7/">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="AEFH v7.0 — исследовательская программа">
-<meta name="twitter:description" content="Математические результаты, открытые гипотезы, DESI DR2 и проверяемые ограничения AEFH.">
-<style>
-:root{color-scheme:light dark;--bg:#f5f7fb;--fg:#182335;--mut:#58677d;--card:#fff;--line:#dce3ed;--accent:#245fc7;--soft:#eaf1ff;--warn:#fff5df;--warnline:#e8cb8a;--shadow:0 14px 40px rgba(30,55,90,.08)}
-[data-theme=dark]{--bg:#101722;--fg:#e8edf6;--mut:#a8b5c8;--card:#182333;--line:#2c3a4f;--accent:#8db5ff;--soft:#1d3151;--warn:#342b1d;--warnline:#76603a;--shadow:0 14px 40px rgba(0,0,0,.22)}
-@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#101722;--fg:#e8edf6;--mut:#a8b5c8;--card:#182333;--line:#2c3a4f;--accent:#8db5ff;--soft:#1d3151;--warn:#342b1d;--warnline:#76603a;--shadow:0 14px 40px rgba(0,0,0,.22)}}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.68 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
-a{color:var(--accent);text-underline-offset:3px}a:hover{text-decoration-thickness:2px}
-.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.top-inner,.hero,.layout,.footer-inner{width:min(1160px,calc(100% - 36px));margin:auto}
-.top-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
-.brand{font-weight:800;color:var(--fg);text-decoration:none}.top-links{display:flex;gap:16px;flex-wrap:wrap}.top-links a{font-size:.92rem;text-decoration:none}
-.hero{padding:42px 0 25px}.eyebrow{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);font-weight:750}
-h1{font-size:clamp(2rem,5vw,3.45rem);line-height:1.08;letter-spacing:-.04em;margin:.5em 0 .25em}.subtitle{font-size:1.13rem;color:var(--mut);max-width:76ch;margin:0 0 18px}
-.meta{display:flex;gap:8px;flex-wrap:wrap}.pill{border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:.82rem;color:var(--mut)}
-.notice{padding:16px 18px;border:1px solid var(--warnline);background:var(--warn);border-radius:16px;margin:14px 0 20px}
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 245px;gap:28px;align-items:start;padding-bottom:50px}
-main{min-width:0}.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;margin:0 0 16px;box-shadow:var(--shadow)}
-h2{font-size:1.45rem;line-height:1.25;margin:0 0 13px;letter-spacing:-.02em}h3{font-size:1.12rem;line-height:1.35;margin:20px 0 8px}
-p{margin:9px 0}.muted,.small{color:var(--mut)}.small{font-size:.9rem}
-.formula{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:13px 16px;margin:12px 0;overflow-wrap:anywhere;font-family:Georgia,"Times New Roman",serif;font-size:1.02rem}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.mini{padding:14px;border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--card) 92%,var(--soft))}
-table{width:100%;border-collapse:collapse;font-size:.94rem}th,td{text-align:left;vertical-align:top;padding:11px 10px;border-bottom:1px solid var(--line)}th{font-weight:750;background:color-mix(in srgb,var(--soft) 60%,var(--card))}
-.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}table{min-width:650px}
-.tag{display:inline-block;border:1px solid var(--line);border-radius:7px;padding:2px 7px;font-size:.75rem;color:var(--mut);white-space:nowrap}
-.tag.conditional{background:var(--warn)}.tag.open{background:var(--soft)}
-aside{position:sticky;top:76px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
-aside strong{display:block;margin-bottom:8px}aside ol{margin:0;padding-left:20px}aside li{margin:6px 0;font-size:.9rem}
-ul,ol{padding-left:1.3rem}li{margin:7px 0}.refs li{margin:10px 0}
-.cta{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--accent);border-radius:999px;padding:9px 15px;text-decoration:none;font-weight:700;margin:6px 8px 4px 0}
-.frame{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card)}iframe{display:block;width:100%;height:880px;border:0;background:var(--card)}
-.footer{border-top:1px solid var(--line);padding:22px 0 34px;color:var(--mut);font-size:.9rem}
-@media(max-width:850px){.layout{grid-template-columns:1fr}aside{position:static;order:-1}.grid{grid-template-columns:1fr}.top-inner{padding:10px 0}.hero{padding-top:28px}}
-@media(max-width:560px){body{font-size:15px}.top-inner,.hero,.layout,.footer-inner{width:calc(100% - 24px)}.panel{padding:16px}iframe{height:1020px}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AEFH v7.0 — Алгебраико-энтропийная гравитация конечного горизонта</title>
+  <meta name="description" content="Интерактивная рукопись AEFH v7.0: 14 теорем, факторы фон Неймана II₁ и II∞, DPI, гравитация, калибровочные сектора, Хиггс и космология." />
+  <meta name="author" content="Иван Воронцов" />
+  <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large" />
+  <link rel="canonical" href="https://ivanivorontsov-sudo.github.io/aefh/v7/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:locale" content="ru_RU" />
+  <meta property="og:title" content="AEFH v7.0 — интерактивная исследовательская рукопись" />
+  <meta property="og:description" content="Математическое ядро AEFH, интерактивные симуляторы и явное разделение математических утверждений, физических предпосылок и открытых задач." />
+  <meta property="og:url" content="https://ivanivorontsov-sudo.github.io/aefh/v7/" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --bg:#fcfcfb;--surface:#fff;--surface-alt:#f4f6f9;--text:#181c24;--muted:#586274;
+      --border:#dfe4ec;--accent:#1d4ed8;--accent-soft:#e8f0fe;--ok:#0f766e;--ok-soft:#e6f7f5;
+      --warn:#b45309;--warn-soft:#fef3c7;--bad:#b91c1c;--bad-soft:#fee2e2;
+      --shadow:0 6px 24px rgba(15,23,42,.06);
+      --font-serif:"Charter","Georgia","Cambria","Times New Roman",serif;
+      --font-sans:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,sans-serif;
+      --font-mono:"JetBrains Mono","Fira Code",ui-monospace,SFMono-Regular,Menlo,monospace;
+    }
+    [data-theme="dark"] {
+      --bg:#0d1117;--surface:#151b23;--surface-alt:#1c2430;--text:#e6edf3;--muted:#9aa7b8;
+      --border:#2a3442;--accent:#60a5fa;--accent-soft:#17263d;--ok:#2dd4bf;--ok-soft:#112d2b;
+      --warn:#fbbf24;--warn-soft:#2e2411;--bad:#f87171;--bad-soft:#331619;
+      --shadow:0 8px 28px rgba(0,0,0,.38);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:4.5rem}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-serif);font-size:17.5px;line-height:1.72;transition:background .2s ease,color .2s ease}
+    a{color:var(--accent);text-underline-offset:3px}
+    #progress-bar{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--accent),var(--ok));z-index:1000}
+    .topbar{position:sticky;top:0;z-index:900;backdrop-filter:blur(10px);background:color-mix(in srgb,var(--surface) 88%,transparent);border-bottom:1px solid var(--border);padding:.65rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem;font-family:var(--font-sans);font-size:.88rem}
+    .brand{font-weight:700;letter-spacing:.02em;display:flex;align-items:center;gap:.5rem;min-width:0}
+    .badge{display:inline-flex;align-items:center;gap:.3rem;padding:.18rem .55rem;border-radius:999px;font-size:.76rem;font-weight:600;font-family:var(--font-mono)}
+    .badge-ok{background:var(--ok-soft);color:var(--ok);border:1px solid color-mix(in srgb,var(--ok) 35%,transparent)}
+    .badge-accent{background:var(--accent-soft);color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
+    .badge-warn{background:var(--warn-soft);color:var(--warn);border:1px solid color-mix(in srgb,var(--warn) 35%,transparent)}
+    .controls{display:flex;flex-wrap:wrap;gap:.45rem}
+    button.btn{appearance:none;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font-sans);font-size:.8rem;font-weight:600;padding:.36rem .72rem;border-radius:8px;cursor:pointer;transition:all .15s ease}
+    button.btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+    button.btn:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+    .layout{max-width:1260px;margin:0 auto;padding:2rem 1.25rem 4rem;display:grid;grid-template-columns:260px minmax(0,1fr);gap:2.25rem;align-items:start}
+    aside.toc{position:sticky;top:4.5rem;max-height:calc(100vh - 5.5rem);overflow-y:auto;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1rem 1rem 1.15rem;box-shadow:var(--shadow);font-family:var(--font-sans);font-size:.84rem}
+    .toc-title{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:0 0 .65rem}
+    .toc ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.2rem}
+    .toc a{display:block;text-decoration:none;color:var(--muted);padding:.32rem .55rem;border-radius:7px;border-left:2px solid transparent;transition:all .15s ease;line-height:1.35}
+    .toc a:hover,.toc a.active{color:var(--accent);background:var(--accent-soft);border-left-color:var(--accent);font-weight:600}
+    main.paper{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:2.75rem 3rem;box-shadow:var(--shadow);min-width:0}
+    header.hero{border-bottom:2px solid var(--border);padding-bottom:1.75rem;margin-bottom:2rem}
+    .meta-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.9rem}
+    h1{font-family:var(--font-serif);font-size:clamp(1.85rem,3.1vw,2.55rem);line-height:1.2;margin:0 0 .75rem;letter-spacing:-.015em}
+    .subtitle{font-family:var(--font-sans);font-size:1.02rem;color:var(--muted);margin:0 0 1.15rem;line-height:1.55}
+    .keywords{font-family:var(--font-sans);font-size:.83rem;color:var(--muted);background:var(--surface-alt);border:1px solid var(--border);padding:.65rem .9rem;border-radius:10px}
+    h2{font-family:var(--font-sans);font-size:1.42rem;margin:2.6rem 0 .9rem;padding-bottom:.45rem;border-bottom:1px solid var(--border);letter-spacing:-.01em;scroll-margin-top:4.5rem}
+    h3{font-family:var(--font-sans);font-size:1.08rem;margin:1.6rem 0 .6rem;color:var(--text)}
+    p{margin:0 0 1rem}
+    ul,ol{margin:0 0 1.1rem;padding-left:1.45rem}
+    li{margin-bottom:.35rem}
+    .math-box{border-radius:12px;padding:1.15rem 1.35rem;margin:1.45rem 0;border:1px solid var(--border);border-left:4px solid var(--accent);background:var(--surface-alt)}
+    .math-box.lemma{border-left-color:var(--ok)}
+    .math-box.corollary{border-left-color:#7c3aed}
+    .math-box.warning{border-left-color:var(--warn);background:var(--warn-soft)}
+    .math-box.abstract{border-left-color:var(--accent);background:color-mix(in srgb,var(--accent-soft) 55%,var(--surface))}
+    .box-header{font-family:var(--font-sans);font-weight:700;font-size:.98rem;margin-bottom:.55rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap}
+    details.proof{margin-top:.85rem;border:1px solid var(--border);border-radius:10px;background:var(--surface);overflow:hidden}
+    details.proof summary{cursor:pointer;padding:.58rem .95rem;font-family:var(--font-sans);font-size:.86rem;font-weight:600;color:var(--accent);background:color-mix(in srgb,var(--accent-soft) 45%,var(--surface));user-select:none;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+    details.proof summary::-webkit-details-marker{display:none}
+    details.proof summary::after{content:"▸ Развернуть";font-size:.78rem;opacity:.85}
+    details.proof[open] summary::after{content:"▾ Свернуть"}
+    .proof-body{padding:1rem 1.15rem .75rem;font-size:.95rem;border-top:1px solid var(--border)}
+    .qed{text-align:right;font-weight:700;color:var(--accent);margin-top:-.35rem;margin-bottom:.2rem}
+    .table-wrap{overflow-x:auto;margin:1.35rem 0;border:1px solid var(--border);border-radius:12px}
+    table{width:100%;border-collapse:collapse;font-family:var(--font-sans);font-size:.87rem;line-height:1.45}
+    th,td{padding:.68rem .85rem;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+    th{background:var(--surface-alt);font-weight:700;color:var(--text)}
+    tr:last-child td{border-bottom:none}
+    tr.highlight-row{background:var(--ok-soft)}
+    .katex-display{overflow-x:auto;overflow-y:hidden;padding:.35rem 0;margin:.85rem 0}
+    .lab-card{margin:1.6rem 0;padding:1.25rem 1.35rem;border:1px solid var(--border);border-radius:14px;background:var(--surface-alt);font-family:var(--font-sans)}
+    .lab-title{font-weight:700;font-size:.98rem;margin:0 0 .35rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+    .lab-sub{font-size:.84rem;color:var(--muted);margin:0 0 1rem}
+    .sliders{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:1rem}
+    .slider-group label{display:flex;justify-content:space-between;gap:.5rem;font-size:.83rem;font-weight:600;margin-bottom:.35rem}
+    .slider-group input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}
+    .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:.7rem}
+    .stat-pill{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.65rem .8rem;min-width:0}
+    .stat-pill .k{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);display:block;margin-bottom:.2rem}
+    .stat-pill .v{font-family:var(--font-mono);font-size:.95rem;font-weight:700;overflow-wrap:anywhere}
+    .stat-ok{color:var(--ok)}.stat-warn{color:var(--warn)}.stat-bad{color:var(--bad)}
+    canvas.plot{width:100%;height:290px;display:block;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:.9rem}
+    .exp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin:1.25rem 0}
+    .exp-card{background:var(--surface-alt);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;font-family:var(--font-sans);font-size:.88rem}
+    .exp-card h4{margin:0 0 .45rem;font-size:.95rem;display:flex;align-items:center;justify-content:space-between;gap:.4rem}
+    .exp-card p{margin:0 0 .5rem;line-height:1.5}
+    .exp-card p:last-child{margin-bottom:0}
+    code{font-family:var(--font-mono);font-size:.86em;background:var(--surface-alt);border:1px solid var(--border);padding:.08rem .35rem;border-radius:5px;overflow-wrap:anywhere}
+    footer.colophon{margin-top:2.75rem;padding-top:1.25rem;border-top:1px solid var(--border);font-family:var(--font-sans);font-size:.83rem;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
+    @media(max-width:960px){.layout{grid-template-columns:1fr;padding:1.25rem .9rem 3rem}aside.toc{position:static;max-height:none}main.paper{padding:1.65rem 1.25rem}}
+    @media(max-width:760px){
+      .topbar{flex-wrap:wrap;align-items:flex-start;padding:.6rem .8rem;gap:.55rem}
+      .brand{flex:1 1 100%;flex-wrap:wrap;white-space:normal;gap:.4rem}
+      .controls{width:100%;justify-content:flex-start}
+      button.btn{font-size:.78rem;padding:.4rem .62rem}
+    }
+    @media(max-width:380px){
+      .topbar{padding:.55rem .65rem}
+      .brand{font-size:.82rem}
+      .badge{font-size:.69rem;padding:.16rem .42rem}
+      .controls{gap:.35rem}
+      button.btn{font-size:.74rem;padding:.38rem .52rem}
+      main.paper{padding:1.2rem .9rem}
+      .layout{padding-inline:.55rem}
+    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
+    @media print{
+      .topbar,aside.toc,#progress-bar,.no-print{display:none!important}
+      .layout{display:block;max-width:100%;padding:0}
+      main.paper{border:none;box-shadow:none;padding:0}
+      details.proof{break-inside:avoid}
+      details.proof>.proof-body{display:block!important}
+      a{color:inherit;text-decoration:none}
+      .math-box,.exp-card,.table-wrap{break-inside:avoid}
+      body{font-size:11pt;line-height:1.5}
+    }
+  </style>
 </head>
 <body>
-<header class="top"><div class="top-inner">
-<a class="brand" href="/">Иван Воронцов · исследования</a>
-<nav class="top-links" aria-label="Основная навигация">
-<a href="/">Главная</a><a href="/aefh/">Архив AEFH</a><a href="/aefh/v6/">v6.0</a><a href="#simulator">RG-симулятор</a>
-</nav>
-</div></header>
+  <div id="progress-bar" aria-hidden="true"></div>
+  <nav class="topbar" aria-label="Панель управления">
+    <div class="brand">
+      <span>AEFH v7.0</span>
+      <span class="badge badge-ok">CI: 20/20 + 6/6 RG</span>
+      <span class="badge badge-accent">14 теорем</span>
+    </div>
+    <div class="controls">
+      <button class="btn" id="btn-proofs" type="button">Развернуть все доказательства</button>
+      <button class="btn" id="btn-theme" type="button" aria-pressed="false">Тёмная тема</button>
+      <button class="btn" id="btn-print" type="button">Экспорт в PDF</button>
+    </div>
+  </nav>
 
-<section class="hero">
-<div class="eyebrow">Математическая физика · исследовательская рукопись</div>
-<h1>AEFH v7.0</h1>
-<p class="subtitle">Алгебраико-энтропийная программа конечного горизонта: единый информационный функционал, алгебры наблюдаемых, условная геометрия и проверяемые контакты с физикой.</p>
-<div class="meta"><span class="pill">Версия 7.0 · 24 ноября 2026</span><span class="pill">Авторская исследовательская программа</span><span class="pill">Независимое рецензирование не завершено</span></div>
-<div class="notice"><strong>Статус заявлений.</strong> AEFH не является установленной физической «теорией всего». На этой странице отдельно отмечены: (1) математические утверждения внутри явно заданных моделей; (2) условные выводы, зависящие от дополнительных постулатов; (3) физические гипотезы и способы их проверки. Численные тесты подтверждают только реализованные вычислительные примеры, но не заменяют доказательства общих теорем и не подтверждают экспериментальную истинность модели.</div>
-</section>
+  <div class="layout">
+    <aside class="toc" aria-label="Оглавление">
+      <div class="toc-title">Навигация по трактату</div>
+      <ul id="toc-list">
+        <li><a href="#abstract">Аннотация и аксиомы</a></li>
+        <li><a href="#sec-stability">1. Устойчивость вакуума (Т. 1–3)</a></li>
+        <li><a href="#sec-dpi">2. Причинность и DPI (Т. 4)</a></li>
+        <li><a href="#sec-ii-inf">3. Факторы II∞ (Т. 14)</a></li>
+        <li><a href="#sec-gravity">4. Гравитация и DESI DR2 (Т. 5)</a></li>
+        <li><a href="#sec-ym">5. Калибровки и Янг—Миллс (Т. 6–8)</a></li>
+        <li><a href="#sec-higgs">6. U(1) и Хиггс (Т. 9–11)</a></li>
+        <li><a href="#sec-fermions">7. Фермионы (Т. 12–13)</a></li>
+        <li><a href="#sec-experiments">8. Мысленные эксперименты</a></li>
+        <li><a href="#sec-map">9. Мастер-карта и границы</a></li>
+        <li><a href="#sec-refs">10. Библиография</a></li>
+      </ul>
+    </aside>
 
-<div class="layout">
-<main id="content">
-<section class="panel" id="summary">
-<h2>Что меняется в v7.0</h2>
-<p>Версия 7.0 не объявляет новые физические открытия. Она расширяет исследовательскую программу тремя направлениями: (а) проверка возможности переноса энтропийных оценок с конечного фактора II<sub>1</sub> на полуконечный фактор II<sub>∞</sub>; (б) феноменологическое рассмотрение связанного скалярного тёмного сектора на фоне результатов DESI DR2; (в) независимая однопетлевая проверка соотношения электрослабых констант на высоких энергиях.</p>
-<div class="grid">
-<div class="mini"><strong>Сохранено</strong><p class="small">Математическое ядро и содержание v1–v6. Старые страницы остаются доступны как архивы.</p></div>
-<div class="mini"><strong>Добавлено</strong><p class="small">Разбор типа II<sub>∞</sub>, обновлённые ограничения, ссылки на внешние работы и исправленный RG-симулятор.</p></div>
-<div class="mini"><strong>Не заявляется</strong><p class="small">Экспериментальное подтверждение квантовой гравитации, вывод всех параметров СМ или завершённая непертурбативная теория.</p></div>
-<div class="mini"><strong>Главный принцип</strong><p class="small">Не выдавать исследовательскую гипотезу за установленный факт — даже если формула выглядит особенно нарядно.</p></div>
-</div>
-</section>
+    <main class="paper">
+      <header class="hero">
+        <div class="meta-row">
+          <span class="badge badge-accent">Авторская редакция v7.0</span>
+          <span class="badge badge-ok">Вычислительные тесты: 20/20 + 6/6 RG</span>
+          <span class="badge badge-warn">24 ноября 2026 г.</span>
+        </div>
+        <h1>Алгебраико-энтропийная гравитация конечного горизонта (AEFH v7.0)</h1>
+        <p class="subtitle">
+          Единая операторно-алгебраическая архитектура от факторов фон Неймана типа $\mathrm{II}_1$ и $\mathrm{II}_\infty$ до уравнений Эйнштейна, связанной тёмной энергии DESI DR2, неабелева действия Янга — Миллса, электромагнетизма $U(1)$, механизма Хиггса и киральных фермионов трёх поколений.
+        </p>
+        <div class="keywords">
+          <strong>Ключевые слова:</strong> факторы фон Неймана типа $\mathrm{II}_1$ и $\mathrm{II}_\infty$, относительная энтропия Араки, квантовая аффинность Петца, метрика Боголюбова — Кубо — Мори (BKM), неравенство обработки данных (DPI), энтропия сцепленности, уравнения Эйнштейна, квинтэссенция, действие Вильсона, $\mathbb{C}P^N$-модель Хиггса, киральные аномалии.
+        </div>
+      </header>
 
-<section class="panel" id="axioms">
-<h2>Четыре исходных постулата AEFH v7.0</h2>
-<h3>1. Иерархия алгебр горизонта</h3>
-<p>Для микроскопического описания предполагается конечномерная алгебра типа I<sub>N</sub>, где N может масштабироваться как exp(S<sub>hor</sub>). В полуклассическом описании используются факторы II<sub>1</sub> для соответствующих конструкций статического участка де Ситтера и II<sub>∞</sub> для рассматриваемых алгебр наблюдаемых чёрных дыр. Обычная локальная квантовая теория поля ассоциируется с алгебрами типа III<sub>1</sub>.</p>
-<p class="small muted">Это предлагаемая иерархия масштабов программы, а не доказанная теорема о предельном переходе I<sub>N</sub> → II → III<sub>1</sub>. Число N и механизм предельного перехода ещё предстоит вывести.</p>
+      <div class="math-box warning">
+        <div class="box-header">Статус рукописи и вычислительной проверки</div>
+        <p>Это авторская исследовательская рукопись, а не опубликованная рецензируемая теория. Метки «Доказано» обозначают статус утверждения внутри авторского текста; они не означают независимую проверку всех доказательств. Тесты CI проверяют реализованные численные модели и программный код, но не доказывают операторные теоремы, не подтверждают космологическую модель и не устанавливают физическую истинность AEFH. В разделах 6–7 часть результатов дана как математические конструкции и заявленные следствия; полные независимые выкладки для каждого утверждения здесь не приведены.</p>
+        <p>В теореме 2 и теореме 14 отдельно различаются условия равенства в двух звеньях глобальной энтропийной цепочки. Это устраняет важную неоднозначность: равенство в первом звене возможно и для различных состояний.</p>
+      </div>
 
-<h3>2. Единый информационный функционал</h3>
-<div class="formula">𝓘<sub>α</sub>(ρ,σ) = S(ρ‖σ) + α[1 − F<sub>1/2</sub>(ρ,σ)], &nbsp; α ≥ 0.</div>
-<p>Здесь S(ρ‖σ) — относительная энтропия Араки, а F<sub>1/2</sub> — квантовая аффинность Петца (не fidelity Ульмана): в конечномерной или корректно заданной полуконечной постановке F<sub>1/2</sub> = Tr(ρ<sup>1/2</sup>σ<sup>1/2</sup>). На II<sub>1</sub> используется нормированный след τ; на II<sub>∞</sub> — нормальный верный полуконечный след Tr и состояния-операторы плотности с Tr(ρ)=1, когда такая плотность существует.</p>
-<p class="small muted">Для бесконечномерных алгебр требуется явно фиксировать области определения, поддержку операторов и условия конечности относительной энтропии. Одной замены символа τ на Tr для полного доказательства недостаточно.</p>
+      <section id="abstract">
+        <div class="math-box abstract">
+          <div class="box-header">Аннотация</div>
+          <p>В работе строится исследовательская программа <strong>алгебраико-энтропийной гравитации конечного горизонта (AEFH)</strong> на основе единого безразмерного квантово-информационного функционала:</p>
+          $$\mathcal{I}_\alpha(\rho,\sigma):=S_{\mathrm{Araki}}(\rho\Vert\sigma)+\alpha\big(1-F_{1/2}(\rho,\sigma)\big),\qquad \widetilde{\mathcal{J}}_\gamma:=\mathcal{I}_{-\gamma}.$$
+          <p>Здесь $S_{\mathrm{Araki}}$ — относительная энтропия Араки, а $F_{1/2}(\rho,\sigma):=\operatorname{Tr}(\rho^{1/2}\sigma^{1/2})$ — квантовая аффинность Петца (Хеллингера). В рукописи собраны 14 теорем, технические леммы и космологические следствия, классифицирующие локальную и глобальную устойчивость, причинную монотонность, условный вывод уравнений Эйнштейна, феноменологическую динамику тёмной энергии, калибровочные сектора, механизм Хиггса и киральные фермионы.</p>
+          <p>Математические утверждения, физические входы и открытые задачи разделяются явно: строгая теорема внутри заданной алгебраической модели сама по себе не является экспериментальным подтверждением физической интерпретации.</p>
+        </div>
 
-<h3>3. Склейка горизонтов и калибровочная инвариантность</h3>
-<p>На общем шве смежных областей предполагается инвариантность физических состояний относительно диагонального действия граничной калибровочной группы. Заряженные когерентности и несовпадение граничных данных штрафуются информационным функционалом 𝓘<sub>α</sub>. Точная связь этой схемы с физическими потоками и операторами Гаусса остаётся частью постулатов программы.</p>
+        <h3>Четыре фундаментальные аксиомы AEFH v7.0</h3>
+        <ol>
+          <li><strong>Иерархия алгебр горизонта:</strong> микроскопическая квантовая гравитация в конечном горизонте моделируется алгеброй типа $\mathrm{I}_N$ ($N\sim e^{S_{\mathrm{hor}}}$), а полуклассические описания могут использовать факторы типа $\mathrm{II}_1$ или $\mathrm{II}_\infty$; локальная КТП ассоциируется с алгебрами типа $\mathrm{III}_1$. Конкретный функтор и предельный переход остаются открытой задачей.</li>
+          <li><strong>Единый информационный принцип:</strong> локальные и глобальные вариации состояний управляются функционалом $\mathcal{I}_\alpha$; требование DPI в рассматриваемом классе каналов фиксирует знак $\alpha\ge0$.</li>
+          <li><strong>Закон склейки горизонтов (Гаусс):</strong> на общем шве смежных причинных областей физические состояния предполагаются инвариантными относительно диагонального действия граничной калибровочной группы $G$.</li>
+          <li><strong>Квантовые моды и ковариантность тёмного сектора:</strong> длинноволновые возмущения метрики $\hat h_{\mu\nu}$ предполагаются квантовыми, а дефицит энтропии горизонта описывается ковариантным скалярным сектором $\phi$ при сохранении полного тензора энергии-импульса.</li>
+        </ol>
+      </section>
 
-<h3>4. Квантовые длинноволновые моды и тёмный сектор</h3>
-<p>В физической гипотезе линейные возмущения метрики ĥ<sub>μν</sub> должны иметь квантовую динамику. Дефицит энтропии горизонта описывается скалярным полем φ, которое в феноменологическом расширении может обмениваться энергией с тёмной материей. Полное тензорное тождество сохранения задаётся как ∇<sup>μ</sup>T<sub>μν</sub><sup>tot</sup> = 0.</p>
-<p class="small muted">Эти пункты — физические требования и гипотезы к будущей динамической модели, а не вывод из одной только монотонности относительной энтропии.</p>
-</section>
+      <section id="sec-stability">
+        <h2>1. Алгебраическая устойчивость и фазовая диаграмма вакуума (Теоремы 1–3)</h2>
+        <p>Пусть $\mathcal M$ — фактор фон Неймана типа $\mathrm{II}_1$ (или матричная алгебра $M_N(\mathbb C)$) с точным нормальным нормированным следом $\tau(\mathbf1)=1$. Матрицы плотности нормированы условием $\tau(\rho)=1$. В $M_N(\mathbb C)$ используется $\tau(A)=\operatorname{Tr}(A)/N$, так что обычный след плотности равен $N$. Максимально смешанное состояние в этой нормировке — $\omega_{\max}=\mathbf1$.</p>
 
-<section class="panel" id="theorems">
-<h2>Корпус математических результатов v1–v6</h2>
-<p>Ниже приведена карта заявленных результатов рукописи. Формулировки относятся к конкретным предпосылкам, нормировкам, классам каналов и выбранным представлениям. Обозначение «теорема» — часть авторской структуры текста; независимая проверка доказательств и физической применимости не завершена.</p>
-<div class="table-wrap"><table>
-<thead><tr><th>Блок</th><th>Заявленный результат внутри модели</th><th>Оговорка / статус</th></tr></thead>
-<tbody>
-<tr><td><strong>Т. 1</strong><br>Локальная устойчивость</td><td>Локальный порог γ<sub>loc</sub>=4 из сравнения метрик BKM и Хеллингера; при граничном случае в выбранном направлении заявлен член −7t<sup>4</sup>/96 + O(t<sup>6</sup>).</td><td>Требует проверки пространства допустимых вариаций и спектральных условий.</td></tr>
-<tr><td><strong>Т. 2</strong><br>Глобальная устойчивость</td><td>S(ρ‖σ) ≥ −2 ln F<sub>1/2</sub>(ρ,σ) ≥ 2[1−F<sub>1/2</sub>(ρ,σ)], что задаёт глобальный порог γ<sub>glob</sub>=2 в принятой нормировке.</td><td>Нужны условия поддержки и конечности величин для каждой рассматриваемой алгебры.</td></tr>
-<tr><td><strong>Т. 3</strong><br>Конечная микроструктура</td><td>При σ=I<sub>N</sub> заявлен точный порог γ<sub>N</sub> = ln[N/(N−1)] / [1−√((N−1)/N)] = 2 + 1/(2N) + O(N<sup>−2</sup>).</td><td>Точный конечномерный результат в выбранной нормировке; интерпретация поправки как exp(−S<sub>hor</sub>) требует физической модели N.</td></tr>
-<tr><td><strong>Т. 4</strong><br>DPI и знак α</td><td>Монотонность 𝓘<sub>α</sub>(Φ(ρ),Φ(σ)) ≤ 𝓘<sub>α</sub>(ρ,σ) для оговорённых τ-сохраняющих каналов и классов алгебр связывается с условием α≥0.</td><td>Нельзя автоматически отождествлять любой физический процесс уменьшения горизонта с таким каналом без отдельного постулата.</td></tr>
-<tr><td><strong>Т. 5</strong><br>Гравитационный предел</td><td>Энтропийное равновесие малого шара при дополнительных предпосылках приводит к уравнениям Эйнштейна и ковариантному тождеству сохранения.</td><td><span class="tag conditional">Условный вывод</span> Энтропийный постулат и форма поправки задаются отдельно, а не следуют из Т. 1–4.</td></tr>
-<tr><td><strong>Т. 6–8</strong><br>Краевые и неабелевы сектора</td><td>Центральное расщепление, вклад размерностей представлений и Haar-индуцированное присоединённое действие Вильсона с положительной жёсткостью в заданной решёточной схеме.</td><td>Связь центральных проекторов с физическими потоками и переход к континуальному действию требуют дополнительных обоснований.</td></tr>
-<tr><td><strong>Т. 9–10</strong><br>U(1), заряды и CP<sup>N</sup></td><td>Расширенный зонд задаёт фундаментально-присоединённый Wilson-блок, компактный U(1)-сектор и CP<sup>N</sup>-реберную кинематику с выбранной Higgs-параметризацией.</td><td>Сам по себе конечномерный спектр не равен полной квантовой калибровочной теории.</td></tr>
-<tr><td><strong>Т. 11</strong><br>Потенциал</td><td>Для заданного энтропийного потенциала заявлены строгая выпуклость по x, аналитический минимум и непрерывный переход второго рода.</td><td>Положительная радиальная кривизна не является физической массой без канонической кинетической нормировки.</td></tr>
-<tr><td><strong>Т. 12</strong><br>Аномалии и θ<sub>W</sub></td><td>Условия локальных аномалий фиксируют отношения гиперзарядов заданного мультиплета. При дополнительной универсальности коэффициентов получается древесное sin²θ<sub>W</sub>=3/8.</td><td><span class="tag conditional">Условный результат</span> Общая нормировка заряда и универсальный коэффициент κ<sub>0</sub> — отдельные входы. Это не измеренное значение при M<sub>Z</sub>.</td></tr>
-<tr><td><strong>Т. 13</strong><br>Киральный оператор</td><td>Конечный внутренний оператор D<sub>F</sub>(φ) с заданными матрицами Юкавы; в выбранном Gibbs-разложении возникает неотрицательный квартетный коэффициент при ненулевой дисперсии спектра.</td><td>Матрицы Юкавы остаются входными. Полная спектральная тройка и физический потенциал Хиггса не построены.</td></tr>
-</tbody></table></div>
-<div class="notice"><strong>Важная граница по Стандартной модели.</strong> Т. 12 не выводит из первых принципов саму группу SU(3)×SU(2)×U(1), глобальную форму группы, три поколения или численные матрицы Юкавы. Т. 13 использует матрицы Юкавы как заданные данные. Абсолютный масштаб Хиггса и значение массы около 125 ГэВ из одной только положительности коэффициента λ<sub>H</sub> не следуют.</div>
-</section>
+        <div class="math-box">
+          <div class="box-header"><span>Теорема 1 — Локальный порог $\gamma_{\mathrm{loc}}=4$ и распад в критической точке</span><span class="badge badge-ok">Доказано в модели</span></div>
+          <p>Пусть $\sigma\in\mathcal M_+$ обратимо ($\sigma\ge c\mathbf1\gt0$, $\tau(\sigma)=1$, $\dim\mathcal M\ge2$). Тогда:</p>
+          <ol>
+            <li>При всех $\alpha\ge0$ выполняется $\mathcal I_\alpha(\rho,\sigma)\ge0$ с равенством тогда и только тогда, когда $\rho=\sigma$.</li>
+            <li>Вторая вариация $\widetilde{\mathcal J}_\gamma(\sigma+\epsilon\delta\rho,\sigma)$ строго положительна по любому ненулевому допустимому направлению при $\gamma\lt4$, имеет нулевые коммутирующие направления при $\gamma=4$ и отрицательные направления при любом $\gamma\gt4$.</li>
+            <li>В критической точке $\gamma=4$ для $\sigma=I_2$ и $\rho_t=\operatorname{diag}(1+t,1-t)$, $|t|\lt1$:
+              $$\widetilde{\mathcal J}_4(\rho_t,I_2)=-\frac{7}{96}t^4-\frac{187}{3840}t^6+O(t^8)\lt0.$$
+            </li>
+          </ol>
+          <details class="proof">
+            <summary>Доказательство Теоремы 1</summary>
+            <div class="proof-body">
+              <p><strong>1.</strong> По неравенству Клейна $S(\rho\Vert\sigma)\ge0$ с равенством тогда и только тогда, когда $\rho=\sigma$. По Коши — Буняковскому в $L^2(\mathcal M,\tau)$ имеем $F_{1/2}(\rho,\sigma)=\langle\rho^{1/2},\sigma^{1/2}\rangle_\tau\le1$.</p>
+              <p><strong>2.</strong> На $\mathcal H=L^2(\mathcal M,\tau)$ коммутирующие операторы $L_\sigma(A)=\sigma A$ и $R_\sigma(A)=A\sigma$ задают совместную спектральную меру $d\mu_{\delta\rho}(a,b)=\langle\delta\rho,E(da,db)\delta\rho\rangle_\tau$. Ядра BKM и Хеллингера имеют вид
+                $$K_{\mathrm{BKM}}(a,b)=\frac{\ln a-\ln b}{a-b},\qquad K_{\mathrm H}(a,b)=\frac{1}{(\sqrt a+\sqrt b)^2}.$$
+                При $r=\sqrt{a/b}\gt0$ отношение равно $2(r+1)\ln r/(r-1)$. Функция $\varphi(r)=\ln r-2(r-1)/(r+1)$ имеет производную $\varphi'(r)=(r-1)^2/[r(r+1)^2]\ge0$, что даёт $K_{\mathrm{BKM}}\ge4K_{\mathrm H}$ с равенством при $a=b$. Вдоль коммутирующих возмущений спектральная мера лежит на диагонали.</p>
+              <p><strong>3.</strong> Разложения
+                $$S(\rho_t\Vert I_2)=\frac{t^2}{2}+\frac{t^4}{12}+\frac{t^6}{30}+O(t^8),$$
+                $$1-F_{1/2}(\rho_t,I_2)=\frac{t^2}{8}+\frac{5t^4}{128}+\frac{21t^6}{1024}+O(t^8)$$
+                дают заявленный коэффициент после вычитания четырёхкратной аффинности.</p>
+              <div class="qed">■</div>
+            </div>
+          </details>
+        </div>
 
-<section class="panel" id="theorem14">
-<h2>Новая задача v7.0: перенос на фактор II<sub>∞</sub></h2>
-<p>В работе Klinger, Kudler-Flam и Satishchandran (Phys. Rev. D 114, 065010, 2026) построенная полуклассическая алгебра наблюдаемых чёрной дыры относится к типу II<sub>∞</sub>, тогда как для статического участка де Ситтера с более реалистичной моделью наблюдателя обсуждается тип II<sub>1</sub>. Это важное различие для AEFH: на II<sub>∞</sub> полуконечный след удовлетворяет Tr(1)=∞, поэтому нормировку τ(1)=1 переносить туда нельзя.</p>
-<p>Для положительной интегрируемой плотности ρ можно рассматривать нормальное состояние с Tr(ρ)=1, то есть ρ из L<sup>1</sup>(𝓜,Tr)<sub>+</sub>. Это естественная постановка для проверки энтропийных функционалов, но не автоматическое доказательство старых теорем в бесконечномерном случае.</p>
-<div class="formula">Предлагаемая цель: сформулировать и доказать корректные II<sub>∞</sub>-аналоги локальной BKM-оценки, глобального неравенства для F<sub>1/2</sub> и DPI для Tr-сохраняющих каналов.</div>
-<h3>Что требуется доказать до присвоения номера «Теорема 14»</h3>
-<ul>
-<li>Задать точные области определения логарифма, квадратных корней, относительного модульного оператора и метрик для неограниченных плотностей.</li>
-<li>Проверить, что BKM- и Hellinger-квадратичные формы конечны на одном и том же классе допустимых вариаций и что предельные переходы корректны.</li>
-<li>Сформулировать верный вариант сжатия Петца для нормальных Tr-сохраняющих каналов в выбранной стандартной форме и проследить поддержку состояний.</li>
-<li>Проверить идею с конечным проектором P, Tr(P)=3: угол P𝓜P является фактором II<sub>1</sub>, но для переноса контрпримера нужно явно согласовать нормировки, состояние и канал.</li>
-</ul>
-<p class="small muted">Поэтому расширение Т. 1, 2 и 4 на II<sub>∞</sub> в этой редакции обозначено как исследовательская гипотеза / программа доказательства, а не как завершённая Теорема 14.</p>
-<h3>Чистые состояния и кривая Пейджа</h3>
-<p>Факторы II не имеют минимальных проекторов и, следовательно, не содержат нормальных чистых состояний, представленных минимальными проекторами. Но из этого нельзя заключать, что «кривая Пейджа требует алгебру типа I<sub>N</sub>». Возврат энтропии излучения к нулю в идеализированном сценарии полного унитарного испарения — утверждение о состоянии выбранной подсистемы и её корреляциях. Тип алгебры наблюдаемых, регулятор, остаток и возможные скрытые степени свободы должны анализироваться отдельно.</p>
-<p>Иерархия I<sub>N</sub> → II<sub>1</sub>/II<sub>∞</sub> → III<sub>1</sub> остаётся полезной гипотезой о разных уровнях описания, но не доказанным пределом. Обзор APS от 20 ноября 2026 года подчёркивает, что информационный парадокс чёрной дыры всё ещё не имеет общепринятого окончательного решения.</p>
-</section>
+        <div class="math-box">
+          <div class="box-header"><span>Теорема 2 — Универсальный глобальный порог $\gamma_{\mathrm{glob}}=2$</span><span class="badge badge-ok">Доказано в модели</span></div>
+          <p>Для состояний $\rho,\sigma\in\mathcal M_+$ с $\tau(\rho)=\tau(\sigma)=1$ справедлива цепочка
+          $$S(\rho\Vert\sigma)\ge-2\ln F_{1/2}(\rho,\sigma)\ge2\big(1-F_{1/2}(\rho,\sigma)\big).$$
+          Равенство <strong>во втором звене</strong> и, следовательно, во всей цепочке достигается тогда и только тогда, когда $\rho=\sigma$. Равенство <strong>в первом звене</strong> отдельно возможно и при $\rho\ne\sigma$: условие равенства в строгом неравенстве Йенсена — одноточечная спектральная мера относительного оператора, причём её точка не обязана быть равна $1$. В частности, формулировка «равенство в каждом звене iff $\rho=\sigma$» была бы неверной.</p>
+          <p>В частности, $\widetilde{\mathcal J}_\gamma(\rho,\sigma)\ge0$ для всех $\gamma\le2$. Постоянная $2$ неулучшаема: для любого $\gamma\gt2$ существуют состояния с отрицательным значением функционала.</p>
+          <details class="proof">
+            <summary>Доказательство Теоремы 2</summary>
+            <div class="proof-body">
+              <p>Для обратимых $\rho,\sigma$ зададим на $L^2(\mathcal M,\tau)$ положительный оператор $T=L_\rho^{-1/2}R_\sigma^{1/2}$ и единичный вектор $\eta=\rho^{1/2}$. Тогда $T\eta=\sigma^{1/2}$, $\langle\eta,T\eta\rangle_\tau=F_{1/2}(\rho,\sigma)$ и $\langle\eta,-2\ln(T)\eta\rangle_\tau=S(\rho\Vert\sigma)$. Йенсен для строго выпуклой функции $x\mapsto-2\ln x$ даёт первое неравенство; $-\ln x\ge1-x$ — второе. Равенство в первом звене отдельно требует, чтобы спектральная мера $T$ на $\eta$ была точечной, а равенство во втором требует $F_{1/2}=1$, что эквивалентно $\rho=\sigma$. Вырожденные случаи рассматриваются по поддержкам и предельному переходу.</p>
+              <p><em>Острота:</em> в типе $\mathrm{II}_1$ для проектора $e$ со следом $\tau(e)=p\in(0,1)$ состояние $\rho_{p,\varepsilon}=\varepsilon e+\frac{1-\varepsilon p}{1-p}(\mathbf1-e)$ при $\varepsilon\to0^+$ даёт отношение, стремящиеся к $2$ при $p\to0^+$. В $M_2(\mathbb C)$ тот же механизм реализуется на диагональных состояниях.</p>
+              <div class="qed">■</div>
+            </div>
+          </details>
+        </div>
 
-<section class="panel" id="physics">
-<h2>Пять внешних проверок: что физика действительно говорит</h2>
-<h3>1. Суперпозиция массивного тела, причинность и квантование поля</h3>
-<p>Мысленный эксперимент Belenchia–Wald–Giacomini–Castro-Ruiz–Brukner–Aspelmeyer (2018) рассматривает суперпозиции массивных объектов и показывает важную роль квантования излучения и вакуумных флуктуаций в обсуждении причинности и дополнительности. Это теоретический анализ Gedankenexperiment, а не зарегистрированное лабораторное наблюдение квантового гравитона.</p>
-<p>Его не следует смешивать с BMV-сценарием гравитационно-индуцированной запутанности двух масс. В 2026 году Plávala обсуждает, что при определённых предположениях существующие интерферометрические эксперименты могут дать косвенную проверку гравитационно-индуцированной запутанности; при этом специальный BMV-эксперимент остаётся технологически крайне сложным. Ни один из этих тезисов не является прямым экспериментальным обнаружением гравитона.</p>
+        <div class="math-box">
+          <div class="box-header"><span>Теорема 3 — Точный конечномерный порог $\gamma_N$</span><span class="badge badge-ok">Доказано в модели</span></div>
+          <p>В $M_N(\mathbb C)$ ($N\ge2$) при фиксированном трейс-вакууме $\sigma=I_N$ положим
+          $$\gamma_N=\frac{\ln(N/(N-1))}{1-\sqrt{(N-1)/N}}=2+\frac{1}{2N}+\frac{1}{6N^2}+O(N^{-3}).$$
+          Для любой $\rho\ge0$ с $\tau(\rho)=1$ и $\rho\ne I_N$ заявляется $S(\rho\Vert I_N)\ge\gamma_N(1-F_{1/2}(\rho,I_N))$. Равенство на замкнутом симплексе достигается при спектре $\rho$, с точностью до перестановки, равном $(0,N/(N-1),\ldots,N/(N-1))$. На строго положительных матрицах равенство не достигается, но инфимум равен $\gamma_N$.</p>
+          <details class="proof">
+            <summary>Доказательство Теоремы 3 — схема редукции на замкнутом симплексе</summary>
+            <div class="proof-body">
+              <p>После замены переменных задача сводится к минимумизации $\sum_i h(u_i)$ на $\Delta_N=\{u_i\ge0,\sum_i u_i=N\}$, где $h(u)=u\ln u+\gamma_N\sqrt u-\gamma_Nu$. Производная второго порядка
+              $$h''(u)=\frac{4\sqrt u-\gamma_N}{4u^{3/2}}$$
+              меняет знак один раз. Поэтому минимум ограничивается конфигурациями с равными внутренними координатами и не более чем одной координатой в области строгой вогнутости. Граничный минимум даёт один ноль и $N-1$ равных координат $N/(N-1)$; окончательная проверка одномерных граничных конфигураций требует оценки функции $G_N(a)$.</p>
+              <div class="qed">■</div>
+            </div>
+          </details>
+        </div>
+      </section>
 
-<h3>2. Теорема Вайнберга — Виттена</h3>
-<p>Теорема 1980 года запрещает безмассовые составные или элементарные частицы со спином j&gt;1 в теориях, где существует лоренц-ковариантный тензор энергии-импульса. Это утверждение имеет конкретные предпосылки; оно не является универсальным запретом на любую возникающую гравитацию. Но заявление «в AEFH нет фундаментального плоского фона» само по себе не закрывает вопрос: нужно показать, какая именно предпосылка теоремы не выполняется и как сохраняются причинность и унитарность.</p>
+      <section id="sec-dpi">
+        <h2>2. Принцип причинной монотонности — DPI (Леммы 4.1–4.2 и Теорема 4)</h2>
+        <p>Теоремы 1–3 оставляют коридор $\gamma\in(0,2]$, где функционал может быть глобально неотрицательным. Принцип обработки данных (DPI) требует, чтобы информационный функционал не возрастал при огрублении состояния нормальным сохраняющим след вполне положительным каналом.</p>
 
-<h3>3. Алгебры чёрных дыр и де Ситтера</h3>
-<p>Результат 2026 года о полной алгебре наблюдаемых с horizon edge modes различает чёрные дыры (тип II<sub>∞</sub>) и статический участок де Ситтера в выбранной модели наблюдателя (тип II<sub>1</sub>). Это даёт AEFH конкретный математический ориентир, но не доказывает предложенную микроскопическую иерархию I<sub>N</sub>.</p>
+        <div class="math-box lemma">
+          <div class="box-header"><span>Лемма 4.1 — Спектральная регуляризация и энтропия Араки</span><span class="badge badge-ok">Техническая лемма</span></div>
+          <p>Пусть $A,B\in\mathcal N_+$ в факторе типа $\mathrm{II}_1$, $\tau(A)=\tau(B)=1$, $A\le CB$ для $C\gt0$. Для $A_\varepsilon=(1-\varepsilon)A+\varepsilon\mathbf1$ и $B_\varepsilon=(1-\varepsilon)B+\varepsilon\mathbf1$ при $\varepsilon\to0^+$ изучаются сходимость $\tau(A_\varepsilon^pB_\varepsilon^{1-p})$ для $p\in(0,1)$ и предел относительной энтропии к
+          $$S_{\mathrm{Araki}}(A\Vert B)=-\langle A^{1/2},\log\Delta_{B,A}\,A^{1/2}\rangle_\tau.$$
+          </p>
+        </div>
 
-<h3>4. Кривая Пейджа и пределы вывода</h3>
-<p>Кривая Пейджа — важный ориентир для унитарного испарения: энтропия излучения растёт, достигает максимума и в идеализированной картине полного испарения возвращается к нулю. Современные расчёты островов и гравитационных путей интегрирования продвинули понимание модельных задач, однако перенос на реалистичную астрономическую чёрную дыру и полный микроскопический механизм остаются открытыми. Кривая Пейджа не определяет сама по себе тип алгебры всей квантовой гравитации.</p>
+        <div class="math-box lemma">
+          <div class="box-header"><span>Лемма 4.2 — Проекторы типа $\mathrm{II}_1$ и обменная инволюция</span><span class="badge badge-ok">Стандартная теория факторов</span></div>
+          <p>В факторе $\mathcal M$ типа $\mathrm{II}_1$ след на проекторах принимает все значения $[0,1]$, причём проекторы эквивалентны тогда и только тогда, когда их следы совпадают. Поэтому возможно разложение $\mathbf1=e_1+e_2+e_3$, $\tau(e_i)=1/3$, и частичная изометрия $u$ с $u^*u=e_1$, $uu^*=e_2$. Оператор $S_{12}=u+u^*+e_3$ — самосопряжённая унитарная инволюция, переставляющая $e_1$ и $e_2$.</p>
+        </div>
 
-<h3>5. DESI DR2 и связанная квинтэссенция</h3>
-<p>Публикации DESI DR2 по первым трём годам данных выходили 19 марта 2025 года и 30 июля 2026 года; среди них — анализ BAO и измерения Alcock–Paczynski в Lyman-α forest. В отдельных анализах комбинаций DR2, CMB и каталогов сверхновых предпочтение динамической тёмной энергии над ΛCDM достигает примерно 2,8–4,2σ в зависимости от набора данных и параметризации. Это не единое «измеренное значение сигма» и не открытие на уровне 5σ.</p>
-<p>Работа Babu и Amendola (16 октября 2026 года) исследует связанную тающую квинтэссенцию для DESI DR2. В двух выбранных потенциалах получено улучшение Δχ²=5–15 относительно ΛCDM; модели воспроизводят 64–92% улучшения CPL w<sub>0</sub>w<sub>a</sub>CDM. Ограничение на связь — |β|&lt;0,073 при 95%; апостериорные моды расположены около β≈±0,05, причём переход эффективного уравнения состояния через −1 появляется только на одной ветви и происходит около z≈1. Авторы заключают, что данные допускают такой переход, но пока не требуют его.</p>
-<p>Для AEFH это возможный феноменологический механизм, а не доказательство того, что энтропийное поле φ обязано иметь именно эту связь. Физическое поле может оставаться каноническим с w<sub>φ</sub>≥−1, в то время как эффективное w<sub>eff</sub>, восстановленное при неверном предположении о раздельном сохранении тёмной материи и поля, может выглядеть как пересекающее −1. Конвенции знака β зависят от определения взаимодействия, поэтому конкретные уравнения следует фиксировать вместе с действием и определениями плотностей.</p>
-</section>
+        <div class="math-box">
+          <div class="box-header"><span>Теорема 4 — Однозначность знака $\alpha\ge0$ из DPI</span><span class="badge badge-ok">Доказательство в рукописи</span></div>
+          <p>Для рассматриваемых пар факторов типа $\mathrm{II}_1$ и матричных алгебр, при заданном классе нормальных сохраняющих след каналов, утверждается эквивалентность
+          $$\mathcal I_\alpha(\Phi(\rho),\Phi(\sigma))\le\mathcal I_\alpha(\rho,\sigma)\ \text{для всех допустимых каналов и состояний}\quad\Longleftrightarrow\quad\alpha\ge0.$$
+          </p>
+          <details class="proof">
+            <summary>Доказательство Теоремы 4 — схема</summary>
+            <div class="proof-body">
+              <p><strong>Монотонность при $\alpha\ge0$.</strong> Сопряжённый канал унитален и 2-положителен, поэтому применимо неравенство Кадисона — Шварца. Сжатие Петца $V$ связывает относительные модулярные операторы входа и выхода. Интегральное представление степеней $t^p$ при $0\lt p\lt1$ даёт монотонность $Q_p$; при $p=1/2$ получается монотонность аффинности, а предел $p\to1^-$ даёт DPI для энтропии Араки.</p>
+              <p><strong>Необходимость.</strong> Разбиение единицы на три эквивалентных проектора и последующее усреднение по обменной инволюции создают канал, который уничтожает различимость двух входных блоков. Для любого $\gamma=-\alpha\gt0$ можно выбрать параметр $m$ настолько малым, чтобы вклад $\gamma(2-\sqrt2)\sqrt m$ превосходил логарифмический штраф $2m\ln2$. Тем самым DPI нарушается.</p>
+              <div class="qed">■</div>
+            </div>
+          </details>
+        </div>
 
-<section class="panel" id="rg">
-<h2>Стандартная модель: древесное 3/8 и ренормгрупповой бег</h2>
-<p>В Теореме 12 значение sin²θ<sub>W</sub><sup>(0)</sup>=3/8 получается при дополнительном условии универсальности выбранных коэффициентов зонда. При масштабе M<sub>Z</sub> низкоэнергетическое измерение около 0,2312 — другое значение; сопоставить их можно только после ренормгруппового бега.</p>
-<p>Для наглядной однопетлевой проверки используются GUT-нормированная α<sub>1</sub> и коэффициенты b<sub>i</sub>=(41/10,−19/6,−7):</p>
-<div class="formula">α<sub>i</sub><sup>−1</sup>(μ) = α<sub>i</sub><sup>−1</sup>(M<sub>Z</sub>) − [b<sub>i</sub>/(2π)] ln(μ/M<sub>Z</sub>).</div>
-<p>При опорных значениях α<sub>i</sub><sup>−1</sup>(M<sub>Z</sub>)≈(59,02; 29,58; 8,47) первые две обратные константы встречаются примерно на масштабе 10<sup>13</sup> ГэВ. Там получается sin²θ<sub>W</sub>≈3/8. Но α<sub>3</sub><sup>−1</sup> остаётся примерно на 5,6 единицы ниже α<sub>2</sub><sup>−1</sup>: три константы не объединяются в одной точке в этой простой однопетлевой модели.</p>
-<p class="notice"><strong>Как читать регулятор Δ<sub>adj</sub>.</strong> Это учебный аддитивный сдвиг α<sub>3</sub><sup>−1</sup> только в выбранной точке сравнения. Он не меняет β-функции, не является рассчитанным порогом новой частицы и не выводится автоматически из κ<sub>adj</sub>. Чтобы связать его с AEFH, нужно независимо вывести matching condition из действия модели.</p>
-<p>Переключатель MSSM в симуляторе — идеализированный сценарий с непрерывным matching на 1 ТэВ, а не утверждение об обнаружении суперпартнёров. Здесь нет двухпетлевых поправок, полноценного спектра порогов и схемной неопределённости; результаты предназначены для проверки порядка величин и геометрии графика, а не для precision unification.</p>
-<div class="cta-row"><a class="cta" href="running-couplings.html">Открыть интерактивный симулятор →</a><a class="cta" href="aefh_v7_rg_tests.py">Численные тесты Python</a></div>
-</section>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Режим $\gamma=-\alpha$</th><th>Локальная устойчивость</th><th>Глобальная неотрицательность</th><th>DPI</th><th>Интерпретация в модели</th></tr></thead>
+            <tbody>
+              <tr class="highlight-row"><td><strong>$\gamma\le0$ ($\alpha\ge0$)</strong></td><td>Строго положительна</td><td>Да</td><td><strong>Да</strong></td><td>Допустимый по DPI сектор</td></tr>
+              <tr><td>$0\lt\gamma\le2$</td><td>Строго положительна</td><td>Да</td><td>Нет</td><td>Пробой DPI</td></tr>
+              <tr><td>$2\lt\gamma\lt4$</td><td>Строго положительна</td><td>Нет в общем случае</td><td>Нет</td><td>Глобальная неустойчивость</td></tr>
+              <tr><td>$\gamma=4$</td><td>Есть нулевые направления</td><td>Нет: квартичный спад</td><td>Нет</td><td>Критическая точка</td></tr>
+              <tr><td>$\gamma\gt4$</td><td>Есть отрицательные направления</td><td>Нет</td><td>Нет</td><td>Локальная неустойчивость</td></tr>
+            </tbody>
+          </table>
+        </div>
 
-<section class="panel" id="simulator">
-<h2>Интерактивный RG-симулятор</h2>
-<p>Встроенная версия использует те же начальные значения и однопетлевые коэффициенты, что и отдельный HTML-файл, прикреплённый к этой редакции. Управление масштабом меняет точку чтения данных, а не физику потока.</p>
-<div class="frame"><iframe src="running-couplings.html" title="Интерактивный симулятор ренормгруппового бега констант Стандартной модели" loading="lazy"></iframe></div>
-</section>
+        <div class="lab-card no-print">
+          <div class="lab-title"><span>Интерактивный пульт: фазовая диаграмма $\widetilde{\mathcal J}_\gamma$ и порог $\gamma_N$</span><span class="badge badge-accent">Теоремы 1–4</span></div>
+          <p class="lab-sub">Изменяйте $\gamma=-\alpha$ и размерность $N$ для конечномерной модели $\sigma=I_N$. Индикаторы показывают критерии, заявленные в математической части рукописи.</p>
+          <div class="sliders">
+            <div class="slider-group"><label for="gamma-slider"><span>Параметр $\gamma=-\alpha$</span><span id="gamma-val">-1.00</span></label><input id="gamma-slider" type="range" min="-4" max="6" step="0.05" value="-1.0" /></div>
+            <div class="slider-group"><label for="dim-slider"><span>Размерность $N$</span><span id="dim-val">10</span></label><input id="dim-slider" type="range" min="2" max="500" step="1" value="10" /></div>
+          </div>
+          <div class="stat-grid">
+            <div class="stat-pill"><span class="k">Локальный критерий</span><span class="v" id="st-loc">—</span></div>
+            <div class="stat-pill"><span class="k">Глобальный критерий</span><span class="v" id="st-glob">—</span></div>
+            <div class="stat-pill"><span class="k">Конечномерный порог</span><span class="v" id="st-gn">—</span></div>
+            <div class="stat-pill"><span class="k">Причинность (DPI)</span><span class="v" id="st-dpi">—</span></div>
+          </div>
+        </div>
+      </section>
 
-<section class="panel" id="open">
-<h2>Четыре главные открытые задачи</h2>
-<ol>
-<li><strong>Происхождение группы и числа поколений.</strong> Почему выбраны именно глобальная форма группы Стандартной модели и три поколения? Текущая конструкция использует их как входные данные.</li>
-<li><strong>Численные иерархии.</strong> Значения космологической постоянной, электрослабого масштаба, масс и матриц Юкавы не выводятся из имеющихся алгебраических тождеств.</li>
-<li><strong>Непертурбативная квантовая гравитация.</strong> Нужно построить микроскопическую алгебру, получить из неё пространство-время и гравитон со спином 2 и вывести унитарную кривую Пейджа в контролируемой модели.</li>
-<li><strong>Экспериментальные проверки.</strong> Будущие DESI/Euclid-наблюдения, космологические анализы с разными SN-наборами и проверки гравитационно-индуцированных квантовых корреляций должны отличить модели друг от друга.</li>
-</ol>
-</section>
+      <section id="sec-ii-inf">
+        <h2>3. Перенос на факторы типа $\mathrm{II}_\infty$ (Лемма 14.0 и Теорема 14)</h2>
+        <p>Для фактора типа $\mathrm{II}_\infty$ точный нормальный полуконечный след удовлетворяет $\operatorname{Tr}(\mathbf1)=+\infty$. Поэтому единица не является плотностью нормального состояния с конечным следом; плотности состояний принадлежат $L^1(\mathcal M,\operatorname{Tr})_+$ и могут быть неограниченными сверху и не иметь ограниченной обратной.</p>
 
-<section class="panel" id="verification">
-<h2>Вычислительная проверка и воспроизводимость</h2>
-<p>Новый Python-скрипт проверяет опорную точку M<sub>Z</sub>, однопетлевые значения на масштабе 10<sup>13</sup> ГэВ, условное пересечение α<sub>1</sub><sup>−1</sup> и α<sub>2</sub><sup>−1</sup>, а также смысл аддитивного сценарного сдвига. Это тесты численной реализации, не доказательство теорем AEFH и не проверка наблюдательной модели.</p>
-<p>GitHub Actions запускает скрипт обычным Python и с оптимизациями Python <code>-O</code>, чтобы тесты не зависели от обычных операторов <code>assert</code>.</p>
-<p class="small muted">Архивные математические конструкции и прежние тесты: <a href="/aefh/v6/">AEFH v6.0</a>, <a href="/aefh/v5/">AEFH v5.0</a>, <a href="/aefh/">ранняя рукопись</a>.</p>
-</section>
+        <div class="math-box lemma">
+          <div class="box-header"><span>Лемма 14.0 — Резольвентные интегралы в типе $\mathrm{II}_\infty$</span><span class="badge badge-ok">При двустороннем доминировании</span></div>
+          <p>Для нормальных состояний $\rho,\sigma\in L^1(\mathcal M,\operatorname{Tr})_{+,1}$ с $\lambda_1\sigma\le\rho\le\lambda_2\sigma$, $0\lt\lambda_1\le\lambda_2\lt\infty$, рукопись устанавливает тождества
+          $$S_{\mathrm{Araki}}(\rho\Vert\sigma)=\int_0^\infty t\,\operatorname{Tr}\!\left((\sigma+t)^{-1}(\rho-\sigma)(\rho+t)^{-1}(\rho-\sigma)(\sigma+t)^{-1}\right)dt,$$
+          $$1-F_{1/2}(\rho,\sigma)=\frac1\pi\int_0^\infty t^{1/2}\operatorname{Tr}\!\left(\sigma^{1/2}(\sigma+t)^{-1}(\rho-\sigma)(\rho+t)^{-1}(\rho-\sigma)(\sigma+t)^{-1}\right)dt.$$
+          </p>
+          <p><strong>Техническая оговорка о следе.</strong> Из доминирования следует $-\!c\sigma\le D\le c\sigma$ для $D=\rho-\sigma$, а значит, в угловой алгебре носителя существует ограниченный самосопряжённый оператор $C$ с $D=\sigma^{1/2}C\sigma^{1/2}$. Поэтому подынтегральные выражения можно записать как квадраты $L^2$-норм:
+          $$\operatorname{Tr}\!\left((\sigma+t)^{-1}D(\rho+t)^{-1}D(\sigma+t)^{-1}\right)=\left\|(\rho+t)^{-1/2}D(\sigma+t)^{-1}\right\|_2^2,$$
+          $$\operatorname{Tr}\!\left(\sigma^{1/2}(\sigma+t)^{-1}D(\rho+t)^{-1}D(\sigma+t)^{-1}\right)=\left\|(\rho+t)^{-1/2}D(\sigma+t)^{-1}\sigma^{1/4}\right\|_2^2.$$
+          Это и есть обоснование конечности следов при фиксированном $t\gt0$; одной ссылки на $D\in L^1$ для этого было бы недостаточно.</p>
+        </div>
 
-<section class="panel" id="references">
-<h2>Источники и литература</h2>
-<ol class="refs">
-<li>M. S. Klinger, J. Kudler-Flam, G. Satishchandran, <em>Generalized black hole entropy is von Neumann entropy. II. The complete symmetry group and edge modes</em>, Phys. Rev. D 114, 065010 (2026). <a href="https://doi.org/10.1103/tb6y-lsfv" target="_blank" rel="noopener noreferrer">DOI</a>.</li>
-<li>V. Chandrasekaran, R. Longo, G. Penington, E. Witten, <em>An algebra of observables for de Sitter space</em>, JHEP 02 (2023) 082. <a href="https://arxiv.org/abs/2206.10780" target="_blank" rel="noopener noreferrer">arXiv:2206.10780</a>.</li>
-<li>A. Belenchia et al., <em>Quantum superposition of massive objects and the quantization of gravity</em>, Phys. Rev. D 98, 126009 (2018). <a href="https://doi.org/10.1103/PhysRevD.98.126009" target="_blank" rel="noopener noreferrer">DOI</a>.</li>
-<li>S. Weinberg, E. Witten, <em>Limits on massless particles</em>, Phys. Lett. B 96 (1980), 59–62. <a href="https://doi.org/10.1016/0370-2693(80)90212-9" target="_blank" rel="noopener noreferrer">DOI</a>.</li>
-<li>M. Plávala, <em>Existing experiments suffice to indirectly verify the quantum essence of gravity</em>, Phys. Rev. D 113, 085004 (2026). <a href="https://doi.org/10.1103/87dc-qt73" target="_blank" rel="noopener noreferrer">DOI</a>.</li>
-<li>DESI Collaboration, <em>DESI DR2 publications</em> — официальный список публикаций по первым трём годам данных, выпуски 19 марта 2025 и 30 июля 2026. <a href="https://data.desi.lbl.gov/doc/papers/dr2/" target="_blank" rel="noopener noreferrer">DESI Data</a>.</li>
-<li>J. Y. Babu, L. Amendola, <em>Can coupled thawing quintessence reproduce DESI DR2? A test with two potentials</em> (2026). <a href="https://arxiv.org/abs/2610.23497" target="_blank" rel="noopener noreferrer">arXiv:2610.23497</a>.</li>
-<li><em>Evidence for evolving dark energy from DESI DR2 BAO and Pantheon+, DES-Dovekie, and Union3</em>, Eur. Phys. J. C (2026). <a href="https://doi.org/10.1140/epjc/s10052-026-15806-w" target="_blank" rel="noopener noreferrer">DOI</a>.</li>
-<li>P. Ball, <em>A Half Century of Possible Solutions to the Information Paradox</em>, Physics (APS), 20 November 2026. <a href="https://physics.aps.org/articles/v19/159" target="_blank" rel="noopener noreferrer">APS Physics</a>.</li>
-</ol>
-<p class="small muted">Источники задают научный контекст и проверяемые внешние ограничения. Они не являются рецензией, подтверждением или одобрением AEFH.</p>
-</section>
-</main>
+        <div class="math-box">
+          <div class="box-header"><span>Теорема 14 — Перенос Теорем 1, 2 и 4 на бесконечномерные факторы типа $\mathrm{II}_\infty$</span><span class="badge badge-warn">Авторское доказательство требует независимого аудита</span></div>
+          <p>Пусть $\mathcal M,\mathcal N$ — факторы типа $\mathrm{II}_\infty$ с точными нормальными полуконечными следами. В рукописи заявлены следующие три результата:</p>
+          <ol>
+            <li><strong>Локальный порог $\gamma_{\mathrm{loc}}=4$.</strong> Для произвольного состояния $\sigma\in L^1(\mathcal M,\operatorname{Tr})_{+,1}$ и относительно ограниченного возмущения $\delta\rho=\sigma^{1/2}X\sigma^{1/2}$, $X\in\mathcal M_{\rm sa}$, $\operatorname{Tr}(\sigma X)=0$, заявляются конечные вторые производные и оценка $S_{\mathrm{Araki}}''(0)\ge4(1-F_{1/2})''(0)\gt0$ для ненулевого направления. Коммутирующие направления насыщают коэффициент $4$. Для конкретного конечного блока с $\sigma=P/\operatorname{Tr}(P)$ и равными по следу частями $P=Q+(P-Q)$ критическая траектория даёт $-\frac7{96}t^4+O(t^6)$.</li>
+            <li><strong>Глобальный порог $\gamma_{\mathrm{glob}}=2$.</strong> Для состояний в $L^1_{+,1}$ заявлена цепочка
+              $$S_{\mathrm{Araki}}(\rho\Vert\sigma)\ge-2\ln F_{1/2}(\rho,\sigma)\ge2(1-F_{1/2}(\rho,\sigma)).$$
+              Равенство во втором звене и во всей цепочке эквивалентно $\rho=\sigma$. Равенство только в первом звене может иметь место и для различных состояний; оно соответствует точечной спектральной мере относительного модулярного оператора.</li>
+            <li><strong>Принцип монотонности.</strong> Для рассматриваемых нормальных вполне положительных сохраняющих след каналов $\Phi_*:L^1(\mathcal M,\operatorname{Tr}_{\mathcal M})\to L^1(\mathcal N,\operatorname{Tr}_{\mathcal N})$ утверждается $\mathrm{DPI}\iff\alpha\ge0$ для функционала $\mathcal I_\alpha$ на всех нормальных состояниях.</li>
+          </ol>
+          <details class="proof">
+            <summary>Ключевая схема доказательства Теоремы 14</summary>
+            <div class="proof-body">
+              <p><strong>Часть I.</strong> Спектральные усечения $E_n=E_\sigma([1/n,n])$ дают $A_n=\sigma_n^{1/4}X\sigma_n^{1/4}\in L^2$; после оценки хвостов последовательность сходится к $Y\in L^2$. Сравнение резольвент при $|\epsilon|\le(2\|X\|)^{-1}$ и мажорируемая сходимость позволяют перенести локальные ядровые оценки BKM/Хеллингера.</p>
+              <p><strong>Часть II.</strong> Из полярного разложения относительного оператора Томиты — Такесаки $S_{\sigma,\rho}=J\Delta_{\sigma,\rho}^{1/2}$ получается $\Delta_{\sigma,\rho}^{1/2}\rho^{1/2}=\sigma^{1/2}s(\rho)\in L^2$. Спектральная мера относительного модулярного оператора даёт глобальную энтропийную оценку; условие равенства требует различать одноточечность спектральной меры и значение этой точки.</p>
+              <p><strong>Часть III: монотонность.</strong> Сжатие Петца $V(YB^{1/2})=\Phi^\dagger(Y)\sigma^{1/2}$ приводит к неравенству замкнутых квадратичных форм для относительных модулярных операторов. Дилатация
+                $$W_s=\begin{pmatrix}(H_1+s)^{1/2}V(H_2+s)^{-1/2}\\s^{1/2}(I-V^*V)^{1/2}(H_2+s)^{-1/2}\end{pmatrix}$$
+                является сжатием при условии указанного неравенства форм. Интегрирование резольвентного представления $t^p$ при $0\lt p\lt1$ даёт монотонность $Q_p$, а предел $p\to1^-$ — DPI для $S_{\mathrm{Araki}}$.</p>
+              <p><strong>Часть III: необходимость.</strong> Конечные проекторы следа $3$ в обеих алгебрах разбиваются на три эквивалентных блока следа $1$; дополнительный выходной блок размещается в бесконечном дополнении. Канал с усреднением по обменной инволюции создаёт рост функционала при любом $\gamma=-\alpha\gt0$ на специально выбранной паре состояний.</p>
+              <div class="qed">■</div>
+            </div>
+          </details>
+        </div>
+      </section>
 
-<aside aria-label="Содержание страницы"><strong>На этой странице</strong><ol>
-<li><a href="#summary">Что нового</a></li><li><a href="#axioms">Четыре постулата</a></li><li><a href="#theorems">Теоремы 1–13</a></li><li><a href="#theorem14">Расширение II∞</a></li><li><a href="#physics">Пять проверок</a></li><li><a href="#rg">Ренормгрупповой бег</a></li><li><a href="#simulator">Симулятор</a></li><li><a href="#open">Открытые задачи</a></li><li><a href="#references">Источники</a></li>
-</ol></aside>
-</div>
-<footer class="footer"><div class="footer-inner">
-<p><strong>AEFH v7.0</strong> · Исследовательская рукопись Ивана Воронцова · 24 ноября 2026 года.</p>
-<p>Материалы разрабатывались с применением ИИ-инструментов. Это не означает независимой научной сертификации формулировок, доказательств или программных тестов.</p>
-<a href="#content">К началу страницы ↑</a> · <a href="/">Главная</a> · <a href="/aefh/">Архив AEFH</a> · <a href="https://github.com/ivanivorontsov-sudo/ivanivorontsov-sudo.github.io" target="_blank" rel="noopener noreferrer">Исходники сайта на GitHub</a>
-</div></footer>
-</body></html>
+      <section id="sec-gravity">
+        <h2>4. Геометрическое равновесие и космология DESI DR2 (Теорема 5 и следствия)</h2>
+        <div class="math-box">
+          <div class="box-header"><span>Теорема 5 — Условный геометрический вывод уравнений Эйнштейна</span><span class="badge badge-warn">При энтропийном постулате</span></div>
+          <p>Пусть через точку $p$ пространства-времени размерности $D=d+1$ проведена гиперповерхность $\Sigma\perp u^\mu$ с $K_{ij}(p)=0$. Если при выполнении энтропийного постулата и заданной форме неконформного скалярного сдвига $\delta X$ обобщённая энтропия малого геодезического шара стационарна при фиксированном объёме, то в точке $p$ получается
+          $$G_{\mu\nu}+\Lambda_{\mathrm{eff}}g_{\mu\nu}=8\pi G\langle T_{\mu\nu}\rangle,\qquad \Lambda_{\mathrm{eff}}=\lambda-8\pi G\,\delta X.$$
+          </p>
+          <details class="proof">
+            <summary>Схема геометрического вывода</summary>
+            <div class="proof-body">
+              <p>В римановых нормальных координатах площадь и объём малого шара раскладываются по скалярной кривизне. Фиксация объёма даёт ведущий дефицит площади порядка $\ell^{d+1}$. Вклад энтропии запутанности в вакуумном состоянии CFT связан с вариацией $\langle T_{00}\rangle$. Приравнивание вариации обобщённой энтропии нулю даёт проекцию уравнения Эйнштейна на $u^\mu u^\nu$; поляризация по всем времениподобным $u^\mu$ восстанавливает тензорное уравнение.</p>
+              <div class="qed">■</div>
+            </div>
+          </details>
+        </div>
+        <div class="math-box corollary">
+          <div class="box-header"><span>Следствия 5.1–5.2 — Сохранение и связанная квинтэссенция</span><span class="badge badge-warn">Феноменологическая модель</span></div>
+          <p>Минимальная ковариантная реализация переменного энтропийного вклада использует каноническое скалярное поле $\phi$ с потенциалом $V(\phi)$. Для канонического поля $w_\phi\ge-1$ при положительной плотности. При обмене энергией с тёмной материей
+          $$\dot\rho_{\mathrm{DM}}+3H\rho_{\mathrm{DM}}=-\beta\dot\phi\rho_{\mathrm{DM}},\qquad
+          \ddot\phi+3H\dot\phi+V'(\phi)=+\beta\rho_{\mathrm{DM}},$$
+          полное тождество Бьянки и сохранение полного тензора энергии-импульса сохраняются. Наблюдатель, который ошибочно предполагает отдельное сохранение тёмной материи, может восстановить эффективное $w_{\mathrm{eff}}(z)$, пересекающее $-1$, хотя само поле не является фантомным.</p>
+        </div>
+      </section>
+
+      <section id="sec-ym">
+        <h2>5. Калибровочный сектор, краевые моды и действие Янга — Миллса (Теоремы 6–8)</h2>
+        <div class="math-box">
+          <div class="box-header"><span>Теорема 6 — Расщепление по нетривиальному центру горизонта</span><span class="badge badge-ok">Заявленный результат</span></div>
+          <p>Для конечной алгебры $\mathcal A=\bigoplus_{q\in\mathcal Q}\mathcal A_q$ с центральными проекторами $e_q$, долями $w_q=\tau(e_q)$, вероятностями $p_q=\tau(e_q\rho)$, $r_q=\tau(e_q\sigma)$ и внутрисекторными состояниями функционал распадается на центральный вклад и сумму внутрисекторных вкладов:
+          $$\mathcal I_\alpha(\rho,\sigma)=\left[D_{\mathrm{KL}}(p\Vert r)+\alpha\left(1-\sum_q\sqrt{p_qr_q}\right)\right]
+          +\sum_q\left[p_qS_q(\hat\rho_q\Vert\hat\sigma_q)+\alpha\sqrt{p_qr_q}(1-F_{1/2}^{(q)})\right].$$
+          </p>
+        </div>
+        <div class="math-box">
+          <div class="box-header"><span>Теорема 7 — Склейка горизонтов и трёхчленная калибровочная энтропия</span><span class="badge badge-ok">Заявленный результат</span></div>
+          <p>На физическом подпространстве $\mathcal H_{\mathrm{phys}}=(\mathcal H_L\otimes\mathcal H_R)^G$ проектор Гаусса задаётся усреднением по диагональному действию группы. В выбранной блочной конструкции редуцированная энтропия принимает вид
+          $$S_{\mathrm{vN}}(\rho_L)=\underbrace{-\sum_qp_q\ln p_q}_{H(p)}
+          +\underbrace{\sum_qp_q\ln d_q}_{S_{\mathrm{dim}}}
+          +\underbrace{\sum_qp_qS_{\mathrm{vN}}(\rho_{L,q}^{\mathrm{bulk}})}_{S_{\mathrm{dist}}}.$$
+          Для абелевой $U(1)$ размерностный вклад равен нулю, но шенноновский вклад по секторам сохраняется.</p>
+        </div>
+        <div class="math-box">
+          <div class="box-header"><span>Теорема 8 — Индуцированное присоединённое действие Вильсона и Янг — Миллс</span><span class="badge badge-ok">Заявленная конструкция</span></div>
+          <p>Усреднение выбранного энтропийного функционала по Haar-мере (или точному унитарному $2$-дизайну) приводит к присоединённой петлевой структуре
+          $$\mathcal S_{\alpha,\sigma_0}(W)=\kappa_\alpha(\sigma_0)\big(1-\tau_{\mathrm{adj}}(W)\big),\qquad
+          \tau_{\mathrm{adj}}(W)=\frac{N^2|\tau_N(W)|^2-1}{N^2-1}.$$
+          В разложении малой центрированной плакетки ведущий нетривиальный вклад имеет порядок $a^4\operatorname{Tr}(F_{\mu\nu}^2)$, что соответствует структуре действия Янга — Миллса в решёточном континуальном пределе.</p>
+        </div>
+      </section>
+
+      <section id="sec-higgs">
+        <h2>6. Фундаментальные заряды, $U(1)$ и механизм Хиггса (Теоремы 9–11)</h2>
+        <div class="math-box">
+          <div class="box-header"><span>Теорема 9 — Фундаментально-присоединённый Вильсон и $U(1)$</span><span class="badge badge-ok">Заявленная конструкция</span></div>
+          <p>На расширенном пространстве $\mathbb C^N_{\mathrm{fund}}\oplus\mathbb C_{\mathrm{vac}}$ блочная голономия $\widetilde W=W\oplus1$ и когерентный зонд дают смешанное действие
+          $$\mathcal S^{\mathrm{fund}}_{\alpha,\Sigma_0}(W)=\kappa_{\mathrm{fund}}(1-\operatorname{Re}\tau_N(W))
+          +\kappa_{\mathrm{adj}}(1-\tau_{\mathrm{adj}}(W)).$$
+          При $N=1$ получается компактная $U(1)$-петлевая структура; при $N\ge2$ фундаментальный член может различать элементы центра $Z_N$. Связь коэффициентов зонда с физическими константами требует отдельного matching.</p>
+        </div>
+        <div class="math-box">
+          <div class="box-header"><span>Теорема 10 — Реберная $\mathbb{C}P^N$-кинетика и $U(2)\to U(1)_{\mathrm{em}}$</span><span class="badge badge-ok">Заявленная конструкция</span></div>
+          <p>Для динамического зонда $\Sigma(\psi)=\mu_0I_{N+1}+\mu_1|\psi\rangle\langle\psi|$ ссылочное реберное действие в выбранной схеме пропорционально метрике Фубини — Штуди:
+          $$\mathcal L_{\mathrm{link}}=\Lambda_\alpha\left(1-|\langle\psi(x_-)|\widetilde U_\mu|\psi(x_+)\rangle|^2\right).$$
+          В непрерывном пределе получается кинетическая структура калибровочной $\mathbb{C}P^N$-модели. Для $N=2$ выбранная параметризация оставляет безмассовую $U(1)_{\mathrm{em}}$-моду; соответствие со спектром Стандартной модели требует проверки полного действия.</p>
+        </div>
+        <div class="math-box">
+          <div class="box-header"><span>Теорема 11 — Энтропийный потенциал Хиггса</span><span class="badge badge-ok">Заявленная конструкция</span></div>
+          <p>Для заданных положительных коэффициентов и выбранного отображения усреднения вводится $U(N)$-инвариантный потенциал
+          $$V(\psi)=\beta_{\mathrm{vac}}\mathcal I_\alpha(\Sigma(\psi),\Sigma_{\mathrm{vac}})
+          +\beta_{\mathrm{ent}}S(\mathcal E(\Sigma(\psi))\Vert I_{N+1}).$$
+          В рукописи исследуется его зависимость от $x=\|\phi\|^2=\sin^2\theta$ и фазовый переход между симметричной точкой и минимумом на вакуумной сфере. Для физического применения требуются нормировка действия, динамика калибровочных полей и сравнение с экспериментальными массами.</p>
+        </div>
+      </section>
+
+      <section id="sec-fermions">
+        <h2>7. Аномалии, фермионы и квартичное взаимодействие Хиггса (Теоремы 12–13)</h2>
+        <div class="math-box">
+          <div class="box-header"><span>Теорема 12 — Гиперзаряды и древесное $\sin^2\theta_W^{(0)}=3/8$</span><span class="badge badge-ok">Заявленный результат в заданном наборе полей</span></div>
+          <p>Для стандартного кирального поколения $(Q_L,u_R,d_R,L_L,e_R)$ условия сокращения локальных и гравитационной аномалий при фиксированных гипотезах о представлениях и нормировке гиперзаряда дают стандартные значения
+          $$\left(y_Q,y_u,y_d,y_L,y_e\right)=\left(\frac16,\frac23,-\frac13,-\frac12,-1\right).$$
+          Число $SU(2)$-дублетов $3+1=4$ чётно, что удовлетворяет условию отсутствия глобальной аномалии Виттена. В отдельной зондовой схеме равномерные коэффициенты могут дать отношение обратных калибровочных констант $1:1:5/3$ и древесное значение $\sin^2\theta_W^{(0)}=3/8$. Это значение относится к высокоэнергетической нормировке, а не к низкоэнергетическому измерению.</p>
+        </div>
+        <div class="lab-card no-print">
+          <div class="lab-title"><span>Интерактивный стенд: 1-петлевой бег констант Стандартной модели</span><span class="badge badge-warn">Иллюстративная модель</span></div>
+          <p class="lab-sub">Сравните чистую Стандартную модель с условным порогом новой физики на 1 ТэВ. Параметр $\Delta_{\mathrm{adj}}$ — только демонстрационный аддитивный сдвиг $\alpha_3^{-1}$ в выбранной точке; он не выведен автоматически из AEFH.</p>
+          <canvas id="rg-canvas" class="plot" width="760" height="290" role="img" aria-label="График однопетлевого бега обратных калибровочных констант"></canvas>
+          <div class="sliders">
+            <div class="slider-group"><label for="rg-scale"><span>Масштаб $\log_{10}(\Lambda/\mathrm{ГэВ})$</span><span id="rg-scale-val">13.0</span></label><input id="rg-scale" type="range" min="2.0" max="18.0" step="0.1" value="13.0" /></div>
+            <div class="slider-group"><label for="rg-adj"><span>Сценарный сдвиг $\Delta_{\mathrm{adj}}$</span><span id="rg-adj-val">0.0</span></label><input id="rg-adj" type="range" min="0.0" max="10.0" step="0.1" value="0.0" /></div>
+            <div class="slider-group" style="display:flex;align-items:flex-end"><button class="btn" id="rg-mode-btn" type="button" style="width:100%">Режим: чистая СМ (переключить порог 1 ТэВ)</button></div>
+          </div>
+          <div class="stat-grid">
+            <div class="stat-pill"><span class="k">$\sin^2\theta_W(\Lambda)$</span><span class="v" id="rg-sin2">—</span></div>
+            <div class="stat-pill"><span class="k">$|\alpha_1^{-1}-\alpha_2^{-1}|$</span><span class="v" id="rg-gap12">—</span></div>
+            <div class="stat-pill"><span class="k">$|(\alpha_3^{-1}+\Delta_{\mathrm{adj}})-\alpha_2^{-1}|$</span><span class="v" id="rg-gap32">—</span></div>
+            <div class="stat-pill"><span class="k">Статус $\alpha_3^{-1}$</span><span class="v" id="rg-status">—</span></div>
+          </div>
+        </div>
+        <div class="math-box">
+          <div class="box-header"><span>Теорема 13 — Киральный оператор Дирака и квартет Хиггса</span><span class="badge badge-ok">Заявленная конструкция</span></div>
+          <p>На конечном фермионном пространстве $\mathcal H_F=\mathcal H_L\oplus\mathcal H_R$ вводится оператор Дирака
+          $$D_F(\phi)=\begin{pmatrix}0&M(\phi)^\dagger\\M(\phi)&0\end{pmatrix},\qquad\{D_F,\gamma_F\}=0.$$
+          При выбранной структуре Yukawa-матриц оператор эрмитов, кирален и может быть построен ковариантным относительно заданного представления $G_{\mathrm{SM}}$. В спектральном состоянии Гиббса из разложения информационного функционала может возникать положительный вклад порядка $\|\phi\|^4$. Численный коэффициент требует независимой проверки нормировок конечного спектра и состояния.</p>
+        </div>
+      </section>
+
+      <section id="sec-experiments">
+        <h2>8. Пять мысленных экспериментов и внешних проверок</h2>
+        <div class="exp-grid">
+          <div class="exp-card"><h4><span>1. Belenchia–Wald и BMV</span><span class="badge badge-warn">Теоретический тест</span></h4>
+            <p><strong>Вопрос:</strong> совместимы ли суперпозиции массивных тел с причинностью и дополнительностью при классическом или квантовом описании гравитации?</p>
+            <p><strong>Статус:</strong> анализ Belenchia–Wald — теоретический Gedankenexperiment; BMV — экспериментальная программа гравитационно-индуцированной запутанности. Это не обнаружение гравитона.</p></div>
+          <div class="exp-card"><h4><span>2. Вайнберг — Виттен (1980)</span><span class="badge badge-warn">Условия нужно проверить</span></h4>
+            <p><strong>Вопрос:</strong> может ли теория содержать безмассовую частицу со спином 2 при наличии подходящего лоренц-ковариантного тензора энергии-импульса?</p>
+            <p><strong>Статус:</strong> отсутствие фиксированного фона само по себе не снимает теорему; требуется показать, какая именно гипотеза не выполняется.</p></div>
+          <div class="exp-card"><h4><span>3. Алгебры чёрных дыр</span><span class="badge badge-warn">Контекст, не доказательство AEFH</span></h4>
+            <p><strong>Вопрос:</strong> какой тип алгебры возникает для полной алгебры наблюдаемых чёрной дыры и статического патча де Ситтера?</p>
+            <p><strong>Статус:</strong> статья Klinger–Kudler-Flam–Satishchandran (2026) аргументирует тип $\mathrm{II}_\infty$ для чёрных дыр и тип $\mathrm{II}_1$ для статического патча де Ситтера в рассматриваемой конструкции. Это внешний математический контекст, а не доказательство Теоремы 14 AEFH.</p></div>
+          <div class="exp-card"><h4><span>4. DESI DR2 и $w=-1$</span><span class="badge badge-warn">Данные допускают, но не требуют</span></h4>
+            <p><strong>Вопрос:</strong> указывают ли BAO и объединённые космологические наборы на эволюцию тёмной энергии?</p>
+            <p><strong>Статус:</strong> предпочтение зависит от комбинации данных и параметризации. В июльском выпуске DESI от 30 июля 2026 года новый full-shape анализ Lyman-$\alpha$ сдвинул центральное значение в сторону $\Lambda$CDM; отдельные комбинации данных всё ещё допускают динамическую тёмную энергию.</p></div>
+          <div class="exp-card"><h4><span>5. Бег констант и масса Хиггса</span><span class="badge badge-warn">Открытый порог</span></h4>
+            <p><strong>Факт модели:</strong> простая однопетлевая СМ даёт сближение $\alpha_1^{-1}$ и $\alpha_2^{-1}$ около $10^{13}$ ГэВ, но $\alpha_3^{-1}$ не попадает в ту же точку.</p>
+            <p><strong>Интерпретация:</strong> для устранения зазора требуется рассчитанное пороговое matching-условие либо новая физика; один интерактивный сдвиг не является таким выводом.</p></div>
+        </div>
+      </section>
+
+      <section id="sec-map">
+        <h2>9. Мастер-карта, протокол CI и границы знания</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Этаж программы</th><th>Теоремы</th><th>Математические результаты внутри модели</th><th>Физические входы и открытые рубежи</th></tr></thead>
+            <tbody>
+              <tr><td>Алгебра горизонта</td><td><strong>Т. 1–4, 14</strong></td><td>Локальный и глобальный пороги, конечномерная поправка $\gamma_N$, DPI и исследуемый перенос на $\mathrm{II}_\infty$.</td><td>Явный функтор $\mathrm I_N\to$ лоренцева геометрия; независимый аудит областей определения и предельных переходов.</td></tr>
+              <tr><td>Гравитация и космология</td><td><strong>Т. 5, Сл. 5.1–5.2</strong></td><td>Условный вывод уравнений Эйнштейна и модель связанной квинтэссенции.</td><td>Энтропийный постулат, форма $\delta X$, полный статистический фит к ковариационным матрицам и сравнение с альтернативами.</td></tr>
+              <tr><td>Калибровки и Хиггс</td><td><strong>Т. 6–11</strong></td><td>Центральное расщепление, граничная энтропия, конструкции Вильсона и $\mathbb{C}P^N$.</td><td>Полное квантовое действие, matching, конфайнмент, масштабы и спектр масс.</td></tr>
+              <tr><td>Аномалии и фермионы</td><td><strong>Т. 12–13</strong></td><td>Условия сокращения аномалий и выбранная конечномерная фермионная конструкция.</td><td>Происхождение группы СМ, числа поколений и численных иерархий Yukawa.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="math-box warning">
+          <div class="box-header"><span>Протокол вычислительной верификации</span><span class="badge badge-ok">20/20 + 6/6 RG — по предыдущему CI-запуску</span></div>
+          <p>В мастер-стенде <code>aefh_v7_master_tests.py</code> ранее заявлены 20/20 проверок в обычном Python и под оптимизацией <code>python3 -O</code>, а также 6/6 RG-тестов. Эти результаты подтверждают только охваченные тестами вычисления и программные реализации. Они не доказывают общие утверждения о факторах фон Неймана, физические модели или экспериментальные предсказания. Статус конкретного запуска следует проверять по журналу GitHub Actions.</p>
+          <p><strong>Три фальсифицируемых направления:</strong> (1) точные космологические данные могут не потребовать динамической тёмной энергии; (2) отсутствие наблюдаемой гравитационно-индуцированной квантовой корреляции в корректно поставленных тестах ограничит сценарии квантовой гравитации; (3) нарушение лоренц-инвариантности или отсутствие ожидаемых корреляций может опровергнуть конкретную реализацию безрешёточного основания.</p>
+        </div>
+      </section>
+
+      <section id="sec-refs">
+        <h2>10. Список литературы</h2>
+        <ol style="font-size:.92rem">
+          <li>M. S. Klinger, J. Kudler-Flam, G. Satishchandran, <em>Generalized black hole entropy is von Neumann entropy. II. The complete symmetry group and edge modes</em>, Phys. Rev. D 114, 065010 (2026), <a href="https://doi.org/10.1103/tb6y-lsfv" target="_blank" rel="noopener noreferrer">DOI</a>.</li>
+          <li>V. Chandrasekaran, R. Longo, G. Penington, E. Witten, <em>An Algebra of Observables for de Sitter Space</em>, JHEP 02 (2023) 082, <a href="https://arxiv.org/abs/2206.10780" target="_blank" rel="noopener noreferrer">arXiv:2206.10780</a>.</li>
+          <li>H. Araki, <em>Relative Entropy of States of von Neumann Algebras</em>, Publ. RIMS Kyoto Univ. 11 (1976), 809–833.</li>
+          <li>D. Petz, <em>Quasi-entropies for von Neumann algebras</em>, Rep. Math. Phys. 23 (1986), 57–65; <em>Monotone metrics on matrix spaces</em>, Linear Algebra Appl. 244 (1996), 81–96.</li>
+          <li>M. Takesaki, <em>Theory of Operator Algebras I–II</em>, Springer (2002–2003).</li>
+          <li>T. Jacobson, <em>Entanglement Equilibrium and the Einstein Equation</em>, Phys. Rev. Lett. 116, 201101 (2016), <a href="https://arxiv.org/abs/1505.04753" target="_blank" rel="noopener noreferrer">arXiv:1505.04753</a>.</li>
+          <li>A. Belenchia et al., <em>Quantum superposition of massive objects and the quantization of gravity</em>, Phys. Rev. D 98, 126009 (2018), <a href="https://doi.org/10.1103/PhysRevD.98.126009" target="_blank" rel="noopener noreferrer">DOI</a>.</li>
+          <li>S. Weinberg, E. Witten, <em>Limits on massless particles</em>, Phys. Lett. B 96 (1980), 59–62, <a href="https://doi.org/10.1016/0370-2693(80)90212-9" target="_blank" rel="noopener noreferrer">DOI</a>.</li>
+          <li>DESI Collaboration, <em>DESI DR2 publications</em>, releases of 19 March 2025 and 30 July 2026, <a href="https://data.desi.lbl.gov/doc/papers/dr2/" target="_blank" rel="noopener noreferrer">DESI Data</a>.</li>
+          <li>J. Y. Babu, L. Amendola, <em>Can coupled thawing quintessence reproduce DESI DR2? A test with two potentials</em> (16 October 2026), <a href="https://arxiv.org/abs/2610.23497" target="_blank" rel="noopener noreferrer">arXiv:2610.23497</a>.</li>
+          <li>G. Bianconi, <em>Λ-Gravity from entropy</em>, Phys. Lett. B 882, 141014 (2026), <a href="https://doi.org/10.1016/j.physletb.2026.141014" target="_blank" rel="noopener noreferrer">DOI</a>.</li>
+        </ol>
+      </section>
+
+      <footer class="colophon">
+        <span>AEFH v7.0 · Авторская исследовательская рукопись · 24 ноября 2026 г.</span>
+        <span>HTML5/CSS/JS + KaTeX · Интерактивные стенды выполняются в браузере</span>
+        <span><a href="research-status.html">Предыдущая редакция и редакционные замечания</a></span>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const renderMath = () => {
+        if (typeof renderMathInElement === "function") {
+          renderMathInElement(document.body, {
+            delimiters: [
+              { left: "$$", right: "$$", display: true },
+              { left: "$", right: "$", display: false }
+            ],
+            throwOnError: false
+          });
+        } else if (!window.__katexAttempts || window.__katexAttempts < 25) {
+          window.__katexAttempts = (window.__katexAttempts || 0) + 1;
+          window.setTimeout(renderMath, 100);
+        }
+      };
+      renderMath();
+
+      const bar = document.getElementById("progress-bar");
+      const tocLinks = Array.from(document.querySelectorAll("#toc-list a"));
+      const sections = tocLinks.map(a => document.querySelector(a.getAttribute("href"))).filter(Boolean);
+      const onScroll = () => {
+        const docH = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.width = docH > 0 ? String(Math.min(100, (window.scrollY / docH) * 100)) + "%" : "0%";
+        let current = sections[0];
+        for (const section of sections) {
+          if (section.getBoundingClientRect().top <= 120) current = section;
+        }
+        tocLinks.forEach(a => a.classList.toggle("active", !!current && a.getAttribute("href") === "#" + current.id));
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+
+      const btnTheme = document.getElementById("btn-theme");
+      btnTheme.addEventListener("click", () => {
+        const dark = document.documentElement.getAttribute("data-theme") === "dark";
+        document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+        btnTheme.textContent = dark ? "Тёмная тема" : "Светлая тема";
+        btnTheme.setAttribute("aria-pressed", dark ? "false" : "true");
+        drawRG();
+      });
+
+      const proofNodes = Array.from(document.querySelectorAll("details.proof"));
+      const btnProofs = document.getElementById("btn-proofs");
+      let proofsOpen = false;
+      btnProofs.addEventListener("click", () => {
+        proofsOpen = !proofsOpen;
+        proofNodes.forEach(node => { node.open = proofsOpen; });
+        btnProofs.textContent = proofsOpen ? "Свернуть все доказательства" : "Развернуть все доказательства";
+      });
+
+      const printState = new Map();
+      window.addEventListener("beforeprint", () => {
+        proofNodes.forEach(node => { printState.set(node, node.open); node.open = true; });
+      });
+      window.addEventListener("afterprint", () => {
+        proofNodes.forEach(node => { node.open = printState.get(node) || false; });
+        printState.clear();
+      });
+      document.getElementById("btn-print").addEventListener("click", () => window.print());
+
+      const gSlider = document.getElementById("gamma-slider");
+      const nSlider = document.getElementById("dim-slider");
+      const gVal = document.getElementById("gamma-val");
+      const nVal = document.getElementById("dim-val");
+      const stLoc = document.getElementById("st-loc");
+      const stGlob = document.getElementById("st-glob");
+      const stGn = document.getElementById("st-gn");
+      const stDpi = document.getElementById("st-dpi");
+      const exactGammaN = N => {
+        const lr = Math.log1p(-1.0 / N);
+        return (-lr) / (-Math.expm1(0.5 * lr));
+      };
+      const updatePhaseLab = () => {
+        const g = parseFloat(gSlider.value);
+        const N = parseInt(nSlider.value, 10);
+        const gN = exactGammaN(N);
+        gVal.textContent = g.toFixed(2) + " (α = " + (-g).toFixed(2) + ")";
+        nVal.textContent = String(N);
+        if (g < 4.0) {
+          stLoc.textContent = "Устойчиво (> 0)";
+          stLoc.className = "v stat-ok";
+        } else if (Math.abs(g - 4.0) < 1e-6) {
+          stLoc.textContent = "Квартичный распад −7/96";
+          stLoc.className = "v stat-bad";
+        } else {
+          stLoc.textContent = "Есть отрицательные моды";
+          stLoc.className = "v stat-bad";
+        }
+        if (g <= 2.0) {
+          stGlob.textContent = "Да (inf ≥ 0)";
+          stGlob.className = "v stat-ok";
+        } else {
+          stGlob.textContent = "Нет";
+          stGlob.className = "v stat-bad";
+        }
+        if (g <= gN) {
+          stGn.textContent = "Да (γN = " + gN.toFixed(4) + ")";
+          stGn.className = "v stat-ok";
+        } else {
+          stGn.textContent = "Пробой (γN = " + gN.toFixed(4) + ")";
+          stGn.className = "v stat-bad";
+        }
+        if (g <= 0.0) {
+          stDpi.textContent = "Да (α ≥ 0)";
+          stDpi.className = "v stat-ok";
+        } else {
+          stDpi.textContent = "Нарушена";
+          stDpi.className = "v stat-bad";
+        }
+      };
+      gSlider.addEventListener("input", updatePhaseLab);
+      nSlider.addEventListener("input", updatePhaseLab);
+      updatePhaseLab();
+
+      const canvas = document.getElementById("rg-canvas");
+      const ctx = canvas.getContext("2d");
+      const rgScale = document.getElementById("rg-scale");
+      const rgAdj = document.getElementById("rg-adj");
+      const rgModeBtn = document.getElementById("rg-mode-btn");
+      let susyMode = false;
+      const MZ_LOG = Math.log10(91.188);
+      const LN10 = Math.log(10.0);
+      const evalInvAlphas = logMu => {
+        const a0 = [59.02, 29.58, 8.47];
+        const bSM = [4.1, -19.0 / 6.0, -7.0];
+        const bNP = [6.6, 1.0, -3.0];
+        const logThr = 3.0;
+        if (!susyMode || logMu <= logThr) {
+          const t = (logMu - MZ_LOG) * LN10;
+          return a0.map((v, i) => v - (bSM[i] / (2 * Math.PI)) * t);
+        }
+        const t1 = (logThr - MZ_LOG) * LN10;
+        const t2 = (logMu - logThr) * LN10;
+        return a0.map((v, i) => v - (bSM[i] / (2 * Math.PI)) * t1 - (bNP[i] / (2 * Math.PI)) * t2);
+      };
+      const drawRG = () => {
+        if (!ctx) return;
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        const W = Math.max(280, rect.width);
+        const H = 290;
+        canvas.width = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const styles = getComputedStyle(document.documentElement);
+        const cBg = styles.getPropertyValue("--surface").trim();
+        const cBorder = styles.getPropertyValue("--border").trim();
+        const cMuted = styles.getPropertyValue("--muted").trim();
+        const cText = styles.getPropertyValue("--text").trim();
+        ctx.fillStyle = cBg;
+        ctx.fillRect(0, 0, W, H);
+        const pad = { l: 48, r: 20, t: 22, b: 36 };
+        const pw = W - pad.l - pad.r;
+        const ph = H - pad.t - pad.b;
+        const xMin = 2.0, xMax = 18.5, yMin = 0.0, yMax = 68.0;
+        const toX = x => pad.l + ((x - xMin) / (xMax - xMin)) * pw;
+        const toY = y => pad.t + ph - ((y - yMin) / (yMax - yMin)) * ph;
+        ctx.strokeStyle = cBorder;
+        ctx.lineWidth = 1;
+        ctx.font = "11px -apple-system, sans-serif";
+        ctx.fillStyle = cMuted;
+        for (let y = 0; y <= 60; y += 15) {
+          const py = toY(y);
+          ctx.beginPath(); ctx.moveTo(pad.l, py); ctx.lineTo(W - pad.r, py); ctx.stroke();
+          ctx.fillText(String(y), 14, py + 4);
+        }
+        for (let x = 2; x <= 18; x += 2) {
+          const px = toX(x);
+          ctx.beginPath(); ctx.moveTo(px, pad.t); ctx.lineTo(px, H - pad.b); ctx.stroke();
+          ctx.fillText("10^" + x, px - 12, H - 14);
+        }
+        const colors = ["#2563eb", "#0d9488", "#dc2626"];
+        const labels = ["1/α₁ (U(1)Y)", "1/α₂ (SU(2)L)", "1/α₃ (SU(3)c)"];
+        for (let idx = 0; idx < 3; idx++) {
+          ctx.strokeStyle = colors[idx];
+          ctx.lineWidth = 2.4;
+          ctx.beginPath();
+          for (let k = 0; k <= 120; k++) {
+            const lm = xMin + (k / 120) * (xMax - xMin);
+            const vals = evalInvAlphas(lm);
+            const px = toX(lm), py = toY(vals[idx]);
+            if (k === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+          }
+          ctx.stroke();
+        }
+        const lam = parseFloat(rgScale.value);
+        const dAdj = parseFloat(rgAdj.value);
+        const pxLam = toX(lam);
+        ctx.strokeStyle = cMuted;
+        ctx.setLineDash([5, 4]);
+        ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(pxLam, pad.t); ctx.lineTo(pxLam, H - pad.b); ctx.stroke();
+        ctx.setLineDash([]);
+        const vals = evalInvAlphas(lam);
+        vals.forEach((v, i) => {
+          ctx.fillStyle = colors[i];
+          ctx.beginPath(); ctx.arc(pxLam, toY(v), 4.5, 0, Math.PI * 2); ctx.fill();
+        });
+        if (dAdj > 0) {
+          ctx.strokeStyle = "#dc2626";
+          ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.arc(pxLam, toY(vals[2] + dAdj), 5.5, 0, Math.PI * 2); ctx.stroke();
+        }
+        let lx = pad.l + 10;
+        ctx.font = "bold 10.5px -apple-system, sans-serif";
+        labels.forEach((label, i) => {
+          ctx.fillStyle = colors[i];
+          ctx.fillRect(lx, 7, 9, 9);
+          ctx.fillStyle = cText;
+          ctx.fillText(label, lx + 12, 16);
+          lx += 112;
+        });
+        const a1 = vals[0], a2 = vals[1], a3 = vals[2];
+        const sin2 = a2 / ((5.0 / 3.0) * a1 + a2);
+        const gap12 = Math.abs(a1 - a2);
+        const gap32 = Math.abs((a3 + dAdj) - a2);
+        document.getElementById("rg-scale-val").textContent = lam.toFixed(1);
+        document.getElementById("rg-adj-val").textContent = dAdj.toFixed(1);
+        document.getElementById("rg-sin2").textContent = sin2.toFixed(4) + " (цель 0.3750)";
+        document.getElementById("rg-gap12").textContent = gap12.toFixed(2);
+        document.getElementById("rg-gap32").textContent = gap32.toFixed(2);
+        const status = document.getElementById("rg-status");
+        if (gap12 < 0.7 && gap32 < 0.7) {
+          status.textContent = "Тройное совпадение в сценарии";
+          status.className = "v stat-ok";
+        } else if (gap12 < 0.7) {
+          status.textContent = "α₃ остаётся отдельно";
+          status.className = "v stat-warn";
+        } else {
+          status.textContent = "Не точка 3/8";
+          status.className = "v stat-bad";
+        }
+      };
+      rgScale.addEventListener("input", drawRG);
+      rgAdj.addEventListener("input", drawRG);
+      rgModeBtn.addEventListener("click", () => {
+        susyMode = !susyMode;
+        rgModeBtn.textContent = susyMode ? "Режим: порог 1 ТэВ (вернуть чистую СМ)" : "Режим: чистая СМ (переключить порог 1 ТэВ)";
+        rgScale.value = susyMode ? "16.2" : "13.0";
+        drawRG();
+      });
+      window.addEventListener("resize", drawRG);
+      drawRG();
+    });
+  </script>
+</body>
+</html>
