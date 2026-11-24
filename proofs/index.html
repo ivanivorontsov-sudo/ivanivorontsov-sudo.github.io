@@ -42,7 +42,7 @@
     .top-inner{max-width:1120px;margin:auto;padding:12px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
     .brand{font:800 15px/1.3 system-ui,sans-serif;letter-spacing:-.02em;margin-right:auto;color:var(--text);text-decoration:none}
     .nav{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-width:0}
-    .nav a,.theme{font:650 13px/1.3 system-ui,sans-serif;text-decoration:none;color:var(--text);border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:7px 11px;white-space:normal;overflow-wrap:anywhere}
+    .nav a,.theme{font:650 13px/1.3 system-ui,sans-serif;text-decoration:none;color:var(--text);border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:7px 11px;white-space:nowrap;overflow-wrap:normal;flex:0 0 auto;max-width:100%}
     .theme{cursor:pointer}
     .page{max-width:1040px;margin:0 auto;padding:30px 18px 70px}
     .hero{padding:34px clamp(20px,4vw,42px);border:1px solid var(--border);border-radius:22px;background:var(--surface);box-shadow:var(--shadow)}
@@ -81,7 +81,7 @@
     .footnotes{font:13px/1.6 system-ui,sans-serif;color:var(--muted);border-top:1px solid var(--border);margin-top:28px;padding-top:16px}
     footer{text-align:center;color:var(--muted);font:13px/1.6 system-ui,sans-serif;padding:32px 10px}
     code{font: .9em ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--surface2);padding:2px 5px;border-radius:5px;overflow-wrap:anywhere}
-    @media(max-width:560px){.top-inner{padding:10px 12px;gap:7px}.brand{flex:1 0 100%}.nav{width:100%;gap:6px}.nav a,.theme{font-size:12px;padding:7px 9px;line-height:1.25}.theme{margin-left:auto}.page{padding:18px 10px 48px}.hero,.proof{border-radius:16px}.hero{padding:24px 18px}.proof{padding:20px 16px}.proof-head{display:block}.status{display:inline-block;margin-top:8px}.math{font-size:.94em}}
+    @media(max-width:560px){html{scroll-padding-top:150px}.top-inner{padding:10px 12px;gap:7px}.brand{flex:1 0 100%}.nav{width:100%;gap:6px;justify-content:flex-start;align-items:center}.nav a,.theme{font-size:12px;padding:7px 9px;line-height:1.25;white-space:nowrap;flex:0 0 auto}.theme{margin-left:auto}.page{padding:18px 10px 48px}.hero,.proof{border-radius:16px}.hero{padding:24px 18px}.proof{padding:20px 16px}.proof-head{display:block}.status{display:inline-block;margin-top:8px}.math{font-size:.94em}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
   </style>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","@id":"https://ivanivorontsov-sudo.github.io/proofs/#collection","name":"Короткие доказательства — математические задачи и строгие решения","url":"https://ivanivorontsov-sudo.github.io/proofs/","description":"Небольшие математические доказательства: иррациональный выбор для ограниченных сумм и точный барьер расстояния двоичных кодов при чётном модуле.","inLanguage":"ru-RU","author":{"@type":"Person","name":"Ivan Vorontsov","url":"https://ivanivorontsov-sudo.github.io/"},"hasPart":[{"@type":"CreativeWork","name":"Иррационально ограниченные суммы","description":"Доказательство существования иррациональных чисел, удовлетворяющих заданным оценкам ограниченных сумм."},{"@type":"CreativeWork","name":"Чётные модули и двоичные [9,4]-коды","description":"Доказательство рангового барьера и верхней границы минимального расстояния для чётных модулей."}]}</script>
