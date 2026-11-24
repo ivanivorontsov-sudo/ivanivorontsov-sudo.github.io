@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>AEFH v7.3 — математическое ядро и исследовательская программа</title>
+  <meta name="description" content="AEFH v7.3: локальный порог 4, глобальный порог 2, точный конечномерный порог gamma_N, DPI, резольвентные тождества в модели II_infty и десять физических конструкций с явными ограничениями.">
+  <meta name="author" content="Ivan Vorontsov">
+  <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large">
+  <link rel="canonical" href="https://ivanivorontsov-sudo.github.io/aefh/v7.3/">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="AEFH v7.3 — математическое ядро и исследовательская программа">
+  <meta property="og:description" content="Пять операторных результатов, десять физических конструкций, численный мастер-стенд из 21 unittest и явные границы доказанного.">
+  <meta property="og:url" content="https://ivanivorontsov-sudo.github.io/aefh/v7.3/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="AEFH v7.3">
+  <meta name="twitter:description" content="Операторное ядро, DPI, II_infty, 10 конструкций и 21 численный тест.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg:#f7f8fb;--surface:#fff;--surface2:#f0f3f8;--text:#172033;--muted:#5b6679;
+      --border:#dce2eb;--accent:#2457c5;--green:#087f70;--amber:#9a5800;--red:#b42318;
+      --shadow:0 8px 28px rgba(20,32,55,.07)
+    }
+    [data-theme="dark"] {
+      --bg:#0d1118;--surface:#151c27;--surface2:#1c2635;--text:#e8edf5;--muted:#a7b2c4;
+      --border:#2a3545;--accent:#83b4ff;--green:#5eead4;--amber:#fbbf24;--red:#ff8b83;
+      --shadow:0 8px 28px rgba(0,0,0,.28)
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--text);font:17px/1.68 Georgia,"Times New Roman",serif}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .bar{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding:10px max(16px,calc((100vw - 1120px)/2));background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);font:600 13px/1.3 system-ui,sans-serif}
+    .bar-actions{display:flex;flex-wrap:wrap;gap:7px}
+    button{border:1px solid var(--border);border-radius:9px;background:var(--surface);color:var(--text);padding:7px 11px;font-weight:650;cursor:pointer}
+    button:hover{border-color:var(--accent);color:var(--accent)}
+    .wrap{max-width:1120px;margin:0 auto;padding:28px 18px 64px}
+    main{background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);padding:clamp(18px,4vw,48px);min-width:0}
+    .eyebrow{font:700 12px/1.4 system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+    h1,h2,h3{font-family:system-ui,-apple-system,sans-serif;line-height:1.25;letter-spacing:-.02em}
+    h1{font-size:clamp(1.8rem,4vw,2.7rem);margin:.45rem 0 .8rem}
+    h2{font-size:1.42rem;border-bottom:1px solid var(--border);padding-bottom:9px;margin:2.5rem 0 1rem;scroll-margin-top:80px}
+    h3{font-size:1.04rem;margin:1.3rem 0 .45rem}
+    p{margin:.6rem 0 1rem}
+    .lead{font:16px/1.6 system-ui,sans-serif;color:var(--muted);max-width:900px}
+    .pills{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}
+    .pill{display:inline-flex;align-items:center;border:1px solid var(--border);background:var(--surface2);border-radius:999px;padding:5px 10px;font:700 12px/1.25 system-ui,sans-serif}
+    .pill.green{color:var(--green)}.pill.amber{color:var(--amber)}.pill.red{color:var(--red)}
+    .panel{background:var(--surface2);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:12px;padding:15px 18px;margin:18px 0}
+    .panel.warning{border-left-color:var(--amber)}.panel.caution{border-left-color:var(--red)}
+    .panel h3{margin-top:0}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,285px),1fr));gap:13px}
+    .card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;min-width:0}
+    .card h3{margin-top:0}
+    .tag{font:700 11px/1.35 system-ui,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+    .formula{overflow-x:auto;max-width:100%;padding:8px 0}
+    .archive{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 22px}
+    .archive a{display:inline-block;padding:8px 11px;border:1px solid var(--border);border-radius:9px;background:var(--surface2);font:650 13px system-ui,sans-serif}
+    .archive a.current{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface))}
+    .table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:10px;margin:14px 0}
+    table{border-collapse:collapse;width:100%;font:14px/1.5 system-ui,sans-serif;min-width:650px}
+    th,td{padding:10px 12px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+    th{background:var(--surface2)}
+    tr:last-child td{border-bottom:0}
+    code{font: .86em ui-monospace,monospace;background:var(--surface2);padding:2px 5px;border-radius:5px}
+    .small{font-size:.9rem;color:var(--muted)}
+    footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--border);font:13px/1.5 system-ui,sans-serif;color:var(--muted)}
+    .katex-display{max-width:100%;overflow-x:auto;overflow-y:hidden}
+    @media(max-width:420px){.wrap{padding:9px 7px 28px}main{padding:16px 12px;border-radius:12px}.bar{padding:8px 10px}h2{font-size:1.22rem}}
+  </style>
+</head>
+<body>
+  <nav class="bar">
+    <div>AEFH · редакция 7.3</div>
+    <div class="bar-actions">
+      <button id="theme" type="button">Тёмная тема</button>
+      <button type="button" onclick="window.print()">Печать / PDF</button>
+      <a href="#archive">Архив версий</a>
+    </div>
+  </nav>
+  <div class="wrap">
+    <main>
+      <header>
+        <div class="eyebrow">Алгебраико-энтропийная исследовательская программа</div>
+        <h1>Функционал \(\mathcal I_\alpha\): операторное ядро и физические конструкции</h1>
+        <p class="lead">AEFH v7.3 отделяет математические утверждения о функционале от физических гипотез. Часть A содержит пять основных результатов о локальной и глобальной устойчивости и монотонности; Часть B — десять конструкций, каждая из которых зависит от дополнительных физических входов.</p>
+        <div class="pills">
+          <span class="pill">5 теоремных блоков</span>
+          <span class="pill">10 физических конструкций</span>
+          <span class="pill">21 unittest в мастер-стенде</span>
+          <span class="pill amber" id="ci-status">GitHub Actions: проверка ожидается</span>
+        </div>
+      </header>
+
+      <section class="panel warning">
+        <h3>Статус и границы утверждений</h3>
+        <p>Численные тесты проверяют конкретные конечномерные матричные примеры и регрессионные свойства кода. Они не являются машинным доказательством теорем для произвольных факторов фон Неймана, не заменяют проверку областей определения неограниченных операторов и не подтверждают, что выбранные физические модели описывают реальную Вселенную.</p>
+        <p>В v7.3 исправлена логика знака в доказательстве локального ядра, уточнена таблица конечномерного порога, добавлен тест резольвентных интегралов с 80 узлами и отделена численная проверка леммы от аналитического утверждения в типе \(\mathrm{II}_\infty\). Два места — полная оценка перехода под интеграл в A.5 и развёрнутая конструкция свидетеля для конечномерной необходимости DPI в A.4 — остаются задачами для более полного приложения с доказательствами; ниже они не выдаются за закрытые одной строчкой.</p>
+      </section>
+
+      <h2 id="functional">Определение</h2>
+      <p>Для нормальных состояний \(\rho,\sigma\) положим</p>
+      <div class="formula">\[
+        \mathcal I_\alpha(\rho,\sigma)
+        =S_{\rm Araki}(\rho\Vert\sigma)+\alpha\bigl(1-F_{1/2}(\rho,\sigma)\bigr),
+        \qquad
+        \widetilde{\mathcal J}_\gamma=\mathcal I_{-\gamma},
+      \]</div>
+      <p>где \(F_{1/2}(\rho,\sigma)=\operatorname{Tr}(\rho^{1/2}\sigma^{1/2})\) — квантовая аффинность Петца—Хеллингера. В конечномерной нормировке используется \(\tau(I_N)=1\), \(\tau(\rho)=\tau(\sigma)=1\); в типе \(\mathrm{II}_\infty\) — нормальный полуконечный след с \(\operatorname{Tr}(\rho)=\operatorname{Tr}(\sigma)=1\).</p>
+
+      <h2 id="part-a">Часть A · Математическое ядро</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="tag">A.1 · Локальная устойчивость</div>
+          <h3>Локальный порог \(\gamma_{\rm loc}=4\)</h3>
+          <p>Для положительного спектрального параметра \(r=\sqrt{a/b}\) отношение квадратичных ядер равно</p>
+          <div class="formula">\[
+            \frac{K_{\rm BKM}(a,b)}{K_{\rm H}(a,b)}
+            =\frac{2(r+1)\ln r}{r-1}\ge4.
+          \]</div>
+          <p>Равенство достигается при \(r=1\), то есть на коммутирующей диагонали. Для \(\gamma=4\) квадратичная часть вырождается на коммутирующих направлениях; для конкретного \(M_2\)-пути возникает отрицательный член \(-7t^4/96+O(t^6)\).</p>
+          <p class="small">Исправленный переход знака: \(\psi(r)=\ln r-2(r-1)/(r+1)\), \(\psi(1)=0\), \(\psi'(r)=(r-1)^2/[r(r+1)^2]\ge0\). Поэтому \(\psi(r)\) имеет знак \(r-1\), а \(\psi(r)/(r-1)\ge0\) с равенством только при \(r=1\). Это закрывает логическую дыру при \(r&lt;1\).</p>
+        </article>
+        <article class="card">
+          <div class="tag">A.2 · Глобальная оценка</div>
+          <h3>Глобальный порог \(\gamma_{\rm glob}=2\)</h3>
+          <div class="formula">\[
+            S(\rho\Vert\sigma)\ge-2\ln F_{1/2}(\rho,\sigma)
+            \ge2(1-F_{1/2}(\rho,\sigma)).
+          \]</div>
+          <p>Первая оценка следует из монотонности квантовой энтропии Петца—Реньи \(D_{1/2}\le D_1\); вторая — из \(-\ln x\ge1-x\). Постоянная 2 является острым универсальным инфимумом в заявленном классе.</p>
+        </article>
+        <article class="card">
+          <div class="tag">A.3 · Конечная размерность</div>
+          <h3>Точный порог \(\gamma_N\) для \(\sigma=I_N\)</h3>
+          <div class="formula">\[
+            \gamma_N=
+            \frac{\ln(N/(N-1))}{1-\sqrt{(N-1)/N}}
+            =2+\frac1{2N}+\frac7{24N^2}
+            +\frac5{24N^3}+O(N^{-4}).
+          \]</div>
+          <p>Для фиксированного равномерного \(\sigma=I_N\) это точный порог симплексной задачи; равенство достигается на спектре \((0,N/(N-1),\ldots,N/(N-1))\).</p>
+        </article>
+        <article class="card">
+          <div class="tag">A.4 · Канальная монотонность</div>
+          <h3>DPI и знак \(\alpha\)</h3>
+          <p>Заявленный критерий: монотонность \(\mathcal I_\alpha\) по всем нормальным след-сохраняющим каналам эквивалентна \(\alpha\ge0\): относительная энтропия убывает, а аффинность \(F_{1/2}\) не убывает.</p>
+          <p class="small">Для отрицательного \(\alpha\) приводятся конечномерные свидетели нарушения DPI. В окончательном доказательном приложении необходимо полностью выписать и проверить все отображения для произвольной пары \(M_N\to M_K\); сокращённая запись с неопределённой функцией \(g_N\) не считается самодостаточным доказательством.</p>
+        </article>
+        <article class="card">
+          <div class="tag">A.5 · Полуконечный случай</div>
+          <h3>Перенос на \(\mathrm{II}_\infty\)</h3>
+          <p>Для пар с двусторонним доминированием \(\lambda_1\sigma\le\rho\le\lambda_2\sigma\) записываются два резольвентных интеграла: для \(S_{\rm Araki}\) и \(1-F_{1/2}\). Их матричная проверка реализована отдельным тестом с 80-точечной квадратурой.</p>
+          <p class="small">Тест на \(5\times5\) матрицах с весовым следом — численная проверка тождеств, не доказательство для произвольного фактора \(\mathrm{II}_\infty\). Для полного доказательства переноса нужны явные оценки, обеспечивающие дифференцирование и мажорируемую сходимость при спектральных усечениях \(P_n=\mathbf1_{[1/n,n]}(\sigma)\).</p>
+        </article>
+      </div>
+
+      <h3>Карта режимов \(\gamma\)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Режим</th><th>Локальный анализ</th><th>Глобальный анализ</th><th>DPI</th></tr></thead>
+          <tbody>
+            <tr><td>\(\gamma\le0\), то есть \(\alpha\ge0\)</td><td>Строго положителен</td><td>Неотрицателен</td><td>Сохраняется</td></tr>
+            <tr><td>\(0&lt;\gamma\le2\)</td><td>Строго положителен</td><td>Универсально неотрицателен</td><td>Нарушается для некоторого канала</td></tr>
+            <tr><td>\(2&lt;\gamma&lt;4\)</td><td>Строго положителен</td><td>Не сохраняется в общем классе состояний; при фиксированном \(\sigma=I_N\) — только если \(\gamma&gt;\gamma_N\)</td><td>Нарушается</td></tr>
+            <tr><td>\(\gamma=4\)</td><td>Вырождение на коммутирующих модах; возможен распад четвёртого порядка</td><td>Не сохраняется</td><td>Нарушается</td></tr>
+            <tr><td>\(\gamma&gt;4\)</td><td>Есть отрицательные направления; коммутирующие моды становятся неустойчивыми первыми</td><td>Не сохраняется</td><td>Нарушается</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small">Важная поправка к прежней таблице: условие \(\gamma&gt;\gamma_N\) относится к конкретному срезу \(\sigma=I_N\), а не ко всем \(\gamma\in(2,4)\) и не ко всем размерностям сразу.</p>
+
+      <h2 id="part-b">Часть B · Десять физических конструкций</h2>
+      <p>Ниже перечислены конструктивные ветви программы. Их математическая согласованность внутри выбранных входных предпосылок не означает, что сами предпосылки выведены из Части A или подтверждены экспериментом.</p>
+      <div class="grid">
+        <article class="card"><div class="tag">Б.1 · Гравитация</div><h3>Энтропийное равновесие</h3><p>Условный вывод уравнений Эйнштейна из баланса дефицита площади малой геодезической области и вариации энтропии запутанности; входы — закон площади, локальная геометрия и энтропийный постулат.</p></article>
+        <article class="card"><div class="tag">Б.2 · Космология</div><h3>Связанная квинтэссенция</h3><p>Обмен энергией тёмной материи и канонического скалярного поля может дать эффективное \(w_{\rm eff}&lt;-1\) без фантомного \(w_\phi&lt;-1\). Выбранное \(\beta=-0.05\) находится внутри ограничения \(|\beta|&lt;0.073\), но RK4-демонстрация не является MCMC-фитом DESI DR2.</p></article>
+        <article class="card"><div class="tag">Б.3 · Центр алгебры</div><h3>Центральное расщепление</h3><p>Функционал разделяется на классический вклад \(D_{\rm KL}\) центральных вероятностей и квантовые вклады внутри секторов.</p></article>
+        <article class="card"><div class="tag">Б.4 · Краевые моды</div><h3>Закон Гаусса и энтропия</h3><p>Для расширенного физического пространства получаются шенноновский, размерностный и внутрисекторный вклады в энтропию фон Неймана.</p></article>
+        <article class="card"><div class="tag">Б.5 · Янга—Миллс</div><h3>Присоединённое действие Вильсона</h3><p>Хаарово усреднение или точный унитарный 2-дизайн приводит к присоединённой плакеточной структуре; это само по себе не доказывает конфайнмент.</p></article>
+        <article class="card"><div class="tag">Б.6 · Фундаментальные заряды</div><h3>Фундаментально-присоединённый сектор</h3><p>Дополнительный заряженный блок снимает слепоту присоединённого действия к центру \(Z_N\); для \(N=1\) выделяется компактный \(U(1)\)-сектор.</p></article>
+        <article class="card"><div class="tag">Б.7 · Нарушение симметрии</div><h3>Демонстрация \(U(2)\to U(1)_{\rm em}\)</h3><p>В минимальной нормировке модель даёт \(\tan^2\theta_W\ge1\), то есть \(\sin^2\theta_W\ge1/2\). Это несовместимо с \(0.2312\) на \(M_Z\) и \(3/8\) в GUT-нормировке: модель остаётся игрушечной демонстрацией безмассового фотона, а не реалистичной электрослабой подгонкой.</p></article>
+        <article class="card"><div class="tag">Б.8 · Хиггс</div><h3>Энтропийный потенциал</h3><p>Инвариантный потенциал строится из двух неотрицательных вкладов; вакуумный радиус и масштаб \(246\) ГэВ задаются входными параметрами.</p></article>
+        <article class="card"><div class="tag">Б.9 · Аномалии</div><h3>Гиперзаряды и нормировка \(SU(5)\)</h3><p>Условия сокращения аномалий фиксируют стандартный набор гиперзарядов при заданном \(y_Q\); отношение калибровочных весов дополнительно выбирается как \(SU(5)\)-нормировка.</p></article>
+        <article class="card"><div class="tag">Б.10 · Фермионы</div><h3>Киральный оператор Дирака</h3><p>Конечномерная модель с заданными матрицами Юкавы индуцирует положительный квартичный вклад в разложении. Матрицы Юкавы и масштаб обрезания не выводятся из Части A.</p></article>
+      </div>
+
+      <section class="panel caution">
+        <h3>Что пока не является предсказанием</h3>
+        <p>На этой стадии число независимых численных предсказаний, не заложенных в модель на входе, равно нулю. Масса Хиггса, электрослабый масштаб, иерархии Юкавы, группа \(G_{\rm SM}\), число поколений и масштаб \(\Lambda\) задаются или выбираются отдельно. Наблюдательные тесты могут отвергать конкретные ветви или наборы входов программы; их провал сам по себе не обязан автоматически опровергать все возможные варианты AEFH.</p>
+      </section>
+
+      <h2 id="tests">Численный мастер-стенд</h2>
+      <p>В репозитории находится отдельный файл с 21 методом <code>unittest</code>. Тест №15 использует 80 узлов Гаусса—Лежандра на преобразованном интервале \(t=\tan^2\theta\), проверяет положительную полуопределённость двух факторизаций и сопоставляет интегралы с прямыми матричными значениями. Для него сохранён строгий допуск <code>places=10</code>.</p>
+      <div class="archive">
+        <a href="https://github.com/ivanivorontsov-sudo/ivanivorontsov-sudo.github.io/blob/main/aefh/v7.3/aefh_v7_3_master_tests.py">Исходный файл 21 теста</a>
+        <a href="https://github.com/ivanivorontsov-sudo/ivanivorontsov-sudo.github.io/blob/main/.github/workflows/aefh-v7.3.yml">Workflow GitHub Actions</a>
+        <a href="https://github.com/ivanivorontsov-sudo/ivanivorontsov-sudo.github.io/actions/workflows/aefh-v7.3.yml">Результаты CI</a>
+      </div>
+      <p class="small">Успех тестов означает только успешное выполнение зафиксированных численных проверок. Он не является доказательством теорем A.1–A.5 для бесконечномерных алгебр.</p>
+
+      <h2 id="references">Основные источники</h2>
+      <ol>
+        <li>H. Araki, <em>Relative Entropy of States of von Neumann Algebras</em>, Publ. RIMS 11(3) (1976), 809–833. <a href="https://doi.org/10.2977/prims/1195191148">DOI</a>.</li>
+        <li>D. Petz, <em>Quasi-entropies for states of a von Neumann algebra</em>, Publ. RIMS 21(4) (1985), 787–800. <a href="https://doi.org/10.2977/PRIMS/1195178929">DOI</a>.</li>
+        <li>D. Petz, <em>Quasi-entropies for finite quantum systems</em>, Rep. Math. Phys. 23(1) (1986), 57–65. <a href="https://doi.org/10.1016/0034-4877(86)90067-4">DOI</a>.</li>
+        <li>D. Petz, <em>Monotone metrics on matrix spaces</em>, Linear Algebra Appl. 244 (1996), 81–96. <a href="https://doi.org/10.1016/0024-3795(94)00211-8">DOI</a>.</li>
+        <li>DESI Collaboration, <em>DESI DR2 Results II: Measurements of Baryon Acoustic Oscillations and Cosmological Constraints</em>, Phys. Rev. D 112, 083515 (2025), arXiv:2503.14738. <a href="https://doi.org/10.1103/tr6y-kpc6">DOI</a>.</li>
+        <li>J. Y. Babu, L. Amendola, <em>Can coupled thawing quintessence reproduce DESI DR2? A test with two potentials</em>, arXiv:2610.23497 (2026). <a href="https://arxiv.org/abs/2610.23497">arXiv</a>, <a href="https://doi.org/10.48550/arXiv.2610.23497">DOI</a>.</li>
+        <li>G. Bianconi, <em>Gravity from entropy</em>, Phys. Rev. D 111, 066001 (2025). <a href="https://doi.org/10.1103/PhysRevD.111.066001">DOI</a>; <em>\(\Lambda\)-Gravity from entropy</em>, Phys. Lett. B 882, 141014 (2026). <a href="https://doi.org/10.1016/j.physletb.2026.141014">DOI</a>.</li>
+      </ol>
+
+      <h2 id="archive">Архив версий AEFH — все прежние страницы сохранены</h2>
+      <p>Старые версии оставлены на прежних адресах; v7.3 размещена в отдельном каталоге и не перезаписывает ни одну из них.</p>
+      <div class="archive">
+        <a href="https://ivanivorontsov-sudo.github.io/aefh/">AEFH v3.1.1 · ранняя страница</a>
+        <a href="https://ivanivorontsov-sudo.github.io/aefh/v5/">AEFH v5</a>
+        <a href="https://ivanivorontsov-sudo.github.io/aefh/v6/">AEFH v6</a>
+        <a href="https://ivanivorontsov-sudo.github.io/aefh/v7/">AEFH v7.0 · полная архивная рукопись</a>
+        <a class="current" href="https://ivanivorontsov-sudo.github.io/aefh/v7.3/">AEFH v7.3 · текущая редакция</a>
+        <a href="https://ivanivorontsov-sudo.github.io/aefh/v7/research-status.html">v7 · статус исследований</a>
+        <a href="https://ivanivorontsov-sudo.github.io/aefh/v7/running-couplings.html">v7 · бег констант</a>
+      </div>
+      <footer>
+        AEFH v7.3 · Иван Воронцов · 24 ноября 2026 г.<br>
+        Версия размещена отдельно от архивных редакций. Статусы CI и доказательств должны читаться буквально: тест — не теорема, модель — не наблюдение, а зелёный бейдж — не диплом Филдса.
+      </footer>
+    </main>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const render = () => {
+        if (typeof renderMathInElement === "function") {
+          renderMathInElement(document.body, {
+            delimiters: [
+              {left:"$$",right:"$$",display:true},
+              {left:"\\(",right:"\\)",display:false},
+              {left:"$",right:"$",display:false}
+            ],
+            ignoredTags:["script","style","textarea","pre","code"],
+            throwOnError:false
+          });
+        } else {
+          let retries = 0;
+          const retry = () => {
+            if (typeof renderMathInElement === "function") render();
+            else if (++retries < 20) setTimeout(retry,100);
+          };
+          retry();
+        }
+      };
+      render();
+      const btn=document.getElementById("theme");
+      btn.addEventListener("click",()=>{
+        const dark=document.documentElement.dataset.theme==="dark";
+        document.documentElement.dataset.theme=dark?"light":"dark";
+        btn.textContent=dark?"Тёмная тема":"Светлая тема";
+      });
+    });
+  </script>
+</body>
+</html>
