@@ -1894,7 +1894,8 @@ class TestAEFHv7MasterSuite(unittest.TestCase):
                         + sqrt_sig @ (inv_rho - inv_sig)
                     ).real
                 )
-                self.assertAlmostEqual(i2_lhs, i2_rhs, places=11)
+                i2_scale = max(1.0, abs(i2_lhs), abs(i2_rhs))
+                self.assertLess(abs(i2_lhs - i2_rhs) / i2_scale, 1e-13)
 
                 int_S += t * weight * float(np.trace(M1).real) * dt
                 int_F += (math.sqrt(t) / math.pi) * weight * float(np.trace(M2).real) * dt
