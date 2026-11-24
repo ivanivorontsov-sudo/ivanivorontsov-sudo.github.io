@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Short Proofs — Mathematical Problems and Rigorous Solutions</title>
+  <meta name="description" content="Two detailed mathematical proofs: an interval of irrational witnesses for bounded sums, and a rank obstruction for binary [9,4] codes generated from even moduli.">
+  <meta name="author" content="Ivan Vorontsov">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://ivanivorontsov-sudo.github.io/en/proofs/">
+  <link rel="alternate" hreflang="en" href="https://ivanivorontsov-sudo.github.io/en/proofs/">
+  <link rel="alternate" hreflang="ru" href="https://ivanivorontsov-sudo.github.io/proofs/">
+  <link rel="alternate" hreflang="x-default" href="https://ivanivorontsov-sudo.github.io/proofs/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Short Proofs — Ivan Vorontsov">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:title" content="Short Proofs">
+  <meta property="og:description" content="Two MathOverflow problems, detailed proofs, exact assumptions, and clearly stated limits.">
+  <meta property="og:url" content="https://ivanivorontsov-sudo.github.io/en/proofs/">
+  <meta property="og:image" content="https://ivanivorontsov-sudo.github.io/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Short mathematical proofs by Ivan Vorontsov">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Short Proofs">
+  <meta name="twitter:description" content="Two detailed proofs in real analysis and coding theory.">
+  <meta name="twitter:image" content="https://ivanivorontsov-sudo.github.io/og-cover.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+  <style>
+    :root{--bg:#f7f8fc;--surface:#fff;--surface2:#f0f3f9;--text:#172033;--muted:#5c687c;--border:#dce3ee;--accent:#315fc4;--accent2:#147d70;--warn:#9b5a08;--shadow:0 12px 34px rgba(25,40,75,.08)}
+    [data-theme="dark"]{--bg:#0d121b;--surface:#151d2a;--surface2:#1c2839;--text:#e8edf6;--muted:#a8b4c8;--border:#2c394d;--accent:#8ab4ff;--accent2:#5ee0c5;--warn:#f5c16b;--shadow:0 12px 34px rgba(0,0,0,.25)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:100px}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.72 Georgia,"Times New Roman",serif}
+    a{color:var(--accent);text-underline-offset:3px}a:hover{text-decoration-thickness:2px}
+    .top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+    .top-inner{max-width:1120px;margin:auto;padding:12px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .brand{font:800 15px/1.3 system-ui,sans-serif;letter-spacing:-.02em;margin-right:auto;color:var(--text);text-decoration:none}
+    .nav{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-width:0}
+    .nav a,.theme{font:650 13px/1.3 system-ui,sans-serif;text-decoration:none;color:var(--text);border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:7px 11px;white-space:normal;overflow-wrap:anywhere}
+    .theme{cursor:pointer}
+    .page{max-width:1040px;margin:0 auto;padding:30px 18px 70px;min-width:0}
+    .hero{padding:34px clamp(20px,4vw,42px);border:1px solid var(--border);border-radius:22px;background:var(--surface);box-shadow:var(--shadow);min-width:0}
+    .eyebrow{font:750 11px/1.4 system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2)}
+    h1,h2,h3{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.25;letter-spacing:-.025em}
+    h1{font-size:clamp(2rem,5vw,3.1rem);margin:10px 0}h2{font-size:clamp(1.45rem,3vw,2rem);margin:0 0 14px}h3{font-size:1.1rem;margin:26px 0 9px}
+    .lead{font:17px/1.65 system-ui,sans-serif;color:var(--muted);max-width:760px;margin:0}
+    .stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+    .chip{display:inline-flex;align-items:center;border:1px solid var(--border);background:var(--surface2);padding:6px 10px;border-radius:999px;font:650 12px/1.35 system-ui,sans-serif;color:var(--muted)}
+    .toc{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}.toc a{font:700 13px system-ui,sans-serif;text-decoration:none;border:1px solid var(--border);background:var(--surface);padding:9px 13px;border-radius:10px}
+    .proof{margin-top:18px;padding:clamp(20px,4vw,38px);border:1px solid var(--border);border-radius:22px;background:var(--surface);box-shadow:var(--shadow);min-width:0}
+    .proof-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+    .number{font:800 12px system-ui,sans-serif;color:var(--accent);letter-spacing:.1em;text-transform:uppercase}
+    .status{font:700 11px/1.4 system-ui,sans-serif;border-radius:999px;padding:6px 9px;background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
+    .source{font:14px/1.6 system-ui,sans-serif;color:var(--muted);border:1px solid var(--border);border-radius:12px;background:var(--surface2);padding:12px 14px;margin:16px 0}.source strong{color:var(--text)}
+    .math{overflow-x:auto;max-width:100%;padding:9px 4px;margin:12px 0;overscroll-behavior-inline:contain}.math .katex-display{margin:.55em 0}
+    .proof p,.proof li{margin:10px 0;overflow-wrap:anywhere}.proof ol,.proof ul{padding-left:1.45rem}
+    .step{padding:15px 17px;border:1px solid var(--border);border-radius:13px;margin:14px 0;background:color-mix(in srgb,var(--surface2) 58%,var(--surface));min-width:0}
+    .step h3{margin:0 0 8px}.result{border:1px solid color-mix(in srgb,var(--accent2) 45%,var(--border));background:color-mix(in srgb,var(--accent2) 8%,var(--surface));border-radius:14px;padding:16px 18px;margin:20px 0}
+    .result strong{color:var(--accent2)}.callout{border-left:4px solid var(--accent2);background:var(--surface2);padding:13px 16px;border-radius:0 12px 12px 0;margin:17px 0}.warning{border-left-color:var(--warn)}
+    .footnotes{font:13px/1.6 system-ui,sans-serif;color:var(--muted);border-top:1px solid var(--border);margin-top:28px;padding-top:16px}
+    footer{text-align:center;color:var(--muted);font:13px/1.6 system-ui,sans-serif;padding:32px 10px}
+    code{font:.9em ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--surface2);padding:2px 5px;border-radius:5px;overflow-wrap:anywhere}
+    @media(max-width:560px){.top-inner{padding:10px 12px;gap:7px}.brand{flex:1 0 100%}.nav{width:100%;gap:6px}.nav a,.theme{font-size:12px;padding:7px 9px;line-height:1.25}.theme{margin-left:auto}.page{padding:18px 10px 48px}.hero{padding:24px 18px}.hero,.proof{border-radius:16px}.proof{padding:20px 16px}.proof-head{display:block}.status{display:inline-block;margin-top:8px}.math{font-size:.94em}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  </style>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","@id":"https://ivanivorontsov-sudo.github.io/en/proofs/#collection","name":"Short Proofs — Mathematical Problems and Rigorous Solutions","url":"https://ivanivorontsov-sudo.github.io/en/proofs/","description":"Two detailed mathematical proofs: an interval of irrational witnesses for bounded sums, and a rank obstruction for binary [9,4] codes generated from even moduli.","inLanguage":"en","author":{"@type":"Person","name":"Ivan Vorontsov","url":"https://ivanivorontsov-sudo.github.io/vizitka/en/"},"hasPart":[{"@type":"CreativeWork","name":"Irrationally Bounded Sums"},{"@type":"CreativeWork","name":"Even Moduli and Binary [9,4] Codes"}]}</script>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <a class="brand" href="/en/">Ivan Vorontsov · Mathematics</a>
+    <nav class="nav" aria-label="Main navigation">
+      <a href="#proof-1">Proof 1</a><a href="#proof-2">Proof 2</a>
+      <a href="/en/">Main site</a><a href="/en/research/aefh-v7-4/">AEFH</a>
+      <a href="/proofs/" lang="ru" hreflang="ru">Русский</a>
+    </nav>
+    <button class="theme" id="theme" type="button" aria-label="Toggle colour theme">Theme</button>
+  </div>
+</header>
+<main class="page">
+  <section class="hero">
+    <div class="eyebrow">Short proofs · Issue 01</div>
+    <h1>Short Proofs</h1>
+    <p class="lead">A separate shelf for mathematical problems that do not need a two-hundred-page manuscript. Each entry states its assumptions, gives the proof, and marks the precise limits of the conclusion.</p>
+    <div class="stats"><span class="chip">2 MathOverflow problems</span><span class="chip">2 detailed proofs</span><span class="chip">Sources checked: 24 November 2026</span></div>
+  </section>
+  <nav class="toc" aria-label="Contents">
+    <a href="#proof-1">01 · Irrationally bounded sums</a>
+    <a href="#proof-2">02 · Even moduli and binary codes</a>
+  </nav>
+
+  <article class="proof" id="proof-1">
+    <div class="proof-head"><div><div class="number">Proof No. 01 · Real analysis</div><h2>Irrationally Bounded Sums</h2></div><span class="status">An entire interval of witnesses</span></div>
+    <div class="source"><strong>Original question:</strong> <a href="https://mathoverflow.net/questions/515199/irrationally-bounded-sums" target="_blank" rel="noopener noreferrer">MathOverflow #515199</a>. Asked by Dattier on 13 September 2026. At the time checked, the page showed 5 votes and no posted answer. The note about the symbol \(E\) refers to the French expression <i>partie entière</i>.</div>
+    <h3>Problem</h3>
+    <p>Let \((u_k)_{k\in\mathbb N}\) be any real sequence satisfying \(|u_k|\le1\) for every \(k\). Does there always exist an irrational number \(x\in[1,2]\) such that, for every \(n\in\mathbb N\),</p>
+    <div class="math">\[
+      \left|\sum_{k=1}^{10^n}u_k-u_{\lfloor x\,10^n\rfloor}\right|\le10^n-1?
+    \]</div>
+    <p>Here \(\lfloor y\rfloor\) denotes the floor function. If the convention is \(0\in\mathbb N\), the case \(n=0\) is checked at the end.</p>
+    <div class="result"><strong>Theorem.</strong> The answer is yes. In fact, for every admissible sequence there is an integer \(M\ge1\) such that the inequality holds simultaneously for <em>every</em> \(x\) in the nonempty interval \((1,1+10^{-M})\). Thus there are uncountably many suitable irrational numbers, not merely one specially chosen witness.</div>
+    <h3>Proof</h3>
+    <p>For \(n\ge1\), put</p>
+    <div class="math">\[
+      S_n=\sum_{k=1}^{10^n}u_k,\qquad
+      \delta_n^+=\sum_{k=1}^{10^n}(1-u_k)=10^n-S_n,
+    \]
+      \[
+      \delta_n^-=\sum_{k=1}^{10^n}(1+u_k)=10^n+S_n.
+    \]</div>
+    <p>Since \(-1\le u_k\le1\), both deficit sequences are nonnegative and nondecreasing. Also,</p>
+    <div class="math">\[\delta_n^++\delta_n^-=2\cdot10^n\ge20.\]</div>
+
+    <div class="step">
+      <h3>Case 1. Both deficits are at least 2 for every \(n\ge1\)</h3>
+      <p>Then \(-10^n+2\le S_n\le10^n-2\), so \(|S_n|\le10^n-2\). For every index \(m\ge1\),</p>
+      <div class="math">\[
+        |S_n-u_m|\le|S_n|+|u_m|
+        \le(10^n-2)+1=10^n-1.
+      \]</div>
+      <p>Thus every \(x\in(1,2)\) works. In particular, we may take \(M=1\), and \(x=\sqrt2\) is one possible irrational witness.</p>
+    </div>
+
+    <div class="step">
+      <h3>Case 2. At least one deficit is below 2 at some index</h3>
+      <p>Replacing the entire sequence by \((-u_k)\), if necessary, does not change the absolute value in the problem. We may therefore assume that for some \(n_0\ge1\),</p>
+      <div class="math">\[\delta_{n_0}^+<2.\]</div>
+      <p>We first show that \(\delta_n^->18\) for every \(n\ge1\). If \(n\le n_0\), monotonicity gives \(\delta_n^+\le\delta_{n_0}^+<2\), hence</p>
+      <div class="math">\[\delta_n^-=2\cdot10^n-\delta_n^+>20-2=18.\]</div>
+      <p>If \(n>n_0\), monotonicity of \(\delta_n^-\) gives \(\delta_n^-\ge\delta_{n_0}^->18\). Consequently, for every \(m\ge1\),</p>
+      <div class="math">\[
+        S_n-u_m=\delta_n^- -10^n-u_m
+        >18-10^n-1>-10^n+1.
+      \]</div>
+      <p>The lower bound required by the absolute-value inequality is therefore automatic. It remains to prove \(S_n-u_m\le10^n-1\).</p>
+      <p>Set \(v_k=1-u_k\in[0,2]\). Since \(\delta_n^+=\sum_{k=1}^{10^n}v_k\), the remaining upper bound is equivalent to</p>
+      <div class="math">\[v_m\le\delta_n^+,\qquad m=\lfloor x\,10^n\rfloor.\]</div>
+      <p>Let</p>
+      <div class="math">\[L=\sum_{k=1}^{\infty}v_k\in[0,+\infty].\]</div>
+      <ul>
+        <li><strong>If \(L=0\),</strong> then every \(v_k=0\), and any \(x\in(1,2)\) works. Take \(M=1\).</li>
+        <li><strong>If \(0&lt;L&lt;+\infty\),</strong> choose \(M\ge1\) such that \(\delta_M^+&gt; L/2\).</li>
+        <li><strong>If \(L=+\infty\),</strong> choose \(M\ge1\) such that \(\delta_M^+\ge2\).</li>
+      </ul>
+      <p>Now choose any \(x\in(1,1+10^{-M})\), and write \(m_n=\lfloor x\,10^n\rfloor\).</p>
+      <p><strong>For \(1\le n\le M\):</strong></p>
+      <div class="math">\[
+        10^n&lt;x\,10^n&lt;10^n+10^{n-M}\le10^n+1,
+      \]</div>
+      <p>so \(m_n=10^n\). Thus \(v_{m_n}\) is one of the nonnegative terms in \(\delta_n^+\), and \(v_{m_n}\le\delta_n^+\).</p>
+      <p><strong>For \(n&gt;M\):</strong> since \(x&gt;1\),</p>
+      <div class="math">\[
+        m_n=\lfloor x\,10^n\rfloor\ge10^n\ge10^{M+1}>10^M.
+      \]</div>
+      <p>If \(L&lt;+\infty\), then \(v_{m_n}\) belongs to the tail after \(10^M\), and therefore</p>
+      <div class="math">\[
+        v_{m_n}\le\sum_{k&gt;10^M}v_k
+        =L-\delta_M^+&lt;\frac L2&lt;\delta_M^+\le\delta_n^+.
+      \]</div>
+      <p>If \(L=+\infty\), then \(v_{m_n}\le2\le\delta_M^+\le\delta_n^+\). This proves the upper bound for every \(n\).</p>
+    </div>
+    <p>In Case 2, every \(x\in(1,1+10^{-M})\) works. An explicit irrational choice is</p>
+    <div class="math">\[x=1+\frac{\sqrt2}{10^{M+1}}.\]</div>
+    <p>Finally, if \(0\in\mathbb N\), then for \(n=0\) and \(x\in(1,2)\) we have \(\lfloor x\rfloor=1\), so the left-hand side is \(|u_1-u_1|=0=10^0-1\). This completes the proof. \(\square\)</p>
+    <div class="callout"><strong>What is stronger than the original claim?</strong> We obtain an entire interval of suitable real numbers. Irrationality is only selected at the final step; it is not the difficult part of the argument.</div>
+  </article>
+
+  <article class="proof" id="proof-2">
+    <div class="proof-head"><div><div class="number">Proof No. 02 · Coding theory</div><h2>Even Moduli and Binary [9,4] Codes</h2></div><span class="status">Exact result under stated filling rules</span></div>
+    <div class="source"><strong>Original question:</strong> <a href="https://mathoverflow.net/questions/518117/minimum-distance-and-griesmer-bound-of-9-4-binary-linear-codes-from-x-t1" target="_blank" rel="noopener noreferrer">MathOverflow #518117</a>. Asked on 23 November 2026. The page showed 2 votes and no posted answer when checked. The numerical frequencies below are the experiment reported in the question, not a new independent computation in this note.</div>
+    <h3>Setup</h3>
+    <p>Let \(m\ge2\), choose \((x_1,x_2)\in\mathbb Z_m^2\), and generate a second-order recurrence</p>
+    <div class="math">\[x_{t+1}\equiv x_{t-1}-x_t^2\pmod m.\]</div>
+    <p>Take the canonical integer representatives \(x_t\in\{0,\ldots,m-1\}\), set \(b_t=x_t\bmod2\in\mathbb F_2\), fill a parity block \(P\in\mathbb F_2^{4\times5}\), and form the systematic generator matrix</p>
+    <div class="math">\[G=[\,I_4\mid P\,].\]</div>
+    <p>Write \(d_{\min}(C)\) for the minimum Hamming distance of the code. The binary Griesmer bound gives \(d_{\min}\le4\) for a code of length 9 and dimension 4: \(4+2+1+1=8\le9\), whereas \(5+3+2+1=11&gt;9\).</p>
+    <div class="result"><strong>Theorem for standard fillings.</strong> If \(m\) is even, then:
+      <ul><li>if \((x_1,x_2)=(0,0)\), then \(d_{\min}(C)=1\);</li><li>for every nonzero initial pair, \(d_{\min}(C)=2\).</li></ul>
+      In particular, under these filling rules an even modulus cannot produce minimum distance 3 or 4.</div>
+
+    <h3>Step 1. Reduction modulo 2 and period 3</h3>
+    <p>For even \(m\), parity is well-defined on residue classes modulo \(m\): adding a multiple of \(m\) does not change parity. The recurrence therefore reduces in \(\mathbb F_2\) to</p>
+    <div class="math">\[b_{t+1}=b_{t-1}-b_t^2=b_{t-1}+b_t,\]</div>
+    <p>because \(b_t^2=b_t\) and \(-1=1\) in \(\mathbb F_2\). Hence</p>
+    <div class="math">\[b_{t+2}=b_t+b_{t+1}=b_{t-1},\qquad b_{t+3}=b_t.\]</div>
+    <p>The sequence has period dividing 3. If the initial pair is zero, the sequence is identically zero. Otherwise it is a cyclic shift of one of \(110110\ldots\), \(101101\ldots\), or \(011011\ldots\).</p>
+
+    <div class="step">
+      <h3>Step 2. Standard row-wise and column-wise fillings</h3>
+      <p>For row-wise filling, define</p>
+      <div class="math">\[P_{i,j}=b_{5(i-1)+j}.\]</div>
+      <p>The indices used by the first and fourth rows differ by 15, a multiple of 3. Thus \(P_{1,*}=P_{4,*}\).</p>
+      <p>For column-wise filling, define</p>
+      <div class="math">\[P_{i,j}=b_{4(j-1)+i}.\]</div>
+      <p>The corresponding indices in the first and fourth rows differ by 3, so again \(P_{1,*}=P_{4,*}\).</p>
+      <p>In either case, adding the first and fourth rows of \(G\) gives the nonzero codeword</p>
+      <div class="math">\[
+        (e_1+e_4)G=(e_1+e_4\mid P_{1,*}+P_{4,*})
+        =(e_1+e_4\mid0),
+      \]</div>
+      <p>whose weight is exactly 2. Therefore \(d_{\min}(C)\le2\).</p>
+      <p>If the initial pair is nonzero, each row of \(P\) contains five consecutive terms of a nonzero period-3 pattern. In the column-wise case the stride is \(4\equiv1\pmod3\). Every such block has Hamming weight 3 or 4, so no row of \(P\) is zero. A weight-1 word in a systematic code \(G=[I_4\mid P]\) would have to be a row of \(G\) whose parity part is zero. Hence no such word exists, and \(d_{\min}(C)\ge2\). We conclude \(d_{\min}(C)=2\).</p>
+      <p>If the initial pair is zero, then \(P=0\), so \(G=[I_4\mid0]\) and the code contains a word of weight 1. Thus \(d_{\min}(C)=1\).</p>
+    </div>
+
+    <div class="result"><strong>Strengthening: a rank barrier for every fixed stride.</strong> Suppose the rows of \(P\) are sampled along arithmetic progressions with one common stride \(\Delta\):
+      \[
+        P_{i,j}=b_{a_i+(j-1)\Delta},
+      \]
+      where the starting indices \(a_i\) may differ. Then for every even \(m\) and every initial pair, \(d_{\min}(C)\le2\). This includes the standard row-wise and column-wise fillings.</div>
+
+    <div class="step">
+      <h3>Step 3. Rank proof of the strengthened barrier</h3>
+      <p>If \(3\mid\Delta\), every row of \(P\) is constant, since the underlying sequence has period 3. Hence all rows lie in the span of \((1,1,1,1,1)\), and \(\operatorname{rank}(P)\le1\).</p>
+      <p>If \(3\nmid\Delta\), every row \(v=(v_1,\ldots,v_5)\) satisfies</p>
+      <div class="math">\[v_j+v_{j+1}+v_{j+2}=0,\qquad j=1,2,3.\]</div>
+      <p>These are three independent linear constraints on five coordinates, so their solution space has dimension 2. Thus \(\operatorname{rank}(P)\le2\) in either case.</p>
+      <p>Consider the left kernel</p>
+      <div class="math">\[W=\{u\in\mathbb F_2^4:uP=0\}.\]</div>
+      <p>By rank-nullity, \(\dim W=4-\operatorname{rank}(P)\ge2\). Choose a two-dimensional subspace \(W_0\subseteq W\). Its three nonzero vectors \(u_1,u_2,u_3\) satisfy \(u_1+u_2+u_3=0\).</p>
+      <p>In each coordinate, the triple \((u_{1,i},u_{2,i},u_{3,i})\) has an even number of ones, hence either zero or two. Therefore</p>
+      <div class="math">\[
+        \operatorname{wt}(u_1)+\operatorname{wt}(u_2)+\operatorname{wt}(u_3)\le2\cdot4=8.
+      \]</div>
+      <p>At least one \(u_r\) has weight at most 2. Since \(u_rP=0\), the corresponding codeword is</p>
+      <div class="math">\[u_rG=(u_r\mid u_rP)=(u_r\mid0),\]</div>
+      <p>and has weight at most 2. Consequently \(d_{\min}(C)\le2\). \(\square\)</p>
+    </div>
+
+    <div class="step">
+      <h3>Step 4. What changes for odd moduli?</h3>
+      <p>For canonical representatives \(x_t\in\{0,\ldots,m-1\}\), there is an integer \(q_t\) such that</p>
+      <div class="math">\[x_{t+1}=x_{t-1}-x_t^2+q_tm.\]</div>
+      <p>Reducing this equality modulo 2 gives</p>
+      <div class="math">\[b_{t+1}=b_{t-1}+b_t+q_t(m\bmod2)\quad\text{in }\mathbb F_2.\]</div>
+      <p>For even \(m\), the extra term vanishes and period 3 is forced. For odd \(m\), the term \(q_t\) can affect the parity of the next entry; reduction of parity is no longer a well-defined ring homomorphism from \(\mathbb Z/m\mathbb Z\) to \(\mathbb F_2\). Therefore the same period-3 rank obstruction no longer follows.</p>
+      <div class="callout warning"><strong>Limit of the conclusion.</strong> This explains why the even-modulus argument breaks down for odd moduli. It does <em>not</em> prove that \(\operatorname{rank}(P)\) reaches 3 or 4, nor that \(d_{\min}=4\) for every odd \(m\). The reported frequencies — 99 of 100 primes and 32 of 100 composites reaching \(d_{\min}=4\) — are experiments described in the original MathOverflow question, not a universal theorem established here.</div>
+    </div>
+    <div class="footnotes"><strong>Filling-rule caveat.</strong> The exact values \(d_{\min}=1\) or \(2\) are proved for the explicitly defined row-wise and column-wise fillings. The stronger bound \(d_{\min}\le2\) is proved for any common fixed stride \(\Delta\) along the rows. These claims do not automatically cover an arbitrary permutation of the 20 entries without such a rule.</div>
+  </article>
+
+  <section class="proof">
+    <h2>How to read this collection</h2>
+    <p>The notes distinguish three levels: theorems proved under stated assumptions, computational observations reported by the original authors, and explanatory mechanisms that do not yet establish a universal conclusion. Publication here does not mean that a solution has been accepted by the MathOverflow community or independently peer-reviewed.</p>
+    <p>When suggesting corrections, preserve the exact problem statement and specify the indexing or construction rule being used. In mathematics, one omitted indexing convention can be more dangerous than an entire dragon.</p>
+  </section>
+  <footer>Short Proofs · independent mathematical notes<br><a href="/proofs/" lang="ru" hreflang="ru">Русская версия</a> · <a href="/en/">Main site</a><br>© 2026 Ivan Vorontsov</footer>
+</main>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+  if(typeof renderMathInElement==="function"){
+    renderMathInElement(document.body,{
+      delimiters:[
+        {left:"$$",right:"$$",display:true},
+        {left:"\\[",right:"\\]",display:true},
+        {left:"\\(",right:"\\)",display:false}
+      ],
+      ignoredTags:["script","style","textarea","pre","code"],
+      throwOnError:false
+    });
+  }
+  const button=document.getElementById("theme");
+  if(button)button.addEventListener("click",()=>{
+    const dark=document.documentElement.dataset.theme==="dark";
+    document.documentElement.dataset.theme=dark?"light":"dark";
+    button.textContent=dark?"Dark theme":"Light theme";
+  });
+});
+</script>
+</body>
+</html>
