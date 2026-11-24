@@ -46,7 +46,12 @@
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     .bar{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding:10px max(16px,calc((100vw - 1120px)/2));background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);font:600 13px/1.3 system-ui,sans-serif}
-    .bar-actions{display:flex;flex-wrap:wrap;gap:7px}
+    .bar-actions{display:flex;flex:1 1 100%;flex-wrap:wrap;gap:7px;min-width:0;max-width:100%}
+    .bar-actions>*{min-width:0;max-width:100%;overflow-wrap:anywhere}
+    .bar{width:100%;max-width:100%;min-width:0}
+    .wrap{width:100%;min-width:0}
+    main,header,footer,section,.grid,.card,.panel{min-width:0;max-width:100%}
+    h1,h2,h3,p,li{overflow-wrap:anywhere}
     button{border:1px solid var(--border);border-radius:9px;background:var(--surface);color:var(--text);padding:7px 11px;font-weight:650;cursor:pointer}
     button:hover{border-color:var(--accent);color:var(--accent)}
     .wrap{max-width:1120px;margin:0 auto;padding:28px 18px 64px}
@@ -81,7 +86,16 @@
     .small{font-size:.9rem;color:var(--muted)}
     footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--border);font:13px/1.5 system-ui,sans-serif;color:var(--muted)}
     .katex-display{max-width:100%;overflow-x:auto;overflow-y:hidden}
-    @media(max-width:420px){.wrap{padding:9px 7px 28px}main{padding:16px 12px;border-radius:12px}.bar{padding:8px 10px}h2{font-size:1.22rem}}
+    @media(max-width:640px){
+      html,body{max-width:100%;overflow-x:clip}
+      .bar{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;padding:8px 10px;gap:8px}
+      .bar>div:first-child{width:100%;min-width:0}
+      .bar-actions{width:100%;display:flex;flex:0 1 auto;min-width:0;max-width:100%;align-items:center}
+      .bar-actions>a,.bar-actions>button{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+      .wrap{width:100%;padding:18px 10px 48px}
+      main{width:100%;padding:20px 16px;border-radius:14px}
+    }
+    @media(max-width:420px){.wrap{padding:9px 7px 28px}main{padding:16px 12px;border-radius:12px}h2{font-size:1.22rem}}
   </style>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","@id":"https://ivanivorontsov-sudo.github.io/aefh/v7.4/#webpage","name":"AEFH v7.4 — полное математическое приложение и исследовательская программа","url":"https://ivanivorontsov-sudo.github.io/aefh/v7.4/","description":"AEFH v7.4: доказательства DPI и резольвентных тождеств в II∞, локальные и глобальные пороги, 21 численная проверка и 10 условных физических конструкций.","inLanguage":"ru-RU","author":{"@type":"Person","name":"Ivan Vorontsov","url":"https://ivanivorontsov-sudo.github.io/"}}</script>
 </head>
