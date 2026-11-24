@@ -20,7 +20,8 @@ GitHub Pages: https://ivanivorontsov-sudo.github.io/
 
 ## Другие страницы
 
-- [AEFH v3.1.1 — математическая исследовательская работа](https://ivanivorontsov-sudo.github.io/aefh/): энтропия Петца, DPI для факторов II₁ и условный геометрический предел.
+- [AEFH v7.0 — текущая исследовательская редакция](https://ivanivorontsov-sudo.github.io/aefh/v7/): энтропийный функционал, алгебры горизонтов, границы физических гипотез и интерактивный RG-симулятор.
+- [Архив AEFH](https://ivanivorontsov-sudo.github.io/aefh/), [v5.0](https://ivanivorontsov-sudo.github.io/aefh/v5/) и [v6.0](https://ivanivorontsov-sudo.github.io/aefh/v6/) — предыдущие редакции рукописи.
 
 - [Визитка и портфолио](https://ivanivorontsov-sudo.github.io/vizitka/).
 - [Ежедневная мастерская](https://ivanivorontsov-sudo.github.io/daily-tools/).
