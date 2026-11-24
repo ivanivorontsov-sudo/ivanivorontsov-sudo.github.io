@@ -305,6 +305,8 @@ try {
 // Mobile overflow checks for important tool entry points.
 const mobilePages = [
   "index.html",
+  "proofs/index.html",
+  "en/proofs/index.html",
   "legal.html",
   "privacy.html",
   "tools-audit/workbench.html",
@@ -347,6 +349,26 @@ for (const width of [320, 360, 390, 430]) {
         const message = relative + ": horizontal overflow at " + width + "px (" + overflow.width + "px viewport, " + overflow.scroll + "px content); offenders=" + JSON.stringify(overflow.offenders);
         if (relative === "daily-tools/index.html" || relative === "index.html" || relative === "legal.html" || relative === "aefh/v7/index.html") fail(message);
         else warnings.push(message);
+      }
+      if (relative === "proofs/index.html" || relative === "en/proofs/index.html") {
+        const nav = await page.locator(".top .nav a, .top .theme").evaluateAll(nodes => nodes.map(node => {
+          const style = getComputedStyle(node);
+          return {
+            label: (node.textContent || "").trim(),
+            whiteSpace: style.whiteSpace,
+            flexShrink: style.flexShrink,
+            scrollWidth: node.scrollWidth,
+            clientWidth: node.clientWidth
+          };
+        }));
+        const broken = nav.filter(item =>
+          item.whiteSpace !== "nowrap" ||
+          item.flexShrink !== "0" ||
+          item.scrollWidth > item.clientWidth + 1
+        );
+        if (!nav.length || broken.length) {
+          warnings.push(relative + ": mobile navigation chips may wrap or shrink at " + width + "px; details=" + JSON.stringify(broken));
+        }
       }
     } catch (error) {
       fail(relative + ": mobile check at " + width + "px failed: " + error.message);
