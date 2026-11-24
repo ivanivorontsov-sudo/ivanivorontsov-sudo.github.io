@@ -93,7 +93,7 @@
     tr:last-child td{border-bottom:none}
     tr.highlight-row{background:var(--ok-soft)}
     .katex-display{overflow-x:auto;overflow-y:hidden;padding:.35rem 0;margin:.85rem 0;max-width:100%}
-    .katex{max-width:100%}
+    .katex{max-width:100%;white-space:normal;overflow-wrap:anywhere}
     .lab-card{margin:1.6rem 0;padding:1.25rem 1.35rem;border:1px solid var(--border);border-radius:14px;background:var(--surface-alt);font-family:var(--font-sans);min-width:0;max-width:100%}
     .lab-title{font-weight:700;font-size:.98rem;margin:0 0 .35rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;min-width:0}
     .lab-title>span:first-child{min-width:0;overflow-wrap:anywhere}
@@ -523,7 +523,9 @@
           $$\mathcal S_{\alpha,\sigma_0}(W_{\mu\nu})=
           \frac{a^4}{g_{\mathrm{YM}}^2}\operatorname{Tr}(F_{\mu\nu}^2)+O(a^6),\qquad
           \frac1{g_{\mathrm{YM}}^2}=\frac{N\kappa_\alpha(\sigma_0)}{N^2-1}\gt0.$$
-          Суммирование по четырёхмерной решётке приводит к структуре евклидова действия Янга — Миллса с ожидаемыми поправками дискретизации.</p>
+          Суммирование по четырёхмерной решётке приводит к структуре евклидова действия Янга — Миллса с ожидаемыми поправками дискретизации:
+          $S_{\mathrm{YM}}=\frac{1}{4g_{\mathrm{YM}}^2}\sum_{x,\mu,\nu,A}(F_{\mu\nu}^A(x))^2+O(a^2).$
+          Положительная квадратичная жёсткость в этой конструкции не означает, что из разложения уже выведены конфайнмент и непертурбативный спектр масс.</p>
         </div>
       </section>
 
@@ -544,10 +546,16 @@
           в рукописи получаются
           $$\kappa_{\mathrm{fund}}=2\Lambda_\alpha\sin^2\theta_0\cos^2\theta_0,\qquad
           \kappa_{\mathrm{adj}}=\frac{N-1}{N}\Lambda_\alpha\sin^4\theta_0,$$
-          $$\Lambda_\alpha=
+          $\Lambda_\alpha=
           \frac{\mu_1\ln(1+\mu_1/\mu_0)+
-          \alpha(\sqrt{\mu_0+\mu_1}-\sqrt{\mu_0})^2}{N+1}.$$
-          </p>
+          \alpha(\sqrt{\mu_0+\mu_1}-\sqrt{\mu_0})^2}{N+1}.$
+          В непрерывном пределе для $F_{\mu\nu}=f_{\mu\nu}I_N+\widehat F_{\mu\nu}$:
+          $\mathcal S^{\mathrm{fund}}_{\alpha,\Sigma_0}(W_{\mu\nu})=
+          a^4\left[\frac12\kappa_{\mathrm{fund}}f_{\mu\nu}^2+
+          C_{\mathrm{SU}(N)}\operatorname{Tr}(\widehat F_{\mu\nu}^2)\right]+O(a^6),$
+          $C_{\mathrm{SU}(N)}:=\frac{\kappa_{\mathrm{fund}}}{2N}
+          +\frac{N\kappa_{\mathrm{adj}}}{N^2-1}\gt0.$
+          В этой модели полная жёсткость может оставаться положительной и при отрицательном отдельном коэффициенте $\kappa_{\mathrm{adj}}$.</p>
         </div>
 
         <div class="math-box">
@@ -562,11 +570,14 @@
           $$\mathcal L_{\mathrm{link}}=
           a^2\Lambda_\alpha\left(\|\widetilde D_\mu\psi\|^2-
           |\langle\psi|\widetilde D_\mu\psi\rangle|^2\right)+O(a^4).$$
-          В однородном вакууме $|\psi_0\rangle=(\sin\theta_0\,e_N,\cos\theta_0)^T$ группа $U(N)$ спонтанно нарушается до $U(N-1)$. Для $N=2$ выбранная структура оставляет безмассовую $U(1)_{\mathrm{em}}$-моду и задаёт массивные $W^\pm,Z^0$. В рукописи приводятся соотношения
+          В однородном вакууме $|\psi_0\rangle=(\sin\theta_0\,e_N,\cos\theta_0)^T$ группа $U(N)$ спонтанно нарушается до $U(N-1)$. В выбранном счёте имеются $(N-1)^2$ безмассовых и $2N-1$ массивных бозонных направлений до дополнительных динамических членов. Для $N=2$ структура оставляет безмассовую $U(1)_{\mathrm{em}}$-моду ($m_\gamma^2\equiv0$) и задаёт массивные $W^\pm,Z^0$. В рукописи приводятся соотношения
           $$m_W^2=\frac12\mu_{\mathrm H}^2\Lambda_\alpha g^2\sin^2\theta_0,$$
           $$m_Z^2=\frac12\mu_{\mathrm H}^2\Lambda_\alpha(g^2+g'^2)\sin^2\theta_0\cos^2\theta_0,\qquad
           \rho_{\mathrm{cust}}=\frac{m_W^2}{m_Z^2\cos^2\theta_W}=\frac1{\cos^2\theta_0}.$$
-          Минимальная однозондовая модель без фермионов имеет феноменологическое препятствие $\sin^2\theta_W\ge1/2$, которое в программе связывается с последующим фермионным сектором.</p>
+          Минимальная однозондовая модель без фермионов имеет соотношение
+          $\tan^2\theta_W=1+\frac23\tan^2\theta_0\ge1,\qquad
+          \sin^2\theta_W\ge\frac12,$
+          то есть феноменологическое препятствие, которое программа связывает с последующим фермионным сектором. Для сопоставления с экспериментом дополнительно нужны кинетическая нормировка полей и полный спектр.</p>
         </div>
 
         <div class="math-box">
@@ -582,7 +593,7 @@
           $$\left.\frac{d^2V}{d\theta^2}\right|_{\theta_0}=
           \frac{16\beta_{\mathrm{ent}}\mu_1^2}{(N+1)(2\mu_0+\mu_1)}
           x_0(1-x_0)\cosh^2(r/2)\gt0.$$
-          При $r\to\rho_{\max}^-$ имеем $x_0\to0^+$ и $\rho_{\mathrm{cust}}\to1^+$ в этой параметризации.</p>
+          Все $2N-1$ орбитальных направлений вакуумной сферы плоские в данном потенциале и интерпретируются как голдстоуновские моды до калибровочного поглощения. При $r\to\rho_{\max}^-$ имеем $x_0\to0^+$ и $\rho_{\mathrm{cust}}=1/(1-x_0)\to1^+$ в этой параметризации. Абсолютный масштаб вакуумного ожидания и физическая масса Хиггса без дополнительной нормировки действия не фиксируются.</p>
         </div>
       </section>
 
@@ -633,7 +644,9 @@
               \frac{4+\alpha}{8\Lambda^4}\operatorname{Var}_{\tau_F}(\mathcal Y^2)\|\phi\|^4
               -\frac{16+3\alpha}{48\Lambda^6}\kappa_3(\mathcal Y^2)\|\phi\|^6
               +O(\Lambda^{-8}).$$
-              Положительность коэффициента $\lambda_H$ требует ненулевой дисперсии конечного Yukawa-спектра и согласованной нормировки $\rho_D$.</li>
+              Положительность коэффициента $\lambda_H$ требует ненулевой дисперсии конечного Yukawa-спектра и согласованной нормировки $\rho_D$. При $N_g=3$ размерность конечного фермионного пространства равна $16N_g=48$. Квартичный коэффициент в разложении имеет вид
+              $\lambda_H=\frac{4+\alpha}{8\Lambda^4}\operatorname{Var}_{\tau_F}(\mathcal Y^2)\gt0,$
+              если $\alpha\ge0$ и дисперсия не обращается в ноль. Следующий порядок $\|\phi\|^6$ контролируется третьим кумулянтом $\kappa_3(\mathcal Y^2)$.</li>
           </ol>
         </div>
       </section>
