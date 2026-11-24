@@ -55,7 +55,20 @@ html,body{max-width:100%;overflow-x:clip}
 .wrap{width:calc(100% - 24px);max-width:100%;padding-left:0;padding-right:0}
 main{width:100%;min-width:0}
 }
-</style>
+
+    /* Keep the MathML accessibility tree readable by assistive tech but out of document flow. */
+    .katex .katex-mathml{
+      position:fixed!important;top:0!important;left:-10000px!important;
+      display:block!important;width:1px!important;height:1px!important;
+      padding:0!important;margin:0!important;border:0!important;
+      overflow:hidden!important;clip:rect(0,0,0,0)!important;
+      clip-path:inset(50%)!important;white-space:nowrap!important;
+    }
+    .katex .katex-mathml math{
+      position:absolute!important;left:0!important;top:0!important;
+      width:1px!important;height:1px!important;overflow:hidden!important;
+    }
+  </style>
 </head>
 <body>
 <header><div class="wrap bar"><span>AEFH · Version 7.4</span><nav aria-label="Research navigation">
