@@ -416,19 +416,49 @@ try {
       const offenders = [...document.querySelectorAll("body *")].map(el => {
         const rect = el.getBoundingClientRect();
         const style = getComputedStyle(el);
+        const svg = el.ownerSVGElement || (el.tagName.toLowerCase() === "svg" ? el : null);
+        const math = el.closest(".katex");
+        const chain = [];
+        let node = el;
+        while (node && node !== document.body && chain.length < 7) {
+          const r = node.getBoundingClientRect();
+          chain.push({
+            tag: node.tagName.toLowerCase(),
+            id: node.id || "",
+            className: typeof node.className === "string" ? node.className.baseVal || node.className : "",
+            left: Math.round(r.left),
+            right: Math.round(r.right),
+            width: Math.round(r.width),
+            overflowX: getComputedStyle(node).overflowX
+          });
+          node = node.parentElement;
+        }
         return {
-          tag: el.tagName.toLowerCase(), id: el.id || "",
-          className: typeof el.className === "string" ? el.className.slice(0, 80) : "",
-          left: Math.round(rect.left), right: Math.round(rect.right),
-          width: Math.round(rect.width), scrollWidth: el.scrollWidth,
-          clientWidth: el.clientWidth, overflowX: style.overflowX,
-          whiteSpace: style.whiteSpace,
-          html: el.children.length ? "" : el.outerHTML.slice(0, 180)
+          tag: el.tagName.toLowerCase(),
+          id: el.id || "",
+          className: typeof el.className === "string" ? el.className : "",
+          left: Math.round(rect.left),
+          right: Math.round(rect.right),
+          width: Math.round(rect.width),
+          overflowX: style.overflowX,
+          svg: svg ? {
+            width: svg.getAttribute("width"),
+            height: svg.getAttribute("height"),
+            viewBox: svg.getAttribute("viewBox"),
+            rect: (() => {
+              const r = svg.getBoundingClientRect();
+              return { left: Math.round(r.left), right: Math.round(r.right), width: Math.round(r.width) };
+            })()
+          } : null,
+          formula: math ? math.textContent.trim().slice(0, 180) : "",
+          chain
         };
       }).filter(x => x.width > 0 && (x.right > viewport + 2 || x.left < -2))
-        .sort((a, b) => b.right - a.right).slice(0, 12);
+        .sort((a, b) => b.right - a.right)
+        .slice(0, 8);
       return {
-        viewport, content: document.documentElement.scrollWidth,
+        viewport,
+        content: document.documentElement.scrollWidth,
         bodyScroll: document.body.scrollWidth,
         topbar: document.querySelector(".topbar")?.getBoundingClientRect().toJSON(),
         controls: document.querySelector(".controls")?.getBoundingClientRect().toJSON(),
