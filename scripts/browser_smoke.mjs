@@ -322,12 +322,29 @@ for (const width of [320, 360, 390, 430]) {
     try {
       await page.goto(BASE + "/" + relative, { waitUntil: "domcontentloaded", timeout: 20000 });
       await page.waitForTimeout(60);
-      const overflow = await page.evaluate(() => ({
-        width: document.documentElement.clientWidth,
-        scroll: document.documentElement.scrollWidth
-      }));
+      const overflow = await page.evaluate(() => {
+        const viewport = document.documentElement.clientWidth;
+        const offenders = [...document.querySelectorAll("body *")].map(el => {
+          const rect = el.getBoundingClientRect();
+          const style = getComputedStyle(el);
+          return {
+            tag: el.tagName.toLowerCase(),
+            id: el.id || "",
+            className: typeof el.className === "string" ? el.className.slice(0, 100) : "",
+            left: Math.round(rect.left),
+            right: Math.round(rect.right),
+            width: Math.round(rect.width),
+            scrollWidth: el.scrollWidth,
+            clientWidth: el.clientWidth,
+            overflowX: style.overflowX
+          };
+        }).filter(item => item.width > 0 && (item.right > viewport + 2 || item.left < -2))
+          .sort((a, b) => b.right - a.right)
+          .slice(0, 8);
+        return { width: viewport, scroll: document.documentElement.scrollWidth, offenders };
+      });
       if (overflow.scroll > overflow.width + 2) {
-        const message = relative + ": horizontal overflow at " + width + "px (" + overflow.width + "px viewport, " + overflow.scroll + "px content)";
+        const message = relative + ": horizontal overflow at " + width + "px (" + overflow.width + "px viewport, " + overflow.scroll + "px content); offenders=" + JSON.stringify(overflow.offenders);
         if (relative === "daily-tools/index.html" || relative === "index.html" || relative === "legal.html" || relative === "aefh/v7/index.html") fail(message);
         else warnings.push(message);
       }
