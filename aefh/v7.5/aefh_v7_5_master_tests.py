@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Единый мастер-стенд верификации AEFH v7.5 (Теоремы 1-14, Следствия 5.1 и 5.2).
-22 unittest-проверки, устойчивых к запуску с флагом `python3 -O`.
+23 unittest-проверки, устойчивых к запуску с флагом `python3 -O`.
 Зависимости: стандартная библиотека Python, NumPy и SymPy.
 
 Нормировки и пределы численной модели:
@@ -17,7 +17,7 @@
   - Космологический блок проверяет иллюстративную динамику связанной квинтэссенции,
     а не выполняет статистический likelihood-fit к данным DESI DR2.
 
-Карта 21 теста:
+Карта тестовых направлений (14 теоремных блоков):
   01. Теорема 1  : метрики BKM/Хеллингера (log1p), порог gamma_loc = 4, 4-й порядок -(7/96)t^4.
   02. Теорема 2  : глобальная цепочка S >= -2 ln F_{1/2} >= 2(1 - F_{1/2}) и 2D свободный вакуум.
   03. Теорема 3  : точный конечномерный порог gamma_N (до N=10^8), леммы G''' > 0, G > 0, 600 Дирихле.
@@ -1959,6 +1959,19 @@ class TestAEFHv7MasterSuite(unittest.TestCase):
         )
         self.assertEqual(sp.limit(sp.sqrt(x) * dgN, x, 0, dir="+"), g / 2)
         self.assertEqual(sp.limit(x * dgN, x, 0, dir="+"), 0)
+
+
+    def test_17_theorem3_display_math_delimiters(self) -> None:
+        """Regression guard: theorem 3 display math must close before prose resumes."""
+        from pathlib import Path
+
+        html_path = Path(__file__).with_name("index.html")
+        html = html_path.read_text(encoding="utf-8")
+        expected_gamma_close = "O(N^{-5}).$$" + "\\n" + r"          Для любой $\rho\ge0"
+        self.assertIn(expected_gamma_close, html)
+        self.assertNotIn("O(N^{-5}).$" + "\\n" + r"          Для любой", html)
+        self.assertIn("\\[" + "\\n" + "                \\psi(r)=", html)
+        self.assertIn("\\[" + "\\n" + "                \\frac{K_{\\mathrm{BKM}}}", html)
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
