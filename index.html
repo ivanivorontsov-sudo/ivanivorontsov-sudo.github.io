@@ -37,6 +37,16 @@ h1 span{background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-backgro
 .lead{color:var(--mut);max-width:60ch;font-size:1.1rem}
 a{color:var(--acc)}
 .glass{background:var(--card);border:1px solid var(--bd);border-radius:22px;box-shadow:var(--sh);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+
+/* Research cards: keep their text and action links away from the panel edges. */
+.author-works{display:flex;align-items:flex-start;justify-content:space-between;gap:clamp(16px,3vw,28px);padding:clamp(18px,3vw,28px);margin:22px 0}
+.author-works>div{min-width:0;max-width:100%;flex:1 1 auto}
+.author-works h2{font-size:clamp(1.2rem,3vw,1.55rem);line-height:1.22;margin:8px 0}
+.author-works p{color:var(--mut);max-width:70ch;margin:8px 0 16px}
+.author-works .act{display:flex;gap:10px;flex-wrap:wrap}
+.author-works .btn{display:inline-flex;align-items:center;justify-content:center;max-width:100%;white-space:normal;text-align:center;line-height:1.35}
+@media(max-width:620px){.author-works{align-items:flex-start;padding:18px;gap:12px}.author-works .act{width:100%}.author-works .btn{flex:0 1 auto}}
+
 .don{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:18px 20px;margin:24px 0}
 .don b{font-size:1.1rem}.num{font:600 1.15rem ui-monospace,Consolas,monospace;letter-spacing:.06em}
 .tools{display:flex;flex-direction:column;gap:12px;margin:20px 0}
@@ -121,7 +131,7 @@ footer{color:var(--mut);text-align:center;padding:32px 0}
 <div class="tools"><input type="search" id="q" placeholder="Поиск по проектам…" aria-label="Поиск по проектам"><div class="chips" role="group" aria-label="Категории"><button class="chip" data-c="all" aria-pressed="true">Все</button><button class="chip" data-c="android" aria-pressed="false">Android</button><button class="chip" data-c="win" aria-pressed="false">Windows</button><button class="chip" data-c="linux" aria-pressed="false">Linux</button><button class="chip" data-c="web" aria-pressed="false">Веб</button><button class="chip" data-c="misc" aria-pressed="false">Разное</button><button class="chip" data-c="game" aria-pressed="false">Игры</button></div></div>
 <p class="lead result-count" style="font-size:.95rem">Показано: <b id="cnt">77</b></p>
 <div class="grid">
-<article class="card" id="category-linux" data-cat="linux" data-q="matryoshka матрёшка debian 13 kde plasma live система linux"><span class="tag">Linux · Debian 13</span><h3><a href="/projects/matryoshka-os/">Матрёшка ОС</a></h3><p>Развиваемая live-система на Debian 13 и KDE Plasma 6 для x86_64, с загрузкой BIOS и UEFI. Перед установкой нужна резервная копия.</p><div class="act"><a class="btn ghost" href="https://github.com/ivanivorontsov-sudo/matryoshka-os-archive">GitHub / исходники</a><a class="btn" href="https://github.com/ivanivorontsov-sudo/matryoshka-os-archive/releases">Релизы</a></div></article>
+<article class="card" id="category-linux" data-cat="linux" data-q="matryoshka матрёшка debian 13 kde plasma live система linux"><span class="tag">Linux · Debian 13</span><h3><a href="/projects/matryoshka-os/">Матрёшка ОС</a></h3><p>Развиваемая live-система на Debian 13 и KDE Plasma 6 для x86_64, с загрузкой BIOS и UEFI. Перед установкой нужна резервная копия.</p><div class="act"><a class="btn ghost" href="https://github.com/ivanivorontsov-sudo/matryoshka-os">GitHub / исходники</a><a class="btn" href="https://github.com/ivanivorontsov-sudo/matryoshka-os/releases/latest">Релизы</a></div></article>
 <article class="card" id="category-android" data-cat="android" data-q="otuchenie отучение android приложение самопомощи азартное поведение видеоигры"><span class="tag">Android · Самопомощь</span><h3><a href="/projects/otuchenie/">Отучение</a></h3><p>Информационный инструмент самопомощи с паузой, дневником мыслей и планом защиты. Не является медицинским приложением и не заменяет специалиста.</p><div class="act"><a class="btn ghost" href="https://github.com/ivanivorontsov-sudo/otuchenie">GitHub / исходники</a><a class="btn" href="https://github.com/ivanivorontsov-sudo/otuchenie/releases">Релизы</a></div></article>
 
 
