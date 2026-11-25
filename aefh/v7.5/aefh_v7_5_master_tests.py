@@ -1967,11 +1967,11 @@ class TestAEFHv7MasterSuite(unittest.TestCase):
 
         html_path = Path(__file__).with_name("index.html")
         html = html_path.read_text(encoding="utf-8")
-        expected_gamma_close = "O(N^{-5}).$$" + "\\n" + r"          Для любой $\rho\ge0"
+        expected_gamma_close = "O(N^{-5}).$$" + "\n" + r"          Для любой $\rho\ge0"
         self.assertIn(expected_gamma_close, html)
-        self.assertNotIn("O(N^{-5}).$" + "\\n" + r"          Для любой", html)
-        self.assertIn("\\[" + "\\n" + "                \\psi(r)=", html)
-        self.assertIn("\\[" + "\\n" + "                \\frac{K_{\\mathrm{BKM}}}", html)
+        self.assertNotIn("O(N^{-5}).$" + "\n" + r"          Для любой", html)
+        self.assertIn("\\[" + "\n" + "                \\psi(r)=", html)
+        self.assertIn("\\[" + "\n" + "                \\frac{K_{\\mathrm{BKM}}}", html)
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
