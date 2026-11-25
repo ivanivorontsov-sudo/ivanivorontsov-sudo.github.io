@@ -169,6 +169,7 @@
       <button class="btn" id="btn-print" type="button">Экспорт в PDF</button>
     </div>
   </nav>
+  <div class="math-box warning" style="margin:12px 18px"><strong>Архивная полная редакция AEFH v7.0.</strong> Исправленный ряд \(\gamma_N\) до \(N^{-4}\), точная производная в A.4 и расширенные приложения доступны в <a href="https://ivanivorontsov-sudo.github.io/aefh/v7.5/">полной актуальной рукописи v7.5</a>. Историческая страница v7.0 сохранена.</div>
 
   <div class="layout">
     <aside class="toc" aria-label="Оглавление">
@@ -292,7 +293,7 @@
           <div class="box-header"><span>Теорема 3 — Точный конечномерный порог $\gamma_N$</span><span class="badge badge-ok">Заявлено доказательство</span></div>
           <p>В $M_N(\mathbb C)$ ($N\ge2$) при фиксированном трейс-вакууме $\sigma=I_N$ положим:
           $$\gamma_N:=\frac{\ln\!\big(N/(N-1)\big)}{1-\sqrt{(N-1)/N}}
-          =2+\frac{1}{2N}+\frac{7}{24N^2}+O(N^{-3}).$
+          =2+\frac{1}{2N}+\frac{7}{24N^2}+\frac{5}{24N^3}+\frac{313}{1920N^4}+O(N^{-5}).$
           Для любой $\rho\ge0$ с $\tau(\rho)=1$ и $\rho\ne I_N$ заявляется
           $$S(\rho\Vert I_N)\ge\gamma_N\big(1-F_{1/2}(\rho,I_N)\big).$$
           Равенство на замкнутом симплексе достигается при спектре, с точностью до перестановки, равном $(0,N/(N-1),\ldots,N/(N-1))$. На строго положительных матрицах неравенство строгое, а инфимум равен $\gamma_N$.</p>
@@ -357,10 +358,21 @@
               \frac{\sqrt m}{3}\left(\gamma(2-\sqrt2)-2\ln2\sqrt m\right)\gt0$$
               при достаточно малом $m$ и любом $\gamma\gt0$. Значит, DPI нарушается.</p>
               <p><strong>Необходимость для матричных алгебр.</strong> Диагональное измерение с последующей деполяризацией строит канал, для которого на траектории $\rho(x)=\operatorname{diag}(x,(N-x)/(N-1),\ldots)$
-              $$\Delta\widetilde{\mathcal J}_\gamma=
-              \frac1N\left(g_N(x+t(1-x))-g_N(x)\right),\qquad
-              \lim_{x\to0^+}\sqrt{x}\,g_N'(x)=\frac{\gamma}{2}\gt0.$$
-              При малых $x,t\gt0$ функционал возрастает, что противоречит DPI для любого положительного $\gamma$.</p>
+              $\Delta\widetilde{\mathcal J}_\gamma=
+              \frac1N\left(g_N(x+t(1-x))-g_N(x)\right).$
+              Здесь
+              $g_N(x)=x\ln x+(N-x)\ln\frac{N-x}{N-1}
+              -\gamma\left[N-\sqrt{x}-\sqrt{(N-1)(N-x)}\right],$
+              и точная производная равна
+              $g_N'(x)=\ln x-\ln\!\left(\frac{N-x}{N-1}\right)
+              +\frac{\gamma}{2\sqrt{x}}
+              -\frac{\gamma\sqrt{N-1}}{2\sqrt{N-x}}.$
+              Поэтому
+              $g_N'(1)=0,\qquad
+              g_N''(1)=\frac{N}{N-1}\left(1-\frac{\gamma}{4}\right),$
+              $\lim_{x\downarrow0}xg_N'(x)=0,\qquad
+              \lim_{x\downarrow0}\sqrt{x}\,g_N'(x)=\frac{\gamma}{2}\gt0.$
+              При достаточно малых $x,t\gt0$ функционал возрастает, что противоречит DPI для любого положительного $\gamma$.</p>
               <p>Полная область применимости требует явно фиксировать следосохраняемость и допустимые размерности входной и выходной алгебр.</p>
               <div class="qed">■</div>
             </div>
