@@ -85,13 +85,13 @@
       <button id="theme" type="button">Тёмная тема</button>
       <button type="button" onclick="window.print()">Печать / PDF</button>
       <a href="#archive">Архив версий</a>
-      <a href="https://ivanivorontsov-sudo.github.io/aefh/v7.4/">Новая редакция v7.4</a>
+      <a href="https://ivanivorontsov-sudo.github.io/aefh/v7.5/">Новая полная редакция v7.5</a>
       <a href="/en/research/aefh-v7-3/" lang="en">English v7.3</a>
     </div>
   </nav>
   <div class="wrap">
     <main>
-      <section class="panel good"><strong>Опубликована новая редакция AEFH v7.4.</strong> Эта страница сохранена как архив v7.3. <a href="https://ivanivorontsov-sudo.github.io/aefh/v7.4/">Открыть текущую версию</a> · <a href="https://ivanivorontsov-sudo.github.io/en/research/aefh-v7-4/">English v7.4</a></section>
+      <section class="panel good"><strong>Опубликована полная редакция AEFH v7.5.</strong> Эта страница сохранена как архив v7.3. <a href="https://ivanivorontsov-sudo.github.io/aefh/v7.5/">Открыть текущую версию</a> · <a href="https://ivanivorontsov-sudo.github.io/en/research/aefh-v7-5/">English v7.5 overview</a></section>
       <header>
         <div class="eyebrow">Алгебраико-энтропийная исследовательская программа</div>
         <h1>Функционал \(\mathcal I_\alpha\): операторное ядро и физические конструкции</h1>
@@ -149,7 +149,7 @@
             \gamma_N=
             \frac{\ln(N/(N-1))}{1-\sqrt{(N-1)/N}}
             =2+\frac1{2N}+\frac7{24N^2}
-            +\frac5{24N^3}+O(N^{-4}).
+            +\frac5{24N^3}+\frac{313}{1920N^4}+O(N^{-5}).
           \]</div>
           <p>Для фиксированного равномерного \(\sigma=I_N\) это точный порог симплексной задачи; равенство достигается на спектре \((0,N/(N-1),\ldots,N/(N-1))\).</p>
         </article>
@@ -203,7 +203,7 @@
       </section>
 
       <h2 id="tests">Численный мастер-стенд</h2>
-      <p>В репозитории находится отдельный файл с 21 методом <code>unittest</code>. Тест №15 использует 80 узлов Гаусса—Лежандра на преобразованном интервале \(t=\tan^2\theta\), проверяет положительную полуопределённость двух факторизаций и сопоставляет интегралы с прямыми матричными значениями. Для него сохранён строгий допуск <code>places=10</code>.</p>
+      <p>В репозитории находится отдельный файл с 21 методом <code>unittest</code>. Тест №15 использует 80 узлов Гаусса—Лежандра по \(\theta\in(0,\pi/2)\) с заменой \(t=\tan^2\theta\), которая отображает всю полуось \((0,\infty)\). Он проверяет положительную полуопределённость двух факторизаций и сопоставляет интегралы с прямыми матричными значениями; сохранён строгий допуск <code>places=10</code>.</p>
       <div class="archive">
         <a href="https://github.com/ivanivorontsov-sudo/ivanivorontsov-sudo.github.io/blob/main/aefh/v7.3/aefh_v7_3_master_tests.py">Исходный файл 21 теста</a>
         <a href="https://github.com/ivanivorontsov-sudo/ivanivorontsov-sudo.github.io/blob/main/.github/workflows/aefh-v7.3.yml">Workflow GitHub Actions</a>
@@ -229,7 +229,9 @@
         <a href="https://ivanivorontsov-sudo.github.io/aefh/v5/">AEFH v5</a>
         <a href="https://ivanivorontsov-sudo.github.io/aefh/v6/">AEFH v6</a>
         <a href="https://ivanivorontsov-sudo.github.io/aefh/v7/">AEFH v7.0 · полная архивная рукопись</a>
-        <a class="current" href="https://ivanivorontsov-sudo.github.io/aefh/v7.3/">AEFH v7.3 · текущая редакция</a>
+        <a href="https://ivanivorontsov-sudo.github.io/aefh/v7.3/">AEFH v7.3 · архивная редакция</a>
+        <a class="current" href="https://ivanivorontsov-sudo.github.io/aefh/v7.5/">AEFH v7.5 · текущая редакция</a>
+        <a href="https://ivanivorontsov-sudo.github.io/en/research/aefh-v7-5/">English v7.5</a>
         <a href="https://ivanivorontsov-sudo.github.io/aefh/v7/research-status.html">v7 · статус исследований</a>
         <a href="https://ivanivorontsov-sudo.github.io/aefh/v7/running-couplings.html">v7 · бег констант</a>
       </div>
