@@ -26,7 +26,8 @@ GitHub Pages: https://ivanivorontsov-sudo.github.io/
 
 - [Короткие доказательства](https://ivanivorontsov-sudo.github.io/proofs/) — отдельный сборник двух подробных разборов задач MathOverflow с явными условиями применимости. 
 - [Short Proofs (English)](https://ivanivorontsov-sudo.github.io/en/proofs/) — the English edition of both complete proofs.
-- [AEFH v7.4 — текущая исследовательская редакция](https://ivanivorontsov-sudo.github.io/aefh/v7.4/): расширенные доказательные приложения A.4 и A.5, локальный и глобальный пороги, конечномерная граница, DPI, резольвентные тождества и 21 численная проверка в двух режимах. Англоязычный обзор: https://ivanivorontsov-sudo.github.io/en/research/aefh-v7-4/.
+- [AEFH v7.5 — текущая полная редакция](https://ivanivorontsov-sudo.github.io/aefh/v7.5/): полная структура v7.0 с 14 теоремами и интерактивными лабораториями, приложения A.4–A.5, ряд gamma_N до N^-4, 22 проверки (включая SymPy) и 6 RG-тестов. English overview: https://ivanivorontsov-sudo.github.io/en/research/aefh-v7-5/.
+- [AEFH v7.4 — архивная редакция](https://ivanivorontsov-sudo.github.io/aefh/v7.4/), [v7.3 — архив](https://ivanivorontsov-sudo.github.io/aefh/v7.3/); English v7.4: https://ivanivorontsov-sudo.github.io/en/research/aefh-v7-4/.
 - [AEFH v7.3 — архивная редакция](https://ivanivorontsov-sudo.github.io/aefh/v7.3/); English overview: https://ivanivorontsov-sudo.github.io/en/research/aefh-v7-3/.
 - [English project website](https://ivanivorontsov-sudo.github.io/en/) and [English portfolio](https://ivanivorontsov-sudo.github.io/vizitka/en/).
 - [Архив AEFH](https://ivanivorontsov-sudo.github.io/aefh/), [v5.0](https://ivanivorontsov-sudo.github.io/aefh/v5/) и [v6.0](https://ivanivorontsov-sudo.github.io/aefh/v6/) — предыдущие редакции рукописи.
