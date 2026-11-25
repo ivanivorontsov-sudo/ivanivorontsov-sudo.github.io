@@ -99,7 +99,7 @@ r = √(a/b)</div><p>Equality is attained on the commuting spectral diagonal. Th
 <article class="card"><div class="tag">A.2 · Global inequality</div><h3>Universal global threshold 2</h3><div class="math">SAraki(ρ ‖ σ) ≥ −2 ln F1/2(ρ,σ)
                  ≥ 2(1 − F1/2(ρ,σ))</div><p>The first inequality is the order-1/2 to order-1 relative Rényi comparison; the second follows from −ln x ≥ 1−x. The constant 2 is sharp as a universal infimum.</p></article>
 <article class="card"><div class="tag">A.3 · Finite dimension</div><h3>Exact threshold γN for σ = IN</h3><div class="math">γN = ln(N/(N−1)) / (1 − √((N−1)/N))
-   = 2 + 1/(2N) + 7/(24N²) + 5/(24N³) + O(N⁻⁴)</div><p>This is the exact threshold for the fixed maximally mixed reference state in the stated simplex problem.</p></article>
+   = 2 + 1/(2N) + 7/(24N²) + 5/(24N³) + 313/(1920N⁴) + O(N⁻⁵)</div><p>This is the exact threshold for the fixed maximally mixed reference state in the stated simplex problem.</p></article>
 <article class="card"><div class="tag">A.4 · Data processing</div><h3>DPI iff α ≥ 0</h3><p>For α ≥ 0, monotonicity follows from the data-processing inequalities for relative entropy and Petz affinity. For α &lt; 0, an explicit trace-preserving CP construction gives a strict violation for every N,K ≥ 2.</p></article>
 <article class="card"><div class="tag">A.5 · Semifinite setting</div><h3>Type II∞ extension</h3><p>The expanded appendix treats comparable, possibly unbounded densities, resolvent representations, local second variations, the global bound, and the channel contraction argument. A separate finite-matrix test is described as a regression check only.</p></article>
 <article class="card"><div class="tag">Numerical audit</div><h3>21-test master bench</h3><p>The same suite runs in standard Python and with <code>python3 -O</code>. Tests cover selected matrix identities and examples; they are not machine proofs of the infinite-dimensional theorems.</p></article>
@@ -156,7 +156,7 @@ KBKM/KH = 2(r+1)ln(r)/(r−1) ≥ 4</div>
 <p>The programme includes constructions for entropic gravity, coupled quintessence, central decomposition, gauge-theory edge sectors, Wilson-type actions, fundamental charges, a U(2) symmetry-breaking toy model, a Higgs-like potential, Standard Model anomaly constraints, and a finite chiral Dirac operator. Each depends on additional assumptions, couplings, representations, or Yukawa data.</p>
 <div class="panel warning"><strong>Physical status.</strong><p>No independent numerical prediction not already supplied as an input is claimed at this stage. The minimal U(2) toy model gives sin²θ<sub>W</sub>≥1/2 and is explicitly not a realistic electroweak fit. The coupled-quintessence integration is a mechanism demonstration, not a likelihood fit to DESI data.</p></div>
 <h2>6. Test bench and source files</h2>
-<p>The v7.4 master suite contains 21 <code>unittest</code> methods. It checks the finite-dimensional faithful-tail DPI witness, positive-semidefinite resolvent factorizations, the two-step I<sub>2</sub>(t) identity at every node of an 80-point Gauss–Legendre quadrature, and the prior regression suite.</p>
+<p>The v7.4 master suite contains 21 <code>unittest</code> methods. It checks the finite-dimensional faithful-tail DPI witness, positive-semidefinite resolvent factorizations, the two-step I<sub>2</sub>(t) identity at every node of an 80-point Gauss–Legendre quadrature on θ ∈ (0, π/2) with t = tan²θ, mapping the full half-line (0, ∞), and the prior regression suite.</p>
 <div class="actions">
 <a class="button" href="/aefh/v7.4/aefh_v7_4_master_tests.py" download>Download the Python test bench</a>
 <a class="button alt" href="https://github.com/ivanivorontsov-sudo/ivanivorontsov-sudo.github.io/blob/main/aefh/v7.4/aefh_v7_4_master_tests.py">View source on GitHub</a>
@@ -164,7 +164,9 @@ KBKM/KH = 2(r+1)ln(r)/(r−1) ≥ 4</div>
 </div>
 <h2>7. Previous versions and language links</h2>
 <div class="links">
-<a href="https://ivanivorontsov-sudo.github.io/aefh/v7.4/">Full Russian v7.4 manuscript</a>
+<a href="https://ivanivorontsov-sudo.github.io/aefh/v7.5/">Full Russian v7.5 manuscript · current</a>
+<a href="https://ivanivorontsov-sudo.github.io/aefh/v7.4/">Russian v7.4 archive</a>
+<a href="https://ivanivorontsov-sudo.github.io/en/research/aefh-v7-5/">English v7.5 overview</a>
 <a href="https://ivanivorontsov-sudo.github.io/en/research/aefh-v7-3/">English v7.3 archive</a>
 <a href="https://ivanivorontsov-sudo.github.io/aefh/v7.3/">Russian v7.3 archive</a>
 <a href="https://ivanivorontsov-sudo.github.io/aefh/v7/">AEFH v7.0 archive</a>
