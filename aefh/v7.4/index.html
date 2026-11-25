@@ -116,6 +116,7 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","@id":"https://ivanivorontsov-sudo.github.io/aefh/v7.4/#webpage","name":"AEFH v7.4 — полное математическое приложение и исследовательская программа","url":"https://ivanivorontsov-sudo.github.io/aefh/v7.4/","description":"AEFH v7.4: доказательства DPI и резольвентных тождеств в II∞, локальные и глобальные пороги, 21 численная проверка и 10 условных физических конструкций.","inLanguage":"ru-RU","author":{"@type":"Person","name":"Ivan Vorontsov","url":"https://ivanivorontsov-sudo.github.io/"}}</script>
 </head>
 <body>
+  <div class="panel warning" style="max-width:1120px;margin:10px auto;padding:10px 16px">Архивная редакция AEFH v7.4. Актуальная полная рукопись — <a href="https://ivanivorontsov-sudo.github.io/aefh/v7.5/">v7.5 на русском</a> · <a href="https://ivanivorontsov-sudo.github.io/en/research/aefh-v7-5/">English overview</a>.</div>
   <nav class="bar">
     <div>AEFH · редакция 7.4</div>
     <div class="bar-actions">
@@ -185,7 +186,7 @@
             \gamma_N=
             \frac{\ln(N/(N-1))}{1-\sqrt{(N-1)/N}}
             =2+\frac1{2N}+\frac7{24N^2}
-            +\frac5{24N^3}+O(N^{-4}).
+            +\frac5{24N^3}+\frac{313}{1920N^4}+O(N^{-5}).
           \]</div>
           <p>Для фиксированного равномерного \(\sigma=I_N\) это точный порог симплексной задачи; равенство достигается на спектре \((0,N/(N-1),\ldots,N/(N-1))\).</p>
         </article>
@@ -289,11 +290,19 @@
         \]
         Производная удовлетворяет
         \[
-        g_N'(x)=\ln\frac{x(N-1)}{N-x}
+        g_N'(x)=\ln x-\ln\!\left(\frac{N-x}{N-1}\right)
         +\frac{\gamma}{2\sqrt{x}}
-        -\frac{\gamma\sqrt{N-1}}{2\sqrt{N-x}},
-        \qquad
-        \lim_{x\downarrow0}\sqrt{x}\,g_N'(x)=\frac{\gamma}{2}>0.
+        -\frac{\gamma\sqrt{N-1}}{2\sqrt{N-x}}.
+        \]
+        В равновесии
+        \[
+          g_N'(1)=0,\qquad
+          g_N''(1)=\frac{N}{N-1}\left(1-\frac{\gamma}{4}\right).
+        \]
+        На левом конце
+        \[
+          \lim_{x\downarrow0}xg_N'(x)=0,\qquad
+          \lim_{x\downarrow0}\sqrt{x}\,g_N'(x)=\frac{\gamma}{2}>0.
         \]
         Поэтому существует \(\delta&gt;0\), на котором \(g_N'&gt;0\). Выбор \(x=\delta/2\) и \(t=\delta/[2(1-\delta/2)]\) даёт \(u=\delta\) и строгое увеличение функционала. Значит DPI нарушается при любом \(\alpha&lt;0\).</p>
         <p class="small">Для факторов типа II₁ аналогичный свидетель строится разбиением единицы на три проекции равного следа и каналом «измерение — приготовление», после чего усредняется перестановкой первых двух выходных секторов.</p>
@@ -364,7 +373,7 @@
       </section>
 
 <h2 id="tests">Численный мастер-стенд</h2>
-      <p>Мастер-стенд содержит 21 метод <code>unittest</code> и проверяет регрессионные свойства в двух режимах: <code>python3</code> и <code>python3 -O</code>. В тесте №14 проверяется faithful-tail контрпример DPI на строго положительных ограниченных матрицах; тест №15 проверяет PSD-факторизации, двухшаговое тождество для (I_2(t)) в каждом из 80 узлов квадратуры и значения интегралов.</p>
+      <p>Мастер-стенд архивной редакции содержит 21 метод <code>unittest</code> и проверяет регрессионные свойства в двух режимах: <code>python3</code> и <code>python3 -O</code>. Тест №15 использует 80 узлов Гаусса—Лежандра по \(\theta\in(0,\pi/2)\) с заменой \(t=\tan^2\theta\), отображающей всю полуось \((0,\infty)\); он проверяет PSD-факторизации, двухшаговое тождество \(I_2(t)\) в каждом узле и интегралы с допуском <code>places=10</code>.</p>
       <div class="archive">
         <a href="/aefh/v7.4/aefh_v7_4_master_tests.py" download>Скачать Python-файл v7.4</a>
         <a href="https://github.com/ivanivorontsov-sudo/ivanivorontsov-sudo.github.io/blob/main/aefh/v7.4/aefh_v7_4_master_tests.py">Исходный код 21 теста</a>
@@ -393,7 +402,9 @@
         <a href="https://ivanivorontsov-sudo.github.io/aefh/v7/">AEFH v7.0 · полная архивная рукопись</a>
         <a href="https://ivanivorontsov-sudo.github.io/aefh/v7.3/">AEFH v7.3 · архивная редакция</a>
         <a href="https://ivanivorontsov-sudo.github.io/en/research/aefh-v7-3/">English v7.3 · archive</a>
-        <a class="current" href="https://ivanivorontsov-sudo.github.io/aefh/v7.4/">AEFH v7.4 · текущая редакция</a>
+        <a href="https://ivanivorontsov-sudo.github.io/aefh/v7.4/">AEFH v7.4 · архивная редакция</a>
+        <a class="current" href="https://ivanivorontsov-sudo.github.io/aefh/v7.5/">AEFH v7.5 · текущая редакция</a>
+        <a href="https://ivanivorontsov-sudo.github.io/en/research/aefh-v7-5/">English v7.5</a>
         <a href="https://ivanivorontsov-sudo.github.io/en/research/aefh-v7-4/">English v7.4</a>
         <a href="https://ivanivorontsov-sudo.github.io/aefh/v7/research-status.html">v7 · статус исследований</a>
         <a href="https://ivanivorontsov-sudo.github.io/aefh/v7/running-couplings.html">v7 · бег констант</a>
