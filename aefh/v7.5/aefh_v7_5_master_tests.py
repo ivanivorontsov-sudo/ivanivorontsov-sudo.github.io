@@ -1929,6 +1929,14 @@ class TestAEFHv7MasterSuite(unittest.TestCase):
         ratio = ((sp.log(a) - sp.log(b)) / (a - b)) * (sp.sqrt(a) + sp.sqrt(b))**2
         expected_ratio = 2 * (r + 1) * sp.log(r) / (r - 1)
         self.assertEqual(sp.simplify(ratio - expected_ratio), 0)
+        psi = sp.log(r) - 2 * (r - 1) / (r + 1)
+        expected_psi_prime = (r - 1) ** 2 / (r * (r + 1) ** 2)
+        self.assertEqual(sp.simplify(sp.diff(psi, r) - expected_psi_prime), 0)
+        self.assertEqual(sp.simplify(psi.subs(r, 1)), 0)
+        self.assertEqual(
+            sp.simplify(ratio - 4 - 2 * (r + 1) * psi / (r - 1)),
+            0,
+        )
 
         # N=m+1 encodes N>1; factor the positive square root on 0<x<N.
         N = m + 1
