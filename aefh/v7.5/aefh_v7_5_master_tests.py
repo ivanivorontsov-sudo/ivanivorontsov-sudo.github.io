@@ -1972,6 +1972,9 @@ class TestAEFHv7MasterSuite(unittest.TestCase):
         self.assertNotIn("O(N^{-5}).$" + "\n" + r"          Для любой", html)
         self.assertIn("\\[" + "\n" + "                \\psi(r)=", html)
         self.assertIn("\\[" + "\n" + "                \\frac{K_{\\mathrm{BKM}}}", html)
+        expected_psi_inline = r"знака \(\psi(r)\) при \(r=\sqrt{a/b}\)"
+        self.assertIn(expected_psi_inline, html)
+        self.assertNotIn(r"знака \\(\\psi(r)\\)", html)
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
