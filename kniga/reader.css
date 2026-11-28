@@ -12,3 +12,5 @@ footer{max-width:1180px;margin:auto;padding:25px 18px 50px;color:var(--muted);fo
 @media(max-width:760px){.hero{grid-template-columns:110px minmax(0,1fr);gap:18px}.cover{min-height:165px;padding:14px 9px}.cover strong{font-size:1.25rem}.cover small,.cover em{font-size:.52rem}.grid{grid-template-columns:1fr}.toc{position:static;max-height:480px}.controls{top:56px}.reader{padding:19px}.top-inner{align-items:flex-start}.toplinks{justify-content:flex-end;gap:8px}}
 @media(max-width:390px){.hero{grid-template-columns:1fr}.cover{width:132px;min-height:190px}.controls button{flex:1 1 auto}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+.byline{font:500 1.05rem Georgia,serif;color:var(--accent);margin-top:10px}.book-part>h2{font:500 clamp(1.7rem,4vw,2.4rem) Georgia,serif;margin:26px 0 10px;color:var(--accent)}.about-note{padding:28px 0 10px}.about-note h2{font:500 1.6rem Georgia,serif}
