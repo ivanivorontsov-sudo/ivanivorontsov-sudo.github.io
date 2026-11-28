@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ru" data-theme="paper">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f5f0e7">
+<title>Сверка рукописи — Иван Игоревич Воронцов</title>
+<meta name="description" content="Редакторская проверка полноты стихотворений, рассказов и повести «Полёт» в цифровом собрании Ивана Игоревича Воронцова.">
+<meta name="author" content="Иван Игоревич Воронцов"><meta name="robots" content="index,follow">
+<link rel="canonical" href="https://ivanivorontsov-sudo.github.io/proizvedeniya/sverka/">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600;7..72,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta property="og:type" content="article"><meta property="og:locale" content="ru_RU"><meta property="og:title" content="Сверка рукописи — Иван Игоревич Воронцов"><meta property="og:description" content="Какие тексты сверены с авторскими публикациями, а какие требуют оригинала."><meta property="og:url" content="https://ivanivorontsov-sudo.github.io/proizvedeniya/sverka/">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="Сверка рукописи — Иван Игоревич Воронцов"><meta name="twitter:description" content="Редакторская проверка полноты цифрового собрания произведений.">
+<link rel="stylesheet" href="/proizvedeniya/style.css">
+<style>
+.audit-page{max-width:1120px;margin:auto;padding:0 clamp(16px,5vw,64px) 72px}
+.audit-hero{position:relative;overflow:hidden;padding:clamp(42px,7vw,82px) clamp(22px,5vw,58px);margin:38px 0 28px;background:radial-gradient(ellipse at 86% 16%,color-mix(in srgb,var(--accent) 15%,transparent),transparent 42%),var(--paper);border:1px solid var(--line);box-shadow:var(--shadow)}
+.audit-hero:after{content:"";position:absolute;right:5%;bottom:-100px;width:280px;height:280px;border:1px solid color-mix(in srgb,var(--accent) 22%,transparent);border-radius:50%;box-shadow:0 0 0 28px color-mix(in srgb,var(--accent) 4%,transparent),0 0 0 56px color-mix(in srgb,var(--accent) 3%,transparent);pointer-events:none}
+.audit-kicker{font-size:9px;letter-spacing:.2em;color:var(--accent);font-weight:800}
+.audit-hero h1{font:500 clamp(42px,7vw,76px)/1.02 Literata,Georgia,serif;letter-spacing:-.045em;max-width:760px;margin:18px 0}
+.audit-hero h1 em{color:var(--accent);font-weight:400}.audit-hero p{max-width:690px;color:var(--muted);font-size:13px}
+.audit-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:24px 0 54px}
+.audit-stat{padding:18px 16px;background:var(--paper);border:1px solid var(--line)}.audit-stat b{display:block;color:var(--accent);font:500 36px/1 Literata,Georgia,serif}.audit-stat span{display:block;color:var(--muted);font-size:9px;letter-spacing:.08em;text-transform:uppercase;margin-top:8px}
+.audit-section{margin:48px 0}.audit-head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:18px}.audit-head h2{font:500 clamp(28px,4vw,42px)/1.1 Literata,Georgia,serif;letter-spacing:-.035em;margin:0}.audit-head p{max-width:440px;color:var(--muted);font-size:11px;margin:0}
+.audit-card{background:var(--paper);border:1px solid var(--line);padding:clamp(20px,3vw,30px);box-shadow:var(--shadow)}.audit-card h3{font:500 25px/1.2 Literata,Georgia,serif;margin:9px 0}.audit-card p{color:var(--muted);font-size:12px}
+.audit-label{display:inline-flex;align-items:center;gap:8px;font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:800}.audit-label:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}.audit-label.good{color:#52745a}.audit-label.warn{color:#9a6930}.audit-label.pending{color:var(--accent)}
+.audit-columns{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}.audit-excerpt{padding:20px 22px;background:var(--bg);border-left:3px solid var(--accent);font:15px/1.8 Literata,Georgia,serif;color:var(--ink);white-space:pre-line}.audit-excerpt small{display:block;font:800 8px Manrope,sans-serif;letter-spacing:.14em;color:var(--muted);margin-bottom:10px}
+.audit-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.audit-links a{font-size:10px;font-weight:800;color:var(--accent);border-bottom:1px solid color-mix(in srgb,var(--accent) 35%,transparent);padding-bottom:3px}
+.audit-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.audit-item{padding:16px 18px;border:1px solid var(--line);background:var(--paper)}.audit-item b{display:block;font:600 16px Literata,Georgia,serif}.audit-item small{display:block;color:var(--muted);font-size:10px;margin-top:5px}
+.audit-table{width:100%;border-collapse:collapse;background:var(--paper);font-size:11px}.audit-table th,.audit-table td{padding:13px 15px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.audit-table th{color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.08em}.audit-table td:first-child{font-weight:800}
+.audit-note{padding:18px 20px;margin:16px 0;background:color-mix(in srgb,var(--accent) 6%,var(--paper));border:1px solid var(--line);color:var(--muted);font-size:11px}.audit-note strong{color:var(--ink)}
+.audit-foot{display:flex;justify-content:space-between;align-items:center;gap:18px;border-top:1px solid var(--line);padding-top:22px;margin-top:60px;color:var(--muted);font-size:10px}.audit-foot a{color:var(--accent);font-weight:800}
+@media(max-width:720px){.audit-stats{grid-template-columns:repeat(2,1fr)}.audit-columns{grid-template-columns:1fr}.audit-list{grid-template-columns:1fr}.audit-head{display:block}.audit-head p{margin-top:10px}.audit-foot{flex-direction:column;align-items:flex-start}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Сверка рукописи: полнота текстов","author":{"@type":"Person","name":"Иван Игоревич Воронцов"},"datePublished":"2026-11-29","dateModified":"2026-11-29","inLanguage":"ru-RU","mainEntityOfPage":"https://ivanivorontsov-sudo.github.io/proizvedeniya/sverka/"}</script>
+<script defer src="/proizvedeniya/app.js"></script>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="/proizvedeniya/"><span class="brand-mark">ИВ</span><span>Литературная библиотека</span></a><nav aria-label="Основная навигация"><a href="/proizvedeniya/#catalog">Каталог</a><a href="/proizvedeniya/sverka/" aria-current="page">Сверка текстов</a><a href="/proizvedeniya/#about">Об авторе</a><a href="/ii-proizvedeniya/">ИИ-произведения</a></nav><button class="theme" data-theme-toggle aria-label="Сменить тему">◐</button></header>
+<main class="audit-page">
+<section class="audit-hero">
+<p class="audit-kicker">АРХИВ · РЕДАКТОРСКАЯ ПРОВЕРКА · 29 НОЯБРЯ 2026</p>
+<h1>Ни одной строки<br><em>не потерять.</em></h1>
+<p>Сверка цифрового собрания с авторскими публикациями. Здесь отдельно отмечены подтверждённые совпадения, тексты, которым нужен полный оригинал, и окончания, которые лишь выглядят подозрительно.</p>
+<div class="audit-links"><a href="/proizvedeniya/">← Вернуться в литературную библиотеку</a><a href="https://www.chitalnya.ru/users/ivanvorontsov/" target="_blank" rel="noopener noreferrer">Профиль автора на «Избе-Читальне» ↗</a></div>
+</section>
+<section class="audit-stats" aria-label="Состав проверенного электронного издания">
+<div class="audit-stat"><b>145</b><span>стихотворений</span></div><div class="audit-stat"><b>7</b><span>рассказов</span></div><div class="audit-stat"><b>10</b><span>глав повести «Полёт»</span></div><div class="audit-stat"><b>2</b><span>стихотворения сверены полностью</span></div>
+</section>
+<section class="audit-section">
+<div class="audit-head"><div><p class="eyebrow">01 / ГЛАВНЫЙ ВОПРОС</p><h2>«Нереальная реальность»</h2></div><p>Первое стихотворение сборника. Публикация с таким названием найдена на странице Читальни.</p></div>
+<div class="audit-card">
+<span class="audit-label pending">Нужен оригинал публикации</span>
+<div class="audit-columns">
+<div>
+<h3>Что сейчас находится в EPUB</h3>
+<p>В текущем цифровом издании — 4 четверостишия, 16 стихотворных строк. Текст заканчивается строкой:</p>
+<div class="audit-excerpt"><small>ПОСЛЕДНЯЯ СТРОКА В ТЕКУЩЕЙ ВЕРСИИ</small>Есть в мышлении у них.</div>
+<p>Ты заметил, что стихотворение обрывается раньше оригинала. Я не стал дописывать его по догадке: полный текст публикации не удалось достать для построчного сравнения.</p>
+</div>
+<div>
+<h3>Что удалось подтвердить</h3>
+<p>На «Избе-Читальне» индексируется публикация «Нереальная реальность» под именем Иван Игоревич Воронцов, добавленная 17 августа 2026 года. Поисковый индекс подтверждает название, автора и дату, но не полный текст.</p>
+<p>Поиск и открытие YaPishu по имени и логину ivanvorontsov не дали доступного для чтения профиля или текста. Поэтому сравнение с ЯПишу пока не подтверждено.</p>
+<div class="audit-links"><a href="https://www.chitalnya.ru/poetry/stihi-pro-zhizn/" target="_blank" rel="noopener noreferrer">Запись в рубрике Читальни ↗</a><a href="https://yapishu.net/" target="_blank" rel="noopener noreferrer">YaPishu ↗</a></div>
+</div>
+</div>
+<div class="audit-note"><strong>Решение:</strong> стихотворение помечено как требующее сверки; текст в книге пока не изменён. Это защищает от случайного добавления чужих или выдуманных строк.</div>
+</div>
+</section>
+<section class="audit-section">
+<div class="audit-head"><div><p class="eyebrow">02 / КОНТРОЛЬНЫЕ СОВПАДЕНИЯ</p><h2>Что сверилось целиком</h2></div><p>Два текста удалось сопоставить по полному содержимому авторских публикаций на Читальне.</p></div>
+<div class="audit-list">
+<article class="audit-item"><span class="audit-label good">Совпадает</span><b>«Мир безрассудства» · №89</b><small>На Читальне опубликовано под названием «Куда ты катишься...» · 5 четверостиший. Текст и финальная строфа присутствуют.</small><a class="read" href="https://www.chitalnya.ru/work/4236220/" target="_blank" rel="noopener noreferrer">Открыть публикацию ↗</a></article>
+<article class="audit-item"><span class="audit-label good">Совпадает</span><b>«Чёрный лёд» · №102</b><small>На Читальне опубликовано под названием «Пусть жизнь...» · 3 четверостишия. Все строфы присутствуют.</small><a class="read" href="https://www.chitalnya.ru/work/4241052/" target="_blank" rel="noopener noreferrer">Открыть публикацию ↗</a></article>
+</div>
+<div class="audit-note">У этих двух текстов в книге другие заголовки, но проверенные стихотворные строки совпадают с публикациями. По одному только отличию названия нельзя считать текст обрезанным.</div>
+</section>
+<section class="audit-section">
+<div class="audit-head"><div><p class="eyebrow">03 / ЕЩЁ НУЖНА ПРОВЕРКА</p><h2>Совпали названия — не текст</h2></div><p>В авторском профиле Читальни есть и другие произведения, названия которых встречаются в сборнике. Для них требуется получить полный исходный текст.</p></div>
+<table class="audit-table">
+<thead><tr><th>В книге</th><th>Что найдено</th><th>Статус</th></tr></thead>
+<tbody>
+<tr><td>«Не завидуйте» · №143</td><td>Одноимённая публикация в профиле автора, 6 апреля 2026 года.</td><td><span class="audit-label warn">Текст не сравнен</span></td></tr>
+<tr><td>«Горькая правда» · №17</td><td>Одноимённая старая публикация в профиле автора, 19 сентября 2024 года.</td><td><span class="audit-label warn">Текст не сравнен</span></td></tr>
+<tr><td>«Нереальная реальность» · №1</td><td>Публикация с таким названием найдена в рубрике Читальни, 17 августа 2026 года.</td><td><span class="audit-label pending">Главный вопрос открыт</span></td></tr>
+</tbody></table>
+<div class="audit-note"><strong>Важно:</strong> совпадение заголовка — ещё не доказательство тождества двух версий. Без полного оригинала я не отмечаю такие тексты как совпавшие или обрезанные.</div>
+</section>
+<section class="audit-section">
+<div class="audit-head"><div><p class="eyebrow">04 / АВТОМАТИЧЕСКИЙ ПРОСМОТР</p><h2>Подозрительные окончания</h2></div><p>Быстрый проход по всем 145 стихотворениям выявил несколько окончаний с многоточиями и одну техническую помету.</p></div>
+<div class="audit-list">
+<article class="audit-item"><b>№16 · «Плач души»</b><small>Заканчивается многоточием. Нужен оригинал для сравнения.</small></article>
+<article class="audit-item"><b>№75 · «Лучик рассвета»</b><small>Финальная строка заканчивается многоточием. Обрезка не подтверждена.</small></article>
+<article class="audit-item"><b>№97 · «Комочек в груди»</b><small>Финал с многоточием. Может быть авторским приёмом.</small></article>
+<article class="audit-item"><b>№107 · «Цветёт «Калина»»</b><small>Финальная строка с многоточием. Нужна ручная сверка.</small></article>
+<article class="audit-item"><b>№109 · «Лесная дорожка»</b><small>Финал с многоточием. Обрезка не доказана.</small></article>
+<article class="audit-item"><b>№140 · «Сумрачных дней череда»</b><small>Финал с многоточиями. Нужен авторский оригинал.</small></article>
+</div>
+<div class="audit-note"><strong>Отдельно:</strong> №124 «Ой-люли» заканчивается пометой «2р». Это может быть обозначением повтора в песенном тексте, а не случайным хвостом. Помета сохранена; менять её без оригинала нельзя.</div>
+</section>
+<section class="audit-section">
+<div class="audit-head"><div><p class="eyebrow">05 / ЗАМЕТКИ ИСХОДНОГО АРХИВА</p><h2>Что известно о рукописях</h2></div></div>
+<div class="audit-card">
+<h3>«Слава Советскому народу-победителю!»</h3>
+<p>В профиле Читальни автор отдельно предупреждает: исходник этого старого стихотворения утерян, и удалось восстановить только два четверостишия. Точного названия в оглавлении нынешней книги из 145 стихотворений нет. Это известная особенность исходного авторского архива, а не доказанная ошибка EPUB.</p>
+<div class="audit-links"><a href="https://www.chitalnya.ru/users/ivanvorontsov/" target="_blank" rel="noopener noreferrer">Примечание в профиле автора ↗</a></div>
+<div class="audit-note"><strong>Повесть «Полёт»:</strong> профиль Читальни также содержит старое примечание, что три главы ещё предстояло набрать с рукописи. В нынешнем EPUB есть 10 глав; конец десятой главы прямо помечен как место, где заканчивается доступная рукопись. Это ограничение первоисточника, а не потеря текста при сборке.</div>
+</div>
+</section>
+<section class="audit-section">
+<div class="audit-head"><div><p class="eyebrow">06 / ГРАНИЦЫ ПРОВЕРКИ</p><h2>Что проверено, а что нет</h2></div></div>
+<div class="audit-card">
+<p>Структура EPUB проверена: в нём присутствуют все 145 файлов стихотворений, 7 рассказов и 10 глав «Полёта». Дополнительно выполнен быстрый просмотр финальных строк стихотворений; он помогает найти кандидатов для ручной проверки, но не доказывает наличие пропуска.</p>
+<p>Полное построчное сопоставление с внешними публикациями пока выполнено для двух стихотворений. По «Нереальной реальности» обнаружена запись на Читальне, но без полного доступного текста; по YaPishu не удалось подтвердить читаемый профиль. Остальные совпавшие по названию произведения внесены в список ожидания оригиналов.</p>
+<p><strong>Тексты не исправлялись автоматически.</strong> Отчёт фиксирует находки и вопросы, не подменяя авторскую редакцию предположениями.</p>
+<div class="audit-links"><a href="https://www.chitalnya.ru/users/ivanvorontsov/" target="_blank" rel="noopener noreferrer">Авторский профиль Читальни ↗</a><a href="https://yapishu.net/" target="_blank" rel="noopener noreferrer">Сайт ЯПишу ↗</a><a href="/proizvedeniya/">К авторской библиотеке ↗</a></div>
+</div>
+</section>
+<div class="audit-foot"><a href="/proizvedeniya/">ИВ · Литературная библиотека</a><span>Иван Игоревич Воронцов · редакторская заметка к цифровому собранию</span></div>
+</main>
+<script>(function(){var b=document.querySelector('[data-theme-toggle]'),r=document.documentElement;if(!b)return;b.addEventListener('click',function(){var t=['paper','sepia','night'],n=t.indexOf(r.dataset.theme||'paper');r.dataset.theme=t[(n+1)%t.length];});})();</script>
+</body></html>
