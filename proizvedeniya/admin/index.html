@@ -1,40 +1,21 @@
 <!doctype html>
-<html lang="ru"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f4efe5">
-<title>Редактор произведений — Иван Воронцов</title>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#f4efe5">
+<title>Публикационный портал временно отключён — Иван Воронцов</title>
 <link rel="stylesheet" href="admin.css">
-</head><body>
+</head>
+<body>
 <main class="welcome">
 <a class="mark" href="../">ИВ / EDITOR</a>
 <p class="eyebrow">ЗАКРЫТАЯ АВТОРСКАЯ ЗОНА</p>
-<h1>Редактор произведений</h1>
-<p>Единая редакторская панель для двух литературных библиотек. Новые публикации сохраняются в GitHub; после сборки каждое произведение получает отдельную страницу для поисковых систем.</p>
-<div class="note" id="status">Проверяю подключение редактора…</div>
-<a class="button" href="README.md">Инструкция по первому входу ↗</a>
-<p class="fine">Не вводи GitHub-токены, пароли или секретные ключи в исходный код сайта.</p>
+<h1>Публикационный портал временно отключён</h1>
+<p>Сейчас новые произведения публикуются владельцем сайта вручную через проверенный процесс. Форма входа и внешняя система управления публикациями отключены.</p>
+<div class="note">На этой странице нет авторизации, подключения Decap CMS, OAuth-запросов или загрузки стороннего редактора. Уже опубликованные произведения и обе библиотеки продолжают работать.</div>
+<p class="fine">Портал будет возвращён только после отдельной проверки безопасности и настройки доступа.</p>
 </main>
-<script>
-(function(){
-  var box=document.getElementById('status');
-  fetch('config.yml',{cache:'no-store'}).then(function(response){
-    if(!response.ok)throw new Error('Не удалось прочитать config.yml');
-    return response.text();
-  }).then(function(config){
-    var match=config.match(/^\s*turbo_site_id\s*:\s*([^\s#]+)/m);
-    var id=match?match[1].replace(/^['"]|['"]$/g,''):'';
-    if(!id||id.indexOf('REPLACE_')===0){
-      box.innerHTML='<strong>Нужна однократная настройка.</strong><br>Создай сайт в <a href="https://turbo.decapcms.org/" target="_blank" rel="noopener noreferrer">Decap Turbo</a> через GitHub, установи GitHub App с доступом только к этому репозиторию и вставь Site ID в config.yml. Затем обнови эту страницу — появится форма входа.';
-      return;
-    }
-    box.textContent='Подключение найдено. Загружаю редактор…';
-    var script=document.createElement('script');
-    script.src='https://cdn.jsdelivr.net/npm/decap-cms@3.18.0/dist/decap-cms.js';
-    script.onerror=function(){box.textContent='Не удалось загрузить редактор. Проверь подключение к CDN и обнови страницу.';};
-    document.head.appendChild(script);
-  }).catch(function(error){
-    box.textContent='Не удалось проверить настройки: '+error.message+'. Открой README.md и проверь config.yml.';
-  });
-})();
-</script>
-</body></html>
+</body>
+</html>
