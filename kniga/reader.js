@@ -37,6 +37,33 @@ function filterBook(){
     const markup=await new Response(stream).text();
     if(!markup.includes('id="poem145"')||!markup.includes('id="ch10"')||!markup.includes('Иван Игоревич Воронцов')) throw new Error('Проверка целостности текста книги не пройдена.');
     reader.innerHTML=markup;
+    // Восстановленная полная авторская версия стихотворения № 1.
+    const firstPoem=reader.querySelector('#poem001');
+    if(!firstPoem) throw new Error('В книге не найдено первое стихотворение.');
+    const firstPoemStanzas=[
+      ['Вьётся под небес окном','И какая-то зеркальность','В восприятии людском.'],
+      ['Я про то, что нереально','Вихри жизни объяснить','Всяка ценность — виртуальна','Не за что людей винить.'],
+      ['Понимаю, страх быть должен','За преступности разгул','Но наш выбор — он не сложен','Это химии всё гул.'],
+      ['Все поступки — результаты','Лишь материи ветров','И нейронов автоматы','Потоки мыслей веют, слов.'],
+      ['Что за жизнь? И что за сказки?','Что за лепет серых дней?','Что за мертвенные маски','Здесь у всех подряд людей?'],
+      ['Предвзятость — зло, а вера — глупость','Нет на свете правды, лжи,','Физики законов скупость','Только есть, хоть ты брюзжи.'],
+      ['Люди — просто обезьяны','Чуть умнее лишь других','И огромные изъяны','Есть в мышлении у них.'],
+      ['Пусть придумали культуру','Пусть решили, как всем жить','Но животную натуру','Никому не победить.'],
+      ['Становиться эгоистом?','Нет, тут, брат, уж подожди!','В мире, на руку нечистом','Лишь несчастья впереди.']
+    ];
+    const poemTitle=document.createElement('h2');
+    poemTitle.textContent='Нереальная реальность';
+    firstPoem.replaceChildren(poemTitle);
+    firstPoemStanzas.forEach(lines=>{
+      const stanza=document.createElement('p');
+      stanza.className='stanza';
+      lines.forEach((line,index)=>{
+        if(index) stanza.append(document.createElement('br'));
+        stanza.append(document.createTextNode(line));
+      });
+      firstPoem.append(stanza);
+    });
+    firstPoem.dataset.authorRevision='complete';
     filterBook();
   }catch(error){
     reader.replaceChildren();
