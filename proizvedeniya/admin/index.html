@@ -21,8 +21,7 @@
     if(!response.ok)throw new Error('Не удалось прочитать config.yml');
     return response.text();
   }).then(function(config){
-    var match=config.match(/^\s*t urbo_site_id\s*:\s*([^\s#]+)/m);
-    if(!match)match=config.match(/^\s*t urbo_site_id\s*:\s*([^\s#]+)/m);
+    var match=config.match(/^\s*turbo_site_id\s*:\s*([^\s#]+)/m);
     var id=match?match[1].replace(/^['"]|['"]$/g,''):'';
     if(!id||id.indexOf('REPLACE_')===0){
       box.innerHTML='<strong>Нужна однократная настройка.</strong><br>Создай сайт в <a href="https://turbo.decapcms.org/" target="_blank" rel="noopener noreferrer">Decap Turbo</a> через GitHub, установи GitHub App с доступом только к этому репозиторию и вставь Site ID в config.yml. Затем обнови эту страницу — появится форма входа.';
