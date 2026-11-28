@@ -176,11 +176,21 @@ def check_page(path: Path, seen_canonicals: dict[str, Path]) -> None:
         if len(title) > 70:
             warning(f"{rel}: title is long ({len(title)} characters)")
 
-    descriptions = parser.metas.get("description", [])
-    if len(descriptions) != 1 or not descriptions[0].strip():
-        error(f"{rel}: expected exactly one non-empty meta description, found {len(descriptions)}")
-    elif len(descriptions[0].strip()) < 70 or len(descriptions[0].strip()) > 180:
-        warning(f"{rel}: meta description length is {len(descriptions[0].strip())} characters")
+    robots_directives = {
+        directive.strip().lower()
+        for value in parser.metas.get("robots", [])
+        for directive in value.split(",")
+    }
+    is_noindex = "noindex" in robots_directives
+
+    # Admin and utility pages marked noindex are not public search landing pages.
+    # Keep basic HTML/accessibility/link checks, but skip public snippet metadata.
+    if not is_noindex:
+        descriptions = parser.metas.get("description", [])
+        if len(descriptions) != 1 or not descriptions[0].strip():
+            error(f"{rel}: expected exactly one non-empty meta description, found {len(descriptions)}")
+        elif len(descriptions[0].strip()) < 70 or len(descriptions[0].strip()) > 180:
+            warning(f"{rel}: meta description length is {len(descriptions[0].strip())} characters")
 
     if parser.h1_count != 1:
         error(f"{rel}: expected exactly one H1, found {parser.h1_count}")
@@ -198,30 +208,31 @@ def check_page(path: Path, seen_canonicals: dict[str, Path]) -> None:
         if current > previous + 1:
             warning(f"{rel}: heading level jumps from h{previous} to h{current}")
 
-    if len(parser.canonicals) != 1 or not parser.canonicals[0]:
-        error(f"{rel}: expected exactly one canonical URL, found {len(parser.canonicals)}")
-    else:
-        canonical = parser.canonicals[0].strip()
-        expected = expected_canonical(path)
-        if canonical != expected:
-            error(f"{rel}: canonical mismatch; expected {expected}, got {canonical}")
-        if canonical in seen_canonicals:
-            error(f"{rel}: duplicate canonical also used by {seen_canonicals[canonical].relative_to(ROOT)}")
+    if not is_noindex:
+        if len(parser.canonicals) != 1 or not parser.canonicals[0]:
+            error(f"{rel}: expected exactly one canonical URL, found {len(parser.canonicals)}")
         else:
-            seen_canonicals[canonical] = path
+            canonical = parser.canonicals[0].strip()
+            expected = expected_canonical(path)
+            if canonical != expected:
+                error(f"{rel}: canonical mismatch; expected {expected}, got {canonical}")
+            if canonical in seen_canonicals:
+                error(f"{rel}: duplicate canonical also used by {seen_canonicals[canonical].relative_to(ROOT)}")
+            else:
+                seen_canonicals[canonical] = path
 
-    for key in ("og:title", "og:description", "og:url"):
-        values = parser.properties.get(key, [])
-        if len(values) != 1 or not values[0].strip():
-            error(f"{rel}: expected one non-empty {key}")
-    for key in ("twitter:card", "twitter:title", "twitter:description"):
-        values = parser.metas.get(key, [])
-        if len(values) != 1 or not values[0].strip():
-            error(f"{rel}: expected one non-empty {key}")
+        for key in ("og:title", "og:description", "og:url"):
+            values = parser.properties.get(key, [])
+            if len(values) != 1 or not values[0].strip():
+                error(f"{rel}: expected one non-empty {key}")
+        for key in ("twitter:card", "twitter:title", "twitter:description"):
+            values = parser.metas.get(key, [])
+            if len(values) != 1 or not values[0].strip():
+                error(f"{rel}: expected one non-empty {key}")
 
-    if parser.canonicals and parser.properties.get("og:url"):
-        if parser.properties["og:url"][0].strip() != parser.canonicals[0].strip():
-            error(f"{rel}: og:url does not match canonical URL")
+        if parser.canonicals and parser.properties.get("og:url"):
+            if parser.properties["og:url"][0].strip() != parser.canonicals[0].strip():
+                error(f"{rel}: og:url does not match canonical URL")
 
     for raw in parser.jsonld:
         try:
